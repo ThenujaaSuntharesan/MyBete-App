@@ -10,7 +10,7 @@ class AppTheme {
   static ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
     colorScheme: ColorScheme.fromSeed(
-      seedColor: Color(0xFF1E88E5), // Change this to a suitable dark mode color
+      seedColor: Color(0x0096D8E3), // Change this to a suitable dark mode color
       brightness: Brightness.dark, // Ensure the color scheme is dark
     ),
     useMaterial3: true,
