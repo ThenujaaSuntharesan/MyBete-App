@@ -24,21 +24,27 @@ class _OnboardingViewState extends State<OnboardingView> {
 
             //Skip button
             TextButton(
-                onPressed: (){},
+                onPressed: () => pageController.jumpToPage(controller.items.length-1),
                 child: const Text("Skip")),
 
             //Indicator
             SmoothPageIndicator(
                 controller: pageController,
                 count: controller.items.length,
+                onDotClicked: (index) => pageController.animateToPage(index,
+                    duration: const Duration(milliseconds: 600), curve: Curves.easeIn),
                 effect: const WormEffect(
-                  activeDotColor: Color(0x0096D8E3)
+                  dotHeight: 12,
+                  dotWidth: 12,
+                  activeDotColor: Colors.blueGrey
                 ),
             ),
 
             //Next button
             TextButton(
-                onPressed: (){},
+                onPressed: () => pageController.nextPage(
+                    duration: const Duration(milliseconds: 600),
+                    curve: Curves.easeIn),
                 child: const Text("Next")),
           ],
         ),
