@@ -72,4 +72,12 @@ class _OnboardingViewState extends State<OnboardingView> {
       ),
     );
   }
+  
+//Get started button
+
+  Widget getStarted(){
+    return TextButton(onPressed: onPressed, child: child)
+  }
+
 }
+
