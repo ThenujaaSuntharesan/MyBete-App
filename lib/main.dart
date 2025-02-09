@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:mybete_app/diabeteOptions.dart';
 import 'package:mybete_app/onboarding/onboarding_view.dart';
 import 'package:mybete_app/src/utils/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = await SharedPreferences.getInstance();
+  final onboarding = prefs.getBool("onboarding")??false;
+
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Future.delayed(
       Duration(seconds: 5)
   );
   FlutterNativeSplash.remove();
-  runApp(const MyApp());
+  runApp( MyApp(onboarding: onboarding));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool onboarding;
+  const MyApp({super.key, this.onboarding = false});
 
   // This widget is the root of your application.
   @override
@@ -24,7 +31,7 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
-      home: const OnboardingView(),
+      home: onboarding? diabeteOptions() : OnboardingView(),
     );
   }
 }

@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import 'package:mybete_app/components/color.dart';
 import 'package:mybete_app/diabeteOptions.dart';
 import 'package:mybete_app/onboarding/onboarding_items.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingView extends StatefulWidget {
@@ -89,7 +90,12 @@ class _OnboardingViewState extends State<OnboardingView> {
       width: MediaQuery.of(context).size.width * .9,
       height: 55,
       child: TextButton(
-          onPressed: (){
+          onPressed: () async{
+            final pres = await SharedPreferences.getInstance();
+            pres.setBool("onboarding", true);
+
+            //After press get started button this onboarding value become true
+            if(!mounted) return;
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => diabeteOptions()));
           },
           child: const Text("Get Started", style: TextStyle(color: Colors.white),)),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class diabeteOptions extends StatelessWidget {
   const diabeteOptions({super.key});
@@ -8,7 +9,10 @@ class diabeteOptions extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: TextButton(
-            onPressed: (){}, 
+            onPressed: () async{
+              final prefs = await SharedPreferences.getInstance();
+              prefs.setBool("onboarding", false);
+            },
             child: Text("enable onboarding")),
       ),
     );
