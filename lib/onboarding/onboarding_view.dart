@@ -13,12 +13,14 @@ class _OnboardingViewState extends State<OnboardingView> {
   final controller = OnboardingItems();
   final pageController = PageController();
 
+  bool isLastPage = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomSheet: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        child: Row(
+        child: isLastPage? getStarted() : Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
 
@@ -52,6 +54,7 @@ class _OnboardingViewState extends State<OnboardingView> {
       body: Container(
         margin: const EdgeInsets.symmetric(horizontal: 15),
         child: PageView.builder(
+            onPageChanged: (index) => setState(() => isLastPage = controller.items.length-1 == index),
             itemCount: controller.items.length,
             controller: pageController,
             itemBuilder: (context,index){
@@ -76,9 +79,17 @@ class _OnboardingViewState extends State<OnboardingView> {
 //Get started button
 
   Widget getStarted(){
-    return TextButton(
-        onPressed: onPressed, 
-        child: Text("Get Started"));
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: Colors.blueGrey
+      ),
+      width: MediaQuery.of(context).size.width * .9,
+      height: 55,
+      child: TextButton(
+          onPressed: (){},
+          child: const Text("Get Started", style: TextStyle(color: Colors.white),)),
+    );
   }
 
 }
