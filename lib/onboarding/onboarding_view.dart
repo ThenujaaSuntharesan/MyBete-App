@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:mybete_app/components/color.dart';
 import 'package:mybete_app/onboarding/onboarding_items.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -38,7 +39,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                 effect: const WormEffect(
                   dotHeight: 12,
                   dotWidth: 12,
-                  activeDotColor: Colors.blueGrey
+                  activeDotColor: primaryColor,
                 ),
             ),
 
@@ -82,7 +83,7 @@ class _OnboardingViewState extends State<OnboardingView> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: Colors.blueGrey
+        color: primaryColor
       ),
       width: MediaQuery.of(context).size.width * .9,
       height: 55,
