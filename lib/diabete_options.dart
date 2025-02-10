@@ -41,7 +41,7 @@ Widget haveDiabetes(BuildContext context) {
     height: 55,
     child: TextButton(
       onPressed: () {
-        Navigator.pushReplacement(
+        Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => HaveDiabeteDashboard()),
         );
