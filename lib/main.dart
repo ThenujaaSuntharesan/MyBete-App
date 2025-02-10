@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:mybete_app/diabeteOptions.dart';
+import 'package:mybete_app/diabete_options.dart';
 import 'package:mybete_app/onboarding/onboarding_view.dart';
 import 'package:mybete_app/src/utils/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
-      home: onboarding? diabeteOptions() : OnboardingView(),
+      home: onboarding? DiabeteOptions() : OnboardingView(),
     );
   }
 }

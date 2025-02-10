@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:mybete_app/components/color.dart';
-import 'package:mybete_app/diabeteOptions.dart';
+import 'package:mybete_app/diabete_options.dart';
 import 'package:mybete_app/onboarding/onboarding_items.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -96,7 +96,7 @@ class _OnboardingViewState extends State<OnboardingView> {
 
             //After press get started button this onboarding value become true
             if(!mounted) return;
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => diabeteOptions()));
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DiabeteOptions()));
           },
           child: const Text("Get Started", style: TextStyle(color: Colors.white),)),
     );
