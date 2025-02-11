@@ -24,7 +24,9 @@ class DiabeteOptions extends StatelessWidget {
               child: Text("Choose one option from these three"),
             ),
             SizedBox(height: 20), // Space between elements
-            haveDiabetes(context), // Correctly use the button here
+            haveDiabetes(context),
+            SizedBox(height: 20),
+            doNotHaveDiabetes(context),// Correctly use the button here
           ],
         ),
       ),
@@ -36,7 +38,7 @@ Widget haveDiabetes(BuildContext context) {
   return Container(
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(8),
-      color: Colors.blue, // Replace with primaryColor if needed
+      color: Colors.red, // Replace with primaryColor if needed
     ),
     width: 200, // Give it a fixed width
     height: 55,
@@ -55,7 +57,7 @@ Widget haveDiabetes(BuildContext context) {
   );
 }
 
-Widget donothaveDiabetes(BuildContext context) {
+Widget doNotHaveDiabetes(BuildContext context) {
   return Container(
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(8),
@@ -71,7 +73,7 @@ Widget donothaveDiabetes(BuildContext context) {
         );
       },
       child: const Text(
-        "I have diabetes",
+        "I don't have diabetes",
         style: TextStyle(color: Colors.white, fontSize: 16),
       ),
     ),
