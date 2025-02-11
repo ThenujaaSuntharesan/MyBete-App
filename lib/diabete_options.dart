@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'components/color.dart';
+import 'donot_have_diabetes/donot_have_diabete.dart';
 import 'have diabetes/have_diabete.dart';
 
 class DiabeteOptions extends StatelessWidget {
@@ -47,7 +48,30 @@ Widget haveDiabetes(BuildContext context) {
         );
       },
       child: const Text(
-        "Get Started",
+        "I have diabetes",
+        style: TextStyle(color: Colors.white, fontSize: 16),
+      ),
+    ),
+  );
+}
+
+Widget donothaveDiabetes(BuildContext context) {
+  return Container(
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(8),
+      color: Colors.blue, // Replace with primaryColor if needed
+    ),
+    width: 200, // Give it a fixed width
+    height: 55,
+    child: TextButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => DonotHaveDiabeteDashboard()),
+        );
+      },
+      child: const Text(
+        "I have diabetes",
         style: TextStyle(color: Colors.white, fontSize: 16),
       ),
     ),
