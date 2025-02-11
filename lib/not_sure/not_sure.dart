@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class DonotHaveDiabeteDashboard extends StatelessWidget {
+class NotSureDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,7 +14,7 @@ class DonotHaveDiabeteDashboard extends StatelessWidget {
         ),
       ),
       body: Center(
-        child: Text("Welcome to the don't have Diabetes Dashboard"),
+        child: Text("Welcome to the not sure Dashboard"),
       ),
     );
   }
