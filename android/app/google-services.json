@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "709957401040",
+    "project_id": "mybete-app",
+    "storage_bucket": "mybete-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:709957401040:android:42e60b2f602e97071621d5",
+        "android_client_info": {
+          "package_name": "com.example.mybete_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9ysPd8SbKJ4GrJn2IJpiVZiKizjIVuG8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
