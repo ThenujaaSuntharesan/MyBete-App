@@ -1,4 +1,14 @@
 import 'package:flutter/material.dart';
+import './symptom_levels/blurry_vision.dart';
+import './symptom_levels/frequent_urinary.dart';
+import './symptom_levels/more_tired.dart';
+import './symptom_levels/neurons_damage.dart';
+import './symptom_levels/numbness.dart';
+import './symptom_levels/period_changes.dart';
+import './symptom_levels/polydipsia.dart';
+import './symptom_levels/polyphagia.dart';
+import './symptom_levels/skin_changes.dart';
+import './symptom_levels/weight_changes.dart';
 
 class NotSureDashboard extends StatelessWidget {
   final List<String> symptoms = [
@@ -78,36 +88,38 @@ class LevelDetailScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MethodOrGameScreen(level: level, symptom: symptom),
+                    builder: (context) {
+                      switch (level) {
+                        case 1:
+                          return Symptom1Screen();
+                        case 2:
+                          return Symptom2Screen();
+                        case 3:
+                          return Symptom3Screen();
+                        case 4:
+                          return Symptom4Screen();
+                        case 5:
+                          return Symptom5Screen();
+                        case 6:
+                          return Symptom6Screen();
+                        case 7:
+                          return Symptom7Screen();
+                        case 8:
+                          return Symptom8Screen();
+                        case 9:
+                          return Symptom9Screen();
+                        case 10:
+                          return Symptom10Screen();
+                        default:
+                          return Symptom1Screen();
+                      }
+                    },
                   ),
                 );
               },
               child: Text('Check Symptom'),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class MethodOrGameScreen extends StatelessWidget {
-  final int level;
-  final String symptom;
-
-  MethodOrGameScreen({required this.level, required this.symptom});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Method or Game for Level $level'),
-      ),
-      body: Center(
-        child: Text(
-          'Here you can implement the method or game to check the symptom: $symptom',
-          style: TextStyle(fontSize: 18),
-          textAlign: TextAlign.center,
         ),
       ),
     );
