@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:mybete_app/diabete_options.dart';
+import 'sign_up_screen.dart';
+import 'diabete_options.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -13,8 +15,37 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _login() async {
     try {
+      // Fetch the user document from Firestore using the username
+      DocumentSnapshot usernameSnapshot = await FirebaseFirestore.instance
+          .collection('usernames')
+          .doc(_usernameController.text)
+          .get();
+
+      if (!usernameSnapshot.exists) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('No user found for that username.')));
+        return;
+      }
+
+      // Get the UID associated with the username
+      String uid = usernameSnapshot['uid'];
+
+      // Fetch the user document using the UID
+      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(_usernameController.text)
+          .get();
+
+      if (!userSnapshot.exists) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('No user found for that username.')));
+        return;
+      }
+
+      // Get the email associated with the UID
+      String email = userSnapshot['email'];
+
+      // Sign in with email and password
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _usernameController.text,
+        email: email,
         password: _passwordController.text,
       );
 
@@ -22,8 +53,21 @@ class _LoginPageState extends State<LoginPage> {
         context,
         MaterialPageRoute(builder: (context) => DiabeteOptions()),
       );
+    } on FirebaseAuthException catch (e) {
+      String errorMessage;
+      switch (e.code) {
+        case 'user-not-found':
+          errorMessage = 'No user found for that username.';
+          break;
+        case 'wrong-password':
+          errorMessage = 'Wrong password provided.';
+          break;
+        default:
+          errorMessage = 'An unexpected error occurred. Please try again.';
+      }
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage)));
     } catch (e) {
-      // Handle error
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('An unexpected error occurred. Please try again.')));
     }
   }
 
@@ -47,6 +91,15 @@ class _LoginPageState extends State<LoginPage> {
             ElevatedButton(
               onPressed: _login,
               child: Text('Login'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SignUpPage()),
+                );
+              },
+              child: Text('Don\'t have an account? Create one'),
             ),
           ],
         ),
