@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'log_in_screen.dart';
 import 'diabete_options.dart';
 
@@ -47,6 +48,10 @@ class _SignUpPageState extends State<SignUpPage> {
       await FirebaseFirestore.instance.collection('usernames').doc(_usernameController.text).set({
         'uid': userCredential.user!.uid,
       });
+
+      // Set logged-in flag in SharedPreferences
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLoggedIn', true);
 
       Navigator.pushReplacement(
         context,
