@@ -11,22 +11,21 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   final prefs = await SharedPreferences.getInstance();
-  final onboarding = prefs.getBool("onboarding")??false;
+  final onboarding = prefs.getBool("onboarding") ?? false;
+  final isLoggedIn = prefs.getBool("isLoggedIn") ?? false;
 
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  await Future.delayed(
-      Duration(milliseconds: 500)
-  );
+  await Future.delayed(Duration(milliseconds: 500));
   FlutterNativeSplash.remove();
-  runApp( MyApp(onboarding: onboarding));
+  runApp(MyApp(onboarding: onboarding, isLoggedIn: isLoggedIn));
 }
 
 class MyApp extends StatelessWidget {
   final bool onboarding;
-  const MyApp({super.key, this.onboarding = false});
+  final bool isLoggedIn;
+  const MyApp({super.key, this.onboarding = false, this.isLoggedIn = false});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -34,9 +33,9 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
-      home: onboarding? DiabeteOptions() : OnboardingView(),
-      builder: (context, child) {
-        return AuthState();
+      home: isLoggedIn
+          ? DiabeteOptions()
+          : (onboarding ? DiabeteOptions() : OnboardingView()),
     );
   }
 }

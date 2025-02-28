@@ -1,38 +1,43 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mybete_app/diabete_options.dart';
 
-class SignInScreen extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   @override
-  _SignInScreenState createState() => _SignInScreenState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _SignInScreenState extends State<SignInScreen> {
-  final TextEditingController _emailController = TextEditingController();
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  Future<void> _signIn() async {
+  Future<void> _login() async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text,
+        email: _usernameController.text,
         password: _passwordController.text,
       );
-      // Navigate to home screen
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => DiabeteOptions()),
+      );
     } catch (e) {
-      print(e);
+      // Handle error
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Sign In')),
+      appBar: AppBar(title: Text('Login')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             TextField(
-              controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email'),
+              controller: _usernameController,
+              decoration: InputDecoration(labelText: 'Username'),
             ),
             TextField(
               controller: _passwordController,
@@ -40,8 +45,8 @@ class _SignInScreenState extends State<SignInScreen> {
               obscureText: true,
             ),
             ElevatedButton(
-              onPressed: _signIn,
-              child: Text('Sign In'),
+              onPressed: _login,
+              child: Text('Login'),
             ),
           ],
         ),

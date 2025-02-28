@@ -1,33 +1,34 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mybete_app/diabete_options.dart';
 
-class SignUpScreen extends StatefulWidget {
+class SignUpPage extends StatefulWidget {
   @override
-  _SignUpScreenState createState() => _SignUpScreenState();
+  _SignUpPageState createState() => _SignUpPageState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
-  final TextEditingController _emailController = TextEditingController();
+class _SignUpPageState extends State<SignUpPage> {
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
 
   Future<void> _signUp() async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailController.text,
+        email: _usernameController.text,
         password: _passwordController.text,
       );
 
-      // Save additional user data to Firestore
       await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
-        'name': _nameController.text,
-        'email': _emailController.text,
+        'username': _usernameController.text,
       });
 
-      // Navigate to home screen
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => DiabeteOptions()),
+      );
     } catch (e) {
-      print(e);
+      // Handle error
     }
   }
 
@@ -40,12 +41,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: Column(
           children: [
             TextField(
-              controller: _nameController,
-              decoration: InputDecoration(labelText: 'Name'),
-            ),
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email'),
+              controller: _usernameController,
+              decoration: InputDecoration(labelText: 'Username'),
             ),
             TextField(
               controller: _passwordController,
