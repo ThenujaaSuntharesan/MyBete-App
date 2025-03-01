@@ -22,6 +22,8 @@
 
 import 'package:flutter/material.dart';
 
+import 'DashBoard/MyActivity.dart';
+
 class HaveDiabeteDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -120,7 +122,7 @@ class _QuizScreenState extends State<QuizScreen> {
     bool hasSelectedAnswer = _selectedAnswers[_currentQuestionIndex] != null;
 
     return Scaffold(
-      appBar: AppBar(title: Text("Quiz ${_currentQuestionIndex + 1}")),
+      appBar: AppBar(title: Text("Question ${_currentQuestionIndex + 1}")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -190,20 +192,3 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 }
 
-class DashboardScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Dashboard")),
-      body: Center(child: Text("Welcome to the Dashboard")),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.analytics), label: "Stats"),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-        ],
-      ),
-    );
-  }
-}
