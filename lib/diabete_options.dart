@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -5,6 +6,7 @@ import 'components/color.dart';
 import 'donot_have_diabetes/donot_have_diabete.dart';
 import 'have_diabetes/have_diabete.dart';
 import 'not_sure/not_sure.dart';
+
 
 class DiabeteOptions extends StatelessWidget {
   const DiabeteOptions({super.key});
@@ -49,7 +51,7 @@ Widget haveDiabetes(BuildContext context) {
       onPressed: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => HaveDiabeteDashboard()),
+          MaterialPageRoute(builder: (context) => HaveDiabetesDashboard()),
         );
       },
       child: const Text(
@@ -105,3 +107,4 @@ Widget notSure(BuildContext context) {
     ),
   );
 }
+

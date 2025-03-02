@@ -1,3 +1,4 @@
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,9 +11,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setBool('isLoggedIn', false); // Clear the logged-in flag
-
   runApp(MyApp());
 }
 
@@ -20,11 +18,50 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+<<<<<<< HEAD
+        title: 'MyBete',
+        theme: ThemeData.light(),
+        darkTheme: ThemeData.dark(),
+        themeMode: ThemeMode.system,
+        home: LoginPage(), // Always start with the login page
+        );
+    }
+=======
       title: 'MyBete',
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.system,
-      home: LoginPage(), // Always start with the login page
+      home: FutureBuilder<bool>(
+        future: _checkLoginStatus(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasData && snapshot.data == true) {
+            return DiabeteOptions();
+          } else {
+            return LoginPage();
+          }
+        },
+      ),
     );
   }
+
+  Future<bool> _checkLoginStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    String lastLoginDate = prefs.getString('lastLoginDate') ?? '';
+
+    if (isLoggedIn && _isSameDay(DateTime.parse(lastLoginDate), DateTime.now())) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool _isSameDay(DateTime date1, DateTime date2) {
+    return date1.year == date2.year &&
+        date1.month == date2.month &&
+        date1.day == date2.day;
+  }
+>>>>>>> b4f00ad93e5eddd36612be7f1bf439d4a9d37a71
 }
