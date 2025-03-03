@@ -85,7 +85,7 @@ Widget haveDiabetes(BuildContext context) {
       onPressed: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => HaveDiabeteDashboard()),
+          MaterialPageRoute(builder: (context) => HaveDiabetesDashboard()),
         );
       },
       child: const Text(
