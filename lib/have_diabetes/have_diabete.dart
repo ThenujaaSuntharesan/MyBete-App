@@ -969,11 +969,6 @@
 //   }
 // }
 
-
-
-
-
-
 import 'package:flutter/material.dart';
 
 import '../diabete_options.dart';
