@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+
       title: 'MyBete',
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
@@ -54,3 +55,4 @@ class MyApp extends StatelessWidget {
         date1.day == date2.day;
   }
 }
+
