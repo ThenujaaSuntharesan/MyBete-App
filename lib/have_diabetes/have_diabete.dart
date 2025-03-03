@@ -1,30 +1,8 @@
-// import 'package:flutter/material.dart';
-//
-// class HaveDiabeteDashboard extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text("Diabetes Dashboard"),
-//         leading: IconButton(
-//           icon: Icon(Icons.arrow_back), // Back arrow icon
-//           onPressed: () {
-//             Navigator.pop(context); // Navigate back to the previous screen
-//           },
-//         ),
-//       ),
-//       body: Center(
-//         child: Text("Welcome to the Diabetes Dashboard"),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
-
+import '../diabete_options.dart';
 import 'DashBoard/MyActivity.dart';
 
-class HaveDiabeteDashboard extends StatelessWidget {
+class HaveDiabetesDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -41,7 +19,7 @@ class QuizScreen extends StatefulWidget {
 
 class _QuizScreenState extends State<QuizScreen> {
   int _currentQuestionIndex = 0;
-  List<String?> _selectedAnswers = List.filled(6, null);
+  List<String?> _selectedAnswers = List.filled(5, null);
 
   final List<Map<String, dynamic>> _questions = [
     {
@@ -81,10 +59,6 @@ class _QuizScreenState extends State<QuizScreen> {
       'question': 'Are you taking medication to manage diabetes?',
       'options': ['Oral medication', 'Insulin', 'None']
     },
-    {
-      'question': 'Are you taking medication to manage diabetes?',
-      'options': ['Oral medication', 'Insulin', 'None']
-    },
   ];
 
   void _selectAnswer(String answer) {
@@ -101,8 +75,13 @@ class _QuizScreenState extends State<QuizScreen> {
     }
   }
 
-  void _goBack() {
-    if (_currentQuestionIndex > 0) {
+  void _goBack(BuildContext context) {
+    if (_currentQuestionIndex == 0) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => DiabeteOptions()),
+      );
+    } else {
       setState(() {
         _currentQuestionIndex--;
       });
@@ -116,79 +95,104 @@ class _QuizScreenState extends State<QuizScreen> {
     );
   }
 
+  bool get _allQuestionsAnswered =>
+      _selectedAnswers.every((answer) => answer != null);
+
   @override
   Widget build(BuildContext context) {
-    bool isLastQuestion = _currentQuestionIndex == _questions.length - 1;
-    bool hasSelectedAnswer = _selectedAnswers[_currentQuestionIndex] != null;
-
     return Scaffold(
-      appBar: AppBar(title: Text("Question ${_currentQuestionIndex + 1}")),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(_questions.length, (index) {
-                return Container(
-                  margin: EdgeInsets.symmetric(horizontal: 4),
-                  width: 10,
-                  height: 10,
-                  decoration: BoxDecoration(
-                    color: index == _currentQuestionIndex
-                        ? Colors.blueAccent
-                        : _selectedAnswers[index] != null
-                        ? Colors.blue
-                        : Colors.grey,
-                    shape: BoxShape.circle,
-                  ),
-                );
-              }),
-            ),
-            SizedBox(height: 20),
-            Text(
-              _questions[_currentQuestionIndex]['question'],
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20),
-            ...(_questions[_currentQuestionIndex]['options'] as List<String>)
-                .map((option) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                    _selectedAnswers[_currentQuestionIndex] == option
-                        ? Color(0xFF7AC5CD)
-                        : Colors.grey[300],
-                  ),
-                  onPressed: () => _selectAnswer(option),
-                  child: Text(option, style: TextStyle(color: Colors.black)),
-                ),
-              );
-            }).toList(),
-            Spacer(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => _goBack(context),
+          ),
+          title: Text("Question ${_currentQuestionIndex + 1}"),
+        ),
+        body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                if (_currentQuestionIndex > 0)
-                  ElevatedButton(
-                    onPressed: _goBack,
-                    child: Text("Back"),
-                  ),
-                if (hasSelectedAnswer)
-                  ElevatedButton(
-                    onPressed:
-                    isLastQuestion ? _finishQuiz : _goToNextQuestion,
-                    child: Text(isLastQuestion ? "Finish" : "Next"),
-                  ),
+                // Progress Indicator Dots
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(_questions.length, (index) {
+                    return Container(
+                      margin: EdgeInsets.symmetric(horizontal: 4),
+                      width: 10,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        color: index == _currentQuestionIndex
+                            ? Colors.blueAccent
+                            : _selectedAnswers[index] != null
+                            ? Colors.blue
+                            : Colors.grey,
+                        shape: BoxShape.circle,
+                      ),
+                    );
+                  }),
+                ),
+                SizedBox(height: 20),
+
+                // Question Text
+                Text(
+                  _questions[_currentQuestionIndex]['question'],
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 20),
+
+                // Answer Buttons
+                ...(_questions[_currentQuestionIndex]['options'] as List<String>)
+                    .map((option) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                        _selectedAnswers[_currentQuestionIndex] == option
+                            ? Color(0xFF7AC5CD)
+                            : Colors.grey[300],
+                      ),
+                      onPressed: () => _selectAnswer(option),
+                      child: Text(option, style: TextStyle(color: Colors.black)),
+                    ),
+                  );
+                }).toList(),
+                Spacer(),
+
+                // Navigation Buttons
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => _goBack(context),
+                      child: Text("Back"),
+                    ),
+
+                    if (_selectedAnswers[_currentQuestionIndex] != null &&
+                        _currentQuestionIndex < _questions.length - 1)
+                      ElevatedButton(
+                        onPressed: _goToNextQuestion,
+                        child: Text("Next"),
+                      ),
+
+                    if (_allQuestionsAnswered &&
+                        _currentQuestionIndex == _questions.length - 1)
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: ElevatedButton(
+                          onPressed: _finishQuiz,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                          ),
+                          child: Text("Finish"),
+                        ),
+                      ),
+                  ],
+                ),
               ],
             ),
-          ],
-        ),
-      ),
-    );
-  }
+            ),
+        );
+    }
 }
-
