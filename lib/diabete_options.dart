@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -6,7 +5,7 @@ import 'components/color.dart';
 import 'donot_have_diabetes/donot_have_diabete.dart';
 import 'have_diabetes/have_diabete_quiz.dart';
 import 'not_sure/not_sure.dart';
-
+import 'log_in_screen.dart'; // Import the login screen
 
 class DiabeteOptions extends StatelessWidget {
   const DiabeteOptions({super.key});
@@ -14,7 +13,17 @@ class DiabeteOptions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Diabetes Options")), // Add an app bar
+      appBar: AppBar(
+        title: Text("Diabetes Options"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.account_circle, size: 50), // Increase the size of the icon
+            onPressed: () {
+              _showLogoutMenu(context);
+            },
+          ),
+        ],
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -31,10 +40,35 @@ class DiabeteOptions extends StatelessWidget {
             SizedBox(height: 20),
             doNotHaveDiabetes(context),
             SizedBox(height: 20),
-            notSure(context),// Correctly use the button here
+            notSure(context), // Correctly use the button here
           ],
         ),
       ),
+    );
+  }
+
+  void _showLogoutMenu(BuildContext context) {
+    showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(1000, 80, 0, 0),
+      items: [
+        PopupMenuItem(
+          child: ListTile(
+            leading: Icon(Icons.logout),
+            title: Text('Log Out'),
+            onTap: () async {
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.setBool('isLoggedIn', false);
+              await prefs.remove('lastLoginDate');
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+                    (route) => false,
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }
@@ -107,4 +141,3 @@ Widget notSure(BuildContext context) {
     ),
   );
 }
-
