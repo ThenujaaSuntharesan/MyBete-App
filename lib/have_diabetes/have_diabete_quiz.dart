@@ -970,9 +970,8 @@
 // }
 
 import 'package:flutter/material.dart';
-
 import '../diabete_options.dart';
-
+import 'DashBoard/MyActivity.dart';
 
 class HaveDiabetesDashboard extends StatelessWidget {
   @override
@@ -991,7 +990,7 @@ class QuizScreen extends StatefulWidget {
 
 class _QuizScreenState extends State<QuizScreen> {
   int _currentQuestionIndex = 0;
-  List<String?> _selectedAnswers = List.filled(6, null);
+  List<String?> _selectedAnswers = List.filled(5, null);
 
   final List<Map<String, dynamic>> _questions = [
     {
@@ -1085,6 +1084,7 @@ class _QuizScreenState extends State<QuizScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // Progress Indicator Dots
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(_questions.length, (index) {
@@ -1104,11 +1104,15 @@ class _QuizScreenState extends State<QuizScreen> {
               }),
             ),
             SizedBox(height: 20),
+
+            // Question Text
             Text(
               _questions[_currentQuestionIndex]['question'],
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 20),
+
+            // Answer Buttons
             ...(_questions[_currentQuestionIndex]['options'] as List<String>)
                 .map((option) {
               return Padding(
@@ -1126,6 +1130,8 @@ class _QuizScreenState extends State<QuizScreen> {
               );
             }).toList(),
             Spacer(),
+
+            // Navigation Buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -1133,17 +1139,25 @@ class _QuizScreenState extends State<QuizScreen> {
                   onPressed: () => _goBack(context),
                   child: Text("Back"),
                 ),
+
                 if (_selectedAnswers[_currentQuestionIndex] != null &&
                     _currentQuestionIndex < _questions.length - 1)
                   ElevatedButton(
                     onPressed: _goToNextQuestion,
                     child: Text("Next"),
                   ),
+
                 if (_allQuestionsAnswered &&
                     _currentQuestionIndex == _questions.length - 1)
-                  ElevatedButton(
-                    onPressed: _finishQuiz,
-                    child: Text("Finish"),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: ElevatedButton(
+                      onPressed: _finishQuiz,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                      ),
+                      child: Text("Finish"),
+                    ),
                   ),
               ],
             ),
@@ -1153,26 +1167,24 @@ class _QuizScreenState extends State<QuizScreen> {
     );
   }
 }
-
-class DashboardScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Dashboard")),
-      body: Center(child: Text("Welcome to the Dashboard")),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.analytics), label: "Stats"),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-        ],
-      ),
-    );
-  }
-}
-
-
+//
+// class DashboardScreen extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: Text("Dashboard")),
+//       body: Center(child: Text("Welcome to the Dashboard")),
+//       bottomNavigationBar: BottomNavigationBar(
+//         items: [
+//           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+//           BottomNavigationBarItem(icon: Icon(Icons.analytics), label: "Stats"),
+//           BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings"),
+//           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 
 
