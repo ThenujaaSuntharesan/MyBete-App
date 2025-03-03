@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
           } else if (snapshot.hasData && snapshot.data == true) {
             return DiabeteOptions();
           } else {
-            return LoginPage();
+            return DiabeteOptions();
           }
         },
       ),
