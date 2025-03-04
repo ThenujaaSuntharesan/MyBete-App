@@ -249,3 +249,11 @@ flutter_native_splash:
   #info_plist_files:
   #  - 'ios/Runner/Info-Debug.plist'
   #  - 'ios/Runner/Info-Release.plist'
+
+  dependencies:
+    flutter:
+      sdk: flutter
+    firebase_core: latest_version
+    firebase_storage: latest_version
+    cloud_firestore: latest_version
+    file_picker: latest_version
