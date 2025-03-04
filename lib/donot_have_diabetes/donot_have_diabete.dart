@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'Fitness/exercise.dart';
+// import 'meal_planner_dashboard.dart';
+// import 'mind_relax_dashboard.dart';
 
 class DonotHaveDiabeteDashboard extends StatelessWidget {
   @override
@@ -6,7 +9,7 @@ class DonotHaveDiabeteDashboard extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white, // Set background color to white
       appBar: AppBar(
-        title: Text("i do not have"),
+        title: Text("I Do Not Have Diabetes"),
         centerTitle: false,
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
@@ -23,11 +26,11 @@ class DonotHaveDiabeteDashboard extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min, // Center content vertically
           children: [
-            DashboardButton(title: "Meal Planner"),
+            // DashboardButton(title: "Meal Planner", page: MealPlannerDashboard()),
             SizedBox(height: 20),
-            DashboardButton(title: "Mind Relax"),
+            // DashboardButton(title: "Mind Relax", page: MindRelaxDashboard()),
             SizedBox(height: 20),
-            DashboardButton(title: "Fitness"),
+            DashboardButton(title: "Fitness", page: Exercise()),
           ],
         ),
       ),
@@ -37,8 +40,7 @@ class DonotHaveDiabeteDashboard extends StatelessWidget {
         currentIndex: 1, // Default selected index
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.dashboard), label: "Dashboard"),
+          BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: "Dashboard"),
           BottomNavigationBarItem(icon: Icon(Icons.receipt), label: "Reports"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
@@ -49,7 +51,9 @@ class DonotHaveDiabeteDashboard extends StatelessWidget {
 
 class DashboardButton extends StatelessWidget {
   final String title;
-  const DashboardButton({required this.title});
+  final Widget page;
+
+  const DashboardButton({required this.title, required this.page});
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +67,10 @@ class DashboardButton extends StatelessWidget {
           textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         onPressed: () {
-          // Define actions for buttons
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => page),
+          );
         },
         child: Text(title),
       ),
