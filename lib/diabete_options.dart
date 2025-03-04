@@ -77,9 +77,9 @@ Widget haveDiabetes(BuildContext context) {
   return Container(
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(8),
-      color: Colors.red, // Replace with primaryColor if needed
+      color: Colors.red,
     ),
-    width: 200, // Give it a fixed width
+    width: 200,
     height: 55,
     child: TextButton(
       onPressed: () {
@@ -100,9 +100,9 @@ Widget doNotHaveDiabetes(BuildContext context) {
   return Container(
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(8),
-      color: Colors.blue, // Replace with primaryColor if needed
+      color: Colors.green,
     ),
-    width: 200, // Give it a fixed width
+    width: 200,
     height: 55,
     child: TextButton(
       onPressed: () {
@@ -123,9 +123,9 @@ Widget notSure(BuildContext context) {
   return Container(
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(8),
-      color: Colors.blue, // Replace with primaryColor if needed
+      color: Colors.amber,
     ),
-    width: 200, // Give it a fixed width
+    width: 200,
     height: 55,
     child: TextButton(
       onPressed: () {
