@@ -19,8 +19,10 @@ class FirestoreService {
         'gender': gender,
         'email': email,
       });
+      print('User added successfully');
     } catch (e) {
       print('Error adding user: $e');
+      throw e;
     }
   }
 }
