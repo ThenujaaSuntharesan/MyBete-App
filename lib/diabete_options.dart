@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -6,6 +5,10 @@ import 'components/color.dart';
 import 'donot_have_diabetes/donot_have_diabete.dart';
 import 'have_diabetes/have_diabete.dart';
 import 'not_sure/not_sure.dart';
+<<<<<<< HEAD
+=======
+import 'log_in_screen.dart'; // Import the login screen
+>>>>>>> 43142061625bf1f48b7319e17b7030d320180210
 
 class DiabeteOptions extends StatelessWidget {
   const DiabeteOptions({super.key});
@@ -140,4 +143,8 @@ Widget notSure(BuildContext context) {
       ),
     ),
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 43142061625bf1f48b7319e17b7030d320180210
