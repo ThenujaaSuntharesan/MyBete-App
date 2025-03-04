@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mybete_app/donot_have_diabetes/mind_relax/mind_relax.dart'; // Import the Mind Relax Page
+ // Import the Mind Relax Page
+
 
 class DonotHaveDiabeteDashboard extends StatelessWidget {
   @override
