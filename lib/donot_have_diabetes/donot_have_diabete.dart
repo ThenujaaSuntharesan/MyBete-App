@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'Fitness/exercise.dart';
-// import 'meal_planner_dashboard.dart';
-// import 'mind_relax_dashboard.dart';
+import 'package:mybete_app/donot_have_diabetes/mind_relax/mind_relax.dart'; // Import the Mind Relax Page
+ // Import the Mind Relax Page
+
 
 class DonotHaveDiabeteDashboard extends StatelessWidget {
   @override
@@ -9,7 +9,7 @@ class DonotHaveDiabeteDashboard extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white, // Set background color to white
       appBar: AppBar(
-        title: Text("I Do Not Have Diabetes"),
+        title: Text("i do not have"),
         centerTitle: false,
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
@@ -26,11 +26,11 @@ class DonotHaveDiabeteDashboard extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min, // Center content vertically
           children: [
-            // DashboardButton(title: "Meal Planner", page: MealPlannerDashboard()),
+            DashboardButton(title: "Meal Planner"),
             SizedBox(height: 20),
-            // DashboardButton(title: "Mind Relax", page: MindRelaxDashboard()),
+            DashboardButton(title: "Mind Relax"),
             SizedBox(height: 20),
-            DashboardButton(title: "Fitness", page: Exercise()),
+            DashboardButton(title: "Fitness"),
           ],
         ),
       ),
@@ -40,7 +40,8 @@ class DonotHaveDiabeteDashboard extends StatelessWidget {
         currentIndex: 1, // Default selected index
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: "Dashboard"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.dashboard), label: "Dashboard"),
           BottomNavigationBarItem(icon: Icon(Icons.receipt), label: "Reports"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
@@ -51,9 +52,7 @@ class DonotHaveDiabeteDashboard extends StatelessWidget {
 
 class DashboardButton extends StatelessWidget {
   final String title;
-  final Widget page;
-
-  const DashboardButton({required this.title, required this.page});
+  const DashboardButton({required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -67,10 +66,7 @@ class DashboardButton extends StatelessWidget {
           textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => page),
-          );
+          // Define actions for buttons
         },
         child: Text(title),
       ),

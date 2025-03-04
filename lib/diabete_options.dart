@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mybete_app/log_in_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'components/color.dart';
 import 'donot_have_diabetes/donot_have_diabete.dart';
 import 'have_diabetes/have_diabete.dart';
 import 'not_sure/not_sure.dart';
-import 'log_in_screen.dart'; // Import the login screen
 
 class DiabeteOptions extends StatelessWidget {
   const DiabeteOptions({super.key});
