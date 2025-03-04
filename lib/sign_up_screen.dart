@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'log_in_screen.dart';
 import 'diabete_options.dart';
+import 'firestore.dart'; // Import your FirestoreService
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -15,7 +16,10 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController(); // Add phone controller
   String _gender = 'Male';
+
+  final FirestoreService _firestoreService = FirestoreService();
 
   Future<void> _signUp() async {
     try {
@@ -36,13 +40,14 @@ class _SignUpPageState extends State<SignUpPage> {
       );
 
       // Store user data with username as document ID
-      await FirebaseFirestore.instance.collection('users').doc(_usernameController.text).set({
-        'uid': userCredential.user!.uid,
-        'email': _emailController.text,
-        'username': _usernameController.text,
-        'age': _ageController.text,
-        'gender': _gender,
-      });
+      await _firestoreService.addUser(
+        uid: userCredential.user!.uid,
+        username: _usernameController.text,
+        phone: _phoneController.text,
+        age: _ageController.text,
+        gender: _gender,
+        email: _emailController.text,
+      );
 
       // Map username to UID
       await FirebaseFirestore.instance.collection('usernames').doc(_usernameController.text).set({
@@ -102,6 +107,10 @@ class _SignUpPageState extends State<SignUpPage> {
             TextField(
               controller: _ageController,
               decoration: InputDecoration(labelText: 'Age'),
+            ),
+            TextField(
+              controller: _phoneController,
+              decoration: InputDecoration(labelText: 'Phone'), // Add phone input
             ),
             DropdownButton<String>(
               value: _gender,

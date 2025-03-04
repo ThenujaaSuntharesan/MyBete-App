@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import './symptom_levels/blurry_vision.dart';
 import './symptom_levels/frequent_urinary.dart';
 import './symptom_levels/more_tired.dart';
-import './symptom_levels/neurons_damage.dart';
+import 'symptom_levels/nerones_damage_check/neurons_damage.dart';
 import './symptom_levels/numbness.dart';
 import './symptom_levels/period_changes.dart';
 import './symptom_levels/polydipsia.dart';
