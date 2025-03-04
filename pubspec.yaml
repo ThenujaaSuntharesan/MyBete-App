@@ -42,6 +42,7 @@ dependencies:
   firebase_core: ^3.12.1
   cloud_firestore: ^5.6.5
   firebase_auth: ^5.5.1
+  fl_chart: ^0.70.2
 
 dev_dependencies:
   flutter_test:
@@ -253,6 +254,7 @@ flutter_native_splash:
   dependencies:
     flutter:
       sdk: flutter
+    fl_chart: ^0.63.0
     firebase_core: latest_version
     firebase_storage: latest_version
     cloud_firestore: latest_version
