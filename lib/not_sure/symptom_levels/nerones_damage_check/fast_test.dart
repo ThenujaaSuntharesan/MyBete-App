@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'full_report.dart';
 
 class FastTestScreen extends StatefulWidget {
   @override
@@ -6,44 +10,243 @@ class FastTestScreen extends StatefulWidget {
 }
 
 class _FastTestScreenState extends State<FastTestScreen> {
-  bool faceDroop = false;
-  bool armDrift = false;
-  bool speechSlurred = false;
+  bool faceCompleted = false;
+  bool armsCompleted = false;
+  bool speechCompleted = false;
 
-  void checkForStroke() {
-    if (faceDroop || armDrift || speechSlurred) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text('Stroke Warning'),
-          content: Text('One or more symptoms of a stroke are present. Call emergency services immediately.'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('OK'),
-            ),
-          ],
-        ),
-      );
-    } else {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text('No Stroke Symptoms Detected'),
-          content: Text('No symptoms of a stroke are present.'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('OK'),
-            ),
-          ],
-        ),
-      );
-    }
+  void showFaceDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Face Test'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Which face looks like yours?'),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        faceCompleted = true;
+                      });
+                      Navigator.of(context).pop();
+                    },
+                    child: Column(
+                      children: [
+                        Image.asset('assets/normal_face.png', width: 50, height: 50),
+                        Text('Normal'),
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        faceCompleted = true;
+                      });
+                      Navigator.of(context).pop();
+                    },
+                    child: Column(
+                      children: [
+                        Image.asset('assets/stroke_face.png', width: 50, height: 50),
+                        Text('Stroke'),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void showArmsDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Arms Test'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Which arm position looks like yours?'),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        armsCompleted = true;
+                      });
+                      Navigator.of(context).pop();
+                    },
+                    child: Column(
+                      children: [
+                        Image.asset('assets/normal_arms.png', width: 50, height: 50),
+                        Text('Normal'),
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        armsCompleted = true;
+                      });
+                      Navigator.of(context).pop();
+                    },
+                    child: Column(
+                      children: [
+                        Image.asset('assets/stroke_arms.png', width: 50, height: 50),
+                        Text('Stroke'),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void showSpeechDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Speech Test'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Is your speech normal or slurred?'),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        speechCompleted = true;
+                      });
+                      Navigator.of(context).pop();
+                    },
+                    child: Column(
+                      children: [
+                        Image.asset('assets/normal_speech.png', width: 50, height: 50),
+                        Text('Normal'),
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        speechCompleted = true;
+                      });
+                      Navigator.of(context).pop();
+                    },
+                    child: Column(
+                      children: [
+                        Image.asset('assets/slurred_speech.png', width: 50, height: 50),
+                        Text('Slurred'),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void showReportDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Your Report'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Stroke Risk Analysis'),
+              SizedBox(height: 20),
+              Container(
+                height: 200,
+                child: PieChart(
+                  PieChartData(
+                    sections: _createSampleData(),
+                    centerSpaceRadius: 40,
+                    sectionsSpace: 2,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () async {
+                  await saveReport();
+                  Navigator.of(context).pop();
+                },
+                child: Text('Save'),
+              ),
+              SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => FullReportScreen()),
+                  );
+                },
+                child: Text('View Past Reports'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> saveReport() async {
+    final prefs = await SharedPreferences.getInstance();
+    final report = {
+      'date': DateTime.now().toString(),
+      'face': faceCompleted,
+      'arms': armsCompleted,
+      'speech': speechCompleted,
+    };
+    final reports = prefs.getStringList('reports') ?? [];
+    reports.add(jsonEncode(report));
+    await prefs.setStringList('reports', reports);
+  }
+
+  List<PieChartSectionData> _createSampleData() {
+    return [
+      PieChartSectionData(
+        color: faceCompleted ? Colors.green : Colors.red,
+        value: faceCompleted ? 1 : 0,
+        title: 'Face',
+        radius: 50,
+      ),
+      PieChartSectionData(
+        color: armsCompleted ? Colors.green : Colors.red,
+        value: armsCompleted ? 1 : 0,
+        title: 'Arms',
+        radius: 50,
+      ),
+      PieChartSectionData(
+        color: speechCompleted ? Colors.green : Colors.red,
+        value: speechCompleted ? 1 : 0,
+        title: 'Speech',
+        radius: 50,
+      ),
+    ];
   }
 
   @override
@@ -56,40 +259,41 @@ class _FastTestScreenState extends State<FastTestScreen> {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            buildTestSection(
+            buildTestStep(
               context,
-              'F - Face',
+              'Face',
               'Ask the person to smile. Does one side of the face droop?',
-                  (value) {
-                setState(() {
-                  faceDroop = value;
-                });
-              },
+              Icons.face,
+              Colors.redAccent,
+              showFaceDialog,
+              faceCompleted,
             ),
-            buildTestSection(
+            buildTestStep(
               context,
-              'A - Arms',
+              'Arms',
               'Ask the person to raise both arms. Does one drift downward?',
-                  (value) {
-                setState(() {
-                  armDrift = value;
-                });
-              },
+              Icons.accessibility,
+              Colors.blueAccent,
+              showArmsDialog,
+              armsCompleted,
             ),
-            buildTestSection(
+            buildTestStep(
               context,
-              'S - Speech',
+              'Speech',
               'Ask the person to repeat a simple sentence. Is their speech slurred or strange?',
-                  (value) {
-                setState(() {
-                  speechSlurred = value;
-                });
-              },
+              Icons.record_voice_over,
+              Colors.greenAccent,
+              showSpeechDialog,
+              speechCompleted,
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: checkForStroke,
-              child: Text('Check for Stroke'),
+            buildTestStep(
+              context,
+              'Your Report',
+              'View your stroke risk analysis.',
+              Icons.report,
+              Colors.orangeAccent,
+              showReportDialog,
+              false,
             ),
           ],
         ),
@@ -97,7 +301,7 @@ class _FastTestScreenState extends State<FastTestScreen> {
     );
   }
 
-  Widget buildTestSection(BuildContext context, String title, String description, Function(bool) onChanged) {
+  Widget buildTestStep(BuildContext context, String title, String description, IconData icon, Color color, Function onTap, bool completed) {
     return Card(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Padding(
@@ -105,27 +309,39 @@ class _FastTestScreenState extends State<FastTestScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              title,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Row(
+              children: [
+                Icon(icon, color: color, size: 30),
+                SizedBox(width: 10),
+                Text(
+                  title,
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ],
             ),
             SizedBox(height: 10),
-            Text(description, style: TextStyle(fontSize: 16)),
+            Text(
+              description,
+              style: TextStyle(fontSize: 16),
+            ),
             SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('No', style: TextStyle(fontSize: 16)),
-                Switch(
-                  value: title == 'F - Face' ? faceDroop : title == 'A - Arms' ? armDrift : speechSlurred,
-                  onChanged: onChanged,
-                ),
-                Text('Yes', style: TextStyle(fontSize: 16)),
-              ],
+            ElevatedButton(
+              onPressed: () => onTap(),
+              child: Text(completed ? 'Completed' : 'Start Test'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: completed ? Colors.green : null,
+              ),
             ),
           ],
         ),
       ),
     );
   }
+}
+
+class StrokeRisk {
+  final String test;
+  final int result;
+
+  StrokeRisk(this.test, this.result);
 }
