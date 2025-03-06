@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'components/color.dart';
 import 'donot_have_diabetes/donot_have_diabete.dart';
 import 'have_diabetes/have_diabete.dart';
 import 'not_sure/not_sure.dart';
-import 'log_in_screen.dart'; // Import the login screen
+import 'log_in_screen.dart';
 
 class DiabeteOptions extends StatelessWidget {
   const DiabeteOptions({super.key});
@@ -135,7 +134,7 @@ Widget notSure(BuildContext context) {
         );
       },
       child: const Text(
-        "I'm not sure",
+        "Let's Check Symptoms",
         style: TextStyle(color: Colors.white, fontSize: 16),
       ),
     ),
