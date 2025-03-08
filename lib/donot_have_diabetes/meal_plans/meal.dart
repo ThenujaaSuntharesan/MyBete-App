@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'meal_category.dart'; // Make sure to create this page
 
 void main() {
   runApp(const MyApp());
@@ -308,7 +309,7 @@ class MealPlannerScreen extends StatelessWidget {
       },
       child: Container(
         height: 180,
-        width: 350,
+        width: 180,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(24),
@@ -328,7 +329,7 @@ class MealPlannerScreen extends StatelessWidget {
                 topLeft: Radius.circular(24),
                 bottomLeft: Radius.circular(24),
               ),
-              child: Image.asset(
+              child: Image.network(
                 imageUrl,
                 width: 180,
                 height: 180,
@@ -350,7 +351,7 @@ class MealPlannerScreen extends StatelessWidget {
                   child: Text(
                     label,
                     style: TextStyle(
-                      fontSize: 30,
+                      fontSize: 32,
                       fontWeight: FontWeight.bold,
                       color: Colors.black.withOpacity(0.8),
                     ),
