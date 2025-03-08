@@ -14,6 +14,8 @@ class _FastTestScreenState extends State<FastTestScreen> {
   bool armsCompleted = false;
   bool speechCompleted = false;
 
+  bool reportGenerated = false;
+
   void showFaceDialog() {
     showDialog(
       context: context,
@@ -168,6 +170,9 @@ class _FastTestScreenState extends State<FastTestScreen> {
   }
 
   void showReportDialog() {
+    setState(() {
+      reportGenerated = true;
+    });
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -293,7 +298,7 @@ class _FastTestScreenState extends State<FastTestScreen> {
               Icons.report,
               Colors.orangeAccent,
               showReportDialog,
-              false,
+              true,
             ),
           ],
         ),
@@ -327,9 +332,12 @@ class _FastTestScreenState extends State<FastTestScreen> {
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: () => onTap(),
-              child: Text(completed ? 'Completed' : 'Start Test'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: completed ? Colors.green : null,
+              ),
+              child: Text(title == 'Your Report'
+                  ? (completed ? 'View Report' : 'Start Test')
+                  : (completed ? 'Completed' : 'Start Test')
               ),
             ),
           ],

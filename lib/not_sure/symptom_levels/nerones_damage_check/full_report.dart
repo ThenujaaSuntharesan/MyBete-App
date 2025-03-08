@@ -24,15 +24,32 @@ class _FullReportScreenState extends State<FullReportScreen> {
     });
   }
 
+  Future<void> clearReports() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('reports'); // ✅ Remove reports from SharedPreferences
+    setState(() {
+      reports.clear(); // ✅ Clear reports from UI
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Full Report'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: clearReports, // 🔥 Clears the reports when clicked
+            tooltip: 'Clear Reports',
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ListView.builder(
+        child: reports.isEmpty
+            ? Center(child: Text('No reports available', style: TextStyle(fontSize: 16)))
+            : ListView.builder(
           itemCount: reports.length,
           itemBuilder: (context, index) {
             final report = reports[index];
@@ -57,6 +74,12 @@ class _FullReportScreenState extends State<FullReportScreen> {
             );
           },
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: clearReports, // 🔥 Clears reports when clicked
+        child: Icon(Icons.delete),
+        backgroundColor: Colors.red,
+        tooltip: 'Clear All Reports',
       ),
     );
   }
