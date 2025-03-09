@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mybete_app/donot_have_diabetes/mind_relax/mind_relax.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(
@@ -31,10 +32,12 @@ class MindRelaxQuestionnairePage extends StatefulWidget {
   const MindRelaxQuestionnairePage({Key? key}) : super(key: key);
 
   @override
-  State<MindRelaxQuestionnairePage> createState() => _MindRelaxQuestionnairePageState();
+  State<MindRelaxQuestionnairePage> createState() =>
+      _MindRelaxQuestionnairePageState();
 }
 
-class _MindRelaxQuestionnairePageState extends State<MindRelaxQuestionnairePage> {
+class _MindRelaxQuestionnairePageState
+    extends State<MindRelaxQuestionnairePage> {
   bool _isSelected = true;
   int _selectedIndex = 1;
 
@@ -75,21 +78,30 @@ class _MindRelaxQuestionnairePageState extends State<MindRelaxQuestionnairePage>
                       ),
                     ),
                     const SizedBox(height: 16),
-                    
+
                     // Back Button
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16.0),
-                      child: IconButton(
-                        icon: const Icon(Icons.arrow_back, size: 28),
-                        onPressed: () {
-                          // Navigate back
-                        },
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
-                      ),
-                    ),
+                    // Back Button
+Padding(
+  padding: const EdgeInsets.only(left: 16.0),
+  child: IconButton(
+    icon: const Icon(Icons.arrow_back, size: 28),
+    onPressed: () {
+      if (Navigator.canPop(context)) {
+        Navigator.pop(context); // Go back if possible
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) =>  MindRelaxDashboard()), // Replace with actual previous screen
+        );
+      }
+    },
+    padding: EdgeInsets.zero,
+    constraints: const BoxConstraints(),
+  ),
+),
+
                     const SizedBox(height: 16),
-                    
+
                     // Title
                     Center(
                       child: Column(
@@ -126,7 +138,7 @@ class _MindRelaxQuestionnairePageState extends State<MindRelaxQuestionnairePage>
                       ),
                     ),
                     const SizedBox(height: 24),
-                    
+
                     // Main Content Area with Light Blue Background
                     Container(
                       width: double.infinity,
@@ -140,7 +152,7 @@ class _MindRelaxQuestionnairePageState extends State<MindRelaxQuestionnairePage>
                       child: Column(
                         children: [
                           const SizedBox(height: 24),
-                          
+
                           // Zen Stones Image
                           ClipRRect(
                             borderRadius: BorderRadius.circular(8),
@@ -152,7 +164,7 @@ class _MindRelaxQuestionnairePageState extends State<MindRelaxQuestionnairePage>
                             ),
                           ),
                           const SizedBox(height: 80),
-                          
+
                           // Age Confirmation Text
                           const Text(
                             'To get started,',
@@ -169,7 +181,7 @@ class _MindRelaxQuestionnairePageState extends State<MindRelaxQuestionnairePage>
                             ),
                           ),
                           const SizedBox(height: 40),
-                          
+
                           // Age Option
                           InkWell(
                             onTap: () {
@@ -178,7 +190,8 @@ class _MindRelaxQuestionnairePageState extends State<MindRelaxQuestionnairePage>
                               });
                             },
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 32.0),
                               child: Row(
                                 children: [
                                   Container(
@@ -217,10 +230,11 @@ class _MindRelaxQuestionnairePageState extends State<MindRelaxQuestionnairePage>
                             ),
                           ),
                           const SizedBox(height: 40),
-                          
+
                           // Get Start Button
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 32.0),
                             child: ElevatedButton(
                               onPressed: () {
                                 // Navigate to next screen
@@ -232,7 +246,8 @@ class _MindRelaxQuestionnairePageState extends State<MindRelaxQuestionnairePage>
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(30),
                                 ),
-                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
                                 minimumSize: const Size(double.infinity, 56),
                               ),
                               child: const Text(
@@ -252,7 +267,7 @@ class _MindRelaxQuestionnairePageState extends State<MindRelaxQuestionnairePage>
                 ),
               ),
             ),
-            
+
             // Bottom Navigation Bar
             Container(
               height: 60,
@@ -293,7 +308,8 @@ class _MindRelaxQuestionnairePageState extends State<MindRelaxQuestionnairePage>
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Icon(
           icon,
-          color: index == _selectedIndex ? const Color(0xFF0048FF) : Colors.black,
+          color:
+              index == _selectedIndex ? const Color(0xFF0048FF) : Colors.black,
           size: 28,
         ),
       ),
