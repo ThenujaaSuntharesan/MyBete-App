@@ -3,6 +3,8 @@ import 'Fitness/exercise.dart';
 // import 'meal_planner_dashboard.dart';
 import 'package:mybete_app/donot_have_diabetes/mind_relax/mind_relax.dart';
 
+import 'meal_plans/meal.dart';
+
 class DonotHaveDiabeteDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,8 @@ class DonotHaveDiabeteDashboard extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min, // Center content vertically
           children: [
-            // DashboardButton(title: "Meal Planner", page: MealPlannerDashboard()),
+            SizedBox(height: 20),
+            DashboardButton(title: "Meal Planner", page: MealPlannerScreen()),
             SizedBox(height: 20),
             DashboardButton(title: "Mind Relax", page: MindRelaxDashboard()),
             SizedBox(height: 20),
