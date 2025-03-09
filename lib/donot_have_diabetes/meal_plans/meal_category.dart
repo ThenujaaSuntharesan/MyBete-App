@@ -15,13 +15,13 @@ class MyApp extends StatelessWidget {
         fontFamily: 'SF Pro Display',
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: const FoodCategoryScreen(),
+      home: const FoodCategoryScreen(mealType: 'label',),
     );
   }
 }
 
 class FoodCategoryScreen extends StatelessWidget {
-  const FoodCategoryScreen({Key? key}) : super(key: key);
+  const FoodCategoryScreen({Key? key, required String mealType}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
