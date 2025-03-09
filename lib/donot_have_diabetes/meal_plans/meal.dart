@@ -210,7 +210,7 @@ class MealPlannerScreen extends StatelessWidget {
 
                       const SizedBox(height: 16),
 
-// Horizontal Meal Cards
+
                       // Horizontal Meal Cards
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
