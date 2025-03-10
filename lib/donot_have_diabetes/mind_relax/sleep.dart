@@ -55,7 +55,9 @@ class WelcomeScreen extends StatelessWidget {
                       color: Colors.white,
                       size: 28,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context); // Navigate back to Mind Relax Dashboard
+                    },
                   ),
                 ),
                 
