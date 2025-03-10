@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mybete_app/log_in_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'components/color.dart';
 import 'donot_have_diabetes/donot_have_diabete.dart';
-import 'have_diabetes/have_diabete.dart';
+import 'have_diabetes/have_diabete_quiz.dart';
 import 'not_sure/not_sure.dart';
-import 'log_in_screen.dart'; // Import the login screen
 
 class DiabeteOptions extends StatelessWidget {
   const DiabeteOptions({super.key});
@@ -77,9 +77,9 @@ Widget haveDiabetes(BuildContext context) {
   return Container(
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(8),
-      color: Colors.red, // Replace with primaryColor if needed
+      color: Colors.red,
     ),
-    width: 200, // Give it a fixed width
+    width: 200,
     height: 55,
     child: TextButton(
       onPressed: () {
@@ -100,9 +100,9 @@ Widget doNotHaveDiabetes(BuildContext context) {
   return Container(
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(8),
-      color: Colors.blue, // Replace with primaryColor if needed
+      color: Colors.green,
     ),
-    width: 200, // Give it a fixed width
+    width: 200,
     height: 55,
     child: TextButton(
       onPressed: () {
@@ -123,9 +123,9 @@ Widget notSure(BuildContext context) {
   return Container(
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(8),
-      color: Colors.blue, // Replace with primaryColor if needed
+      color: Colors.amber,
     ),
-    width: 200, // Give it a fixed width
+    width: 200,
     height: 55,
     child: TextButton(
       onPressed: () {
