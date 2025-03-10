@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'components/color.dart';
 import 'donot_have_diabetes/donot_have_diabete.dart';
-import 'have_diabetes/have_diabete.dart';
+import 'have_diabetes/have_diabete_quiz.dart';
 import 'not_sure/not_sure.dart';
 
 class DiabeteOptions extends StatelessWidget {
