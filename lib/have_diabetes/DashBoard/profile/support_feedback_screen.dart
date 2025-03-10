@@ -15,18 +15,19 @@ class _SupportFeedbackScreenState extends State<SupportFeedbackScreen> {
       path: 'thenujaasuntharesan@gmail.com',
       queryParameters: {
         'subject': 'User Feedback',
-        'body': _messageController.text
+        'body': _messageController.text,
       },
     );
 
-    if (await canLaunchUrl(emailUri)) {
-      await launchUrl(emailUri);
+    if (await canLaunch(emailUri.toString())) {
+      await launch(emailUri.toString());
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error sending feedback.")),
+        SnackBar(content: Text("Error sending feedback")),
       );
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
