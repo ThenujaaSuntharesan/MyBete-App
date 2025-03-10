@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mybete_app/donot_have_diabetes/mind_relax/quiz.dart';
 import 'package:mybete_app/donot_have_diabetes/Fitness/exercise.dart';
+import 'package:mybete_app/donot_have_diabetes/mind_relax/sleep.dart';
 
 void main() {
   runApp(const MindRelaxDashboard());
@@ -84,11 +85,21 @@ class _HomePageState extends State<HomePage> {
 
               // Sleep Card
               FeatureCard(
-                title: 'Sleep',
-                description:
-                    'Quality sleep is essential for mental and physical well-being. Prioritize rest to improve mood, focus, and overall health.',
-                buttonText: 'Get Start',
-              ),
+                    title: 'Sleep',
+                    description:
+                        'Quality sleep is essential for mental and physical well-being. Prioritize rest to improve mood, focus, and overall health.',
+                    buttonText: 'Get Start',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Sleep()), // Navigate to Sleep screen
+                      );
+                    },
+                  ),
+
+
+              const SizedBox(height: 20),
+
               const SizedBox(height: 20),
               // Meditate Card
               FeatureCard(
@@ -117,7 +128,6 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.fitness_center), // Fitness Page
             label: 'Fitness',
           ),
-          
           BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),
             label: 'Profile',
