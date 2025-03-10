@@ -1,4 +1,13 @@
 import 'package:flutter/material.dart';
+import 'vegetables.dart';
+import 'fruits.dart';
+import 'bakery.dart';
+import 'grains.dart';
+import 'dairy.dart';
+import 'animal.dart';
+import 'beverages.dart';
+
+
 
 void main() {
   runApp(const MyApp());
@@ -76,37 +85,79 @@ class FoodCategoryScreen extends StatelessWidget {
                         CategoryItem(
                           title: 'Vegetables',
                           imagePath: 'assets/vegetables.png',
-                          onTap: () {},
+                          onTap: () {
+                            // Navigate to VegetableScreen when tapped
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const VegetablesScreen()),
+                            );
+                          },
                         ),
                         CategoryItem(
                           title: 'Fruits',
                           imagePath: 'assets/fruits.png',
-                          onTap: () {},
+                          onTap: () {
+                            // Navigate to FruitScreen when tapped
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const FruitsScreen()),
+                            );
+                          },
                         ),
                         CategoryItem(
                           title: 'Bakery\nItems',
                           imagePath: 'assets/bakery.png',
-                          onTap: () {},
+                          onTap: () {
+                            // Navigate to BakeryScreen when tapped
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const BakeryItemsScreen()),
+                            );
+                          },
                         ),
                         CategoryItem(
                           title: 'Grains',
                           imagePath: 'assets/grains.png',
-                          onTap: () {},
+                          onTap: () {
+                            // Navigate to GrainsScreen when tapped
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const GrainsScreen()),
+                            );
+                          },
                         ),
                         CategoryItem(
                           title: 'Dairy\nProducts',
                           imagePath: 'assets/milk.png',
-                          onTap: () {},
+                          onTap: () {
+                            // Navigate to GrainsScreen when tapped
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const GrainsScreen()),
+                            );
+                          },
                         ),
                         CategoryItem(
                           title: 'Animal\nProtiens',
                           imagePath: 'assets/meat.png',
-                          onTap: () {},
+                          onTap: () {
+                            // Navigate to AnimalProtienScreen when tapped
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const AnimalProteinsScreen()),
+                            );
+                          },
                         ),
                         CategoryItem(
                           title: 'Beverages',
                           imagePath: 'assets/wine.png',
-                          onTap: () {},
+                          onTap: () {
+                            // Navigate to BeverageScreen when tapped
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const BeveragesScreen()),
+                            );
+                          },
                         ),
                       ],
                     ),
