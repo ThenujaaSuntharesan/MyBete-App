@@ -556,15 +556,65 @@
 //   }
 // }
 
+
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'LogDetails/LogInterface.dart';
+import 'Profile.dart';
+import 'Reminders.dart';
+import 'Reports.dart';
+
+
 class MyActivityScreen extends StatefulWidget {
   @override
   _MyActivityScreenState createState() => _MyActivityScreenState();
 }
 
 class _MyActivityScreenState extends State<MyActivityScreen> {
+  int _selectedIndex = 0;
+
+  // Navigation Bar Screens
+  final List<Widget> _screens = [
+    MyActivityScreenContent(), // Main Activity Screen
+    ReportsScreen(),
+    RemindersScreen(),
+    ProfileScreen(),
+  ];
+
+  void _onTabTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _screens[_selectedIndex], // Show selected screen
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onTabTapped,
+        selectedItemColor: Colors.lightBlue, // Highlight selected tab
+        unselectedItemColor: Colors.grey,
+        showUnselectedLabels: true,
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "My activity"),
+          BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: "Reports"),
+          BottomNavigationBarItem(icon: Icon(Icons.notifications), label: "Reminders"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+        ],
+      ),
+    );
+  }
+}
+
+// Separate Widget for My Activity Screen Content
+class MyActivityScreenContent extends StatefulWidget {
+  @override
+  _MyActivityScreenContentState createState() => _MyActivityScreenContentState();
+}
+
+class _MyActivityScreenContentState extends State<MyActivityScreenContent> {
   List<Map<String, dynamic>> logHistory = [];
 
   void _deleteLogEntry(int index) {
