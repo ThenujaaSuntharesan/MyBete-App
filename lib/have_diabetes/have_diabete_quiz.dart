@@ -1062,7 +1062,7 @@ class _QuizScreenState extends State<QuizScreen> {
   void _finishQuiz() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => DashboardScreen()),
+      MaterialPageRoute(builder: (context) => MyActivityScreen()),
     );
   }
 
@@ -1154,7 +1154,7 @@ class _QuizScreenState extends State<QuizScreen> {
                     child: ElevatedButton(
                       onPressed: _finishQuiz,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
+                        backgroundColor: Colors.blue,
                       ),
                       child: Text("Finish"),
                     ),
