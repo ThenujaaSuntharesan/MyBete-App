@@ -199,7 +199,7 @@ class _BouncingCirclesState extends State<BouncingCircles>
                   width: sizes[entry.key],
                   height: sizes[entry.key],
                   decoration: BoxDecoration(
-                    color: Colors.blue,
+                    color: Color(0xFF06333B),
                     shape: BoxShape.circle,
                   ),
                 ),
