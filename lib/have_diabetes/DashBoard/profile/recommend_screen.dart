@@ -9,10 +9,15 @@ class RecommendScreen extends StatelessWidget {
     );
 
     // Close the screen after sharing
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(Duration(milliseconds: 200), () {
       Navigator.of(context).pop();
     });
 
     return SizedBox.shrink(); // Empty widget since UI isn't needed
   }
 }
+
+
+
+
+
