@@ -1,18 +1,3 @@
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/material.dart';
-//
-// class ProfileScreen extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: Text("Profile")),
-//       body: Center(child: Text("User Profile Information")),
-//     );
-//   }
-// }
-
-
-
 import 'package:flutter/material.dart';
 import 'package:mybete_app/have_diabetes/DashBoard/profile/recommend_screen.dart';
 import 'package:mybete_app/have_diabetes/DashBoard/profile/support_feedback_screen.dart';

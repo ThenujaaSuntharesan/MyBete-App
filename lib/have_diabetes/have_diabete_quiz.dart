@@ -1143,6 +1143,9 @@ class _QuizScreenState extends State<QuizScreen> {
                   ElevatedButton(
                     onPressed: _goToNextQuestion,
                     child: Text("Next"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                    ),
                   ),
 
                 if (_allQuestionsAnswered &&
