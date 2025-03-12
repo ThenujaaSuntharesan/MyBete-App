@@ -226,21 +226,21 @@ class MealPlannerScreen extends StatelessWidget {
                             // Lunch Card
                             _mealCard(
                               context,
-                              imageUrl: 'donot_have_diabetes/meal_plans/meal images/lunch.jpg',
+                              imageUrl: 'lib/donot_have_diabetes/meal_plans/meal images/lunch.jpg',
                               label: 'Lunch',
                             ),
                             const SizedBox(width: 16),
                             // Dinner Card
                             _mealCard(
                               context,
-                              imageUrl: 'donot_have_diabetes/meal_plans/meal images/dinner.jpg',
+                              imageUrl: 'lib/donot_have_diabetes/meal_plans/meal images/dinner.jpg',
                               label: 'Dinner',
                             ),
                             const SizedBox(width: 16),
                             // Snack Card
                             _mealCard(
                               context,
-                              imageUrl: 'donot_have_diabetes/meal_plans/meal images/snack.jpg',
+                              imageUrl: 'lib/donot_have_diabetes/meal_plans/meal images/snack.jpg',
                               label: 'Snack',
                             ),
                           ],
