@@ -1007,23 +1007,21 @@ class _QuizScreenState extends State<QuizScreen> {
       ]
     },
     {
-      'question': 'How often do you check your blood sugar levels?',
+      'question': 'Do you follow a specific diet to manage your diabetes?',
       'options': [
-        'Once a day',
-        'Twice a day',
-        'More than twice a day',
-        'Using a CGM',
-        "I don't measure my blood sugar"
+        'Yes, a doctor-recommended diet',
+        'Yes, but I follow my own plan',
+        'No, I eat normally',
+
       ]
     },
     {
-      'question': 'What devices do you use to manage your blood sugar?',
+      'question': 'How often do you visit a doctor or healthcare provider for diabetes check-ups?',
       'options': [
-        'Basic blood glucose meter',
-        'Connected blood glucose meter (with an app)',
-        'CGM',
-        'Insulin pump',
-        'None'
+        'Every 3 months',
+        'Every 6 months',
+        'Once a year',
+        'Rarely'
       ]
     },
     {
@@ -1062,7 +1060,7 @@ class _QuizScreenState extends State<QuizScreen> {
   void _finishQuiz() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => DashboardScreen()),
+      MaterialPageRoute(builder: (context) => MyActivityScreen()),
     );
   }
 
@@ -1154,7 +1152,7 @@ class _QuizScreenState extends State<QuizScreen> {
                     child: ElevatedButton(
                       onPressed: _finishQuiz,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
+                        backgroundColor: Colors.blue,
                       ),
                       child: Text("Finish"),
                     ),
