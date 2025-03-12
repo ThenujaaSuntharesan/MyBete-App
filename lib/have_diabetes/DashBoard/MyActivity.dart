@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-
-import 'Profile.dart';
+import 'profile/Profile.dart';
 import 'Reminders.dart';
 import 'Reports.dart';
 
@@ -47,7 +46,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        selectedItemColor: Colors.blueAccent,
+        selectedItemColor: Color(0xFF5FB8DD),
         unselectedItemColor: Colors.grey,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "My Activity"),
@@ -60,129 +59,179 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 }
 
-class MyActivityScreen extends StatelessWidget {
+class MyActivityScreen extends StatefulWidget {
+  @override
+  _MyActivityScreenState createState() => _MyActivityScreenState();
+}
+
+class _MyActivityScreenState extends State<MyActivityScreen> {
+  List<Map<String, String>> logs = [];
+
+  void _addLog(Map<String, String> newLog) {
+    setState(() {
+      logs.insert(0, newLog);
+    });
+  }
+
+  void _openLogEntryDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return LogEntryDialog(onSave: _addLog);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("My Activity")),
+      appBar: AppBar(
+        title: Text("My Activity"),
+        backgroundColor: Color(0xFF5FB8DD),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)),
-              elevation: 5,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Activity Overview", style: TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold)),
-                    SizedBox(height: 10),
-                    Container(
-                      height: 200,
-                      child: LineChart(
-                        LineChartData(
-                          gridData: FlGridData(show: false),
-                          titlesData: FlTitlesData(show: false),
-                          borderData: FlBorderData(show: false),
-                          lineBarsData: [
-                            LineChartBarData(
-                              spots: [
-                                FlSpot(0, 1),
-                                FlSpot(1, 3),
-                                FlSpot(2, 2),
-                                FlSpot(3, 5),
-                                FlSpot(4, 3),
-                                FlSpot(5, 4),
-                              ],
-                              isCurved: true,
-                              gradient: LinearGradient(
-                                colors: [
-                                  Colors.blue,
-                                  Colors.lightBlueAccent
-                                ], // Replace colors with gradient
-                              ),
-                              barWidth: 4,
-                              belowBarData: BarAreaData(show: false),
-                            ),
-                          ],
-                        ),
-                      ),
+            // Stats Graph
+            Expanded(
+              child: logs.isEmpty
+                  ? Center(child: Text("No logs available. Add your first entry!"))
+                  : LineChart(
+                LineChartData(
+                  gridData: FlGridData(show: true),
+                  titlesData: FlTitlesData(show: true),
+                  borderData: FlBorderData(show: false),
+                  lineBarsData: [
+                    LineChartBarData(
+                      spots: logs
+                          .asMap()
+                          .entries
+                          .map((entry) => FlSpot(
+                          entry.key.toDouble(),
+                          double.tryParse(entry.value["bloodSugar"] ?? "0") ?? 0))
+                          .toList(),
+                      isCurved: true,
+                      color: Color(0xFF5EB7CF),
+                      barWidth: 4,
                     ),
                   ],
                 ),
               ),
             ),
             SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _activityCard(
-                    "Steps", "-", Icons.directions_walk, Colors.orange),
-                _activityCard("Average mg/dL", "-", Icons.local_fire_department,
-                    Colors.red),
-                _activityCard("Active Time", "-", Icons.timer, Colors.blue),
-              ],
-            ),
-            SizedBox(height: 20),
+            // Log History
             Expanded(
-              child: ListView(
-                children: [
-                  _activityListTile("Monday 17 Feb 2025", "07:00 AM - 07:30 AM",
-                      Icons.local_fire_department, Colors.green),
-                  _activityListTile("Monday 17 Feb 2025", "07:00 AM - 07:30 AM",
-                      Icons.local_fire_department, Colors.green),
-                  _activityListTile("Monday 17 Feb 2025", "07:00 AM - 07:30 AM",
-                      Icons.local_fire_department, Colors.green),
-
-                ],
+              child: ListView.builder(
+                itemCount: logs.length,
+                itemBuilder: (context, index) {
+                  final log = logs[index];
+                  return ListTile(
+                    title: Text("${log['date']} at ${log['time']}"),
+                    subtitle: Text("Blood Sugar: ${log['bloodSugar']} mg/dL"),
+                    leading: Icon(Icons.history, color: Color(0xFF5FB8DD)),
+                  );
+                },
               ),
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Implement logging functionality here
-        },
-        child: Icon(Icons.note_add),
-        backgroundColor: Colors.blueAccent,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-    );
-  }
-
-  Widget _activityCard(String title, String value, IconData icon, Color color) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      elevation: 3,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Icon(icon, size: 30, color: color),
-            SizedBox(height: 5),
-            Text(title,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            Text(
-                value, style: TextStyle(fontSize: 14, color: Colors.grey[700])),
-          ],
-        ),
+        backgroundColor: Color(0xFF5FB8DD),
+        onPressed: _openLogEntryDialog,
+        child: Icon(Icons.add, color: Colors.white),
       ),
     );
   }
+}
 
-  Widget _activityListTile(String title, String subtitle, IconData icon,
-      Color color) {
-    return ListTile(
-      leading: Icon(icon, color: color),
-      title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-      subtitle: Text(subtitle, style: TextStyle(color: Colors.grey[600])),
-      trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+class LogEntryDialog extends StatefulWidget {
+  final Function(Map<String, String>) onSave;
+
+  LogEntryDialog({required this.onSave});
+
+  @override
+  _LogEntryDialogState createState() => _LogEntryDialogState();
+}
+
+class _LogEntryDialogState extends State<LogEntryDialog> {
+  TextEditingController dateController = TextEditingController();
+  TextEditingController timeController = TextEditingController();
+  TextEditingController bloodSugarController = TextEditingController();
+
+  Future<void> _selectDate() async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (pickedDate != null) {
+      setState(() {
+        dateController.text = "${pickedDate.toLocal()}".split(' ')[0];
+      });
+    }
+  }
+
+  Future<void> _selectTime() async {
+    TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    if (pickedTime != null) {
+      setState(() {
+        timeController.text = pickedTime.format(context);
+      });
+    }
+  }
+
+  void _saveLog() {
+    if (dateController.text.isEmpty ||
+        timeController.text.isEmpty ||
+        bloodSugarController.text.isEmpty) {
+      return;
+    }
+
+    widget.onSave({
+      "date": dateController.text,
+      "time": timeController.text,
+      "bloodSugar": bloodSugarController.text,
+    });
+
+    Navigator.of(context).pop();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text("Add Log"),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextField(
+            controller: dateController,
+            decoration: InputDecoration(labelText: "Date"),
+            readOnly: true,
+            onTap: _selectDate,
+          ),
+          TextField(
+            controller: timeController,
+            decoration: InputDecoration(labelText: "Time"),
+            readOnly: true,
+            onTap: _selectTime,
+          ),
+          TextField(
+            controller: bloodSugarController,
+            decoration: InputDecoration(labelText: "Blood Sugar (mg/dL)"),
+            keyboardType: TextInputType.number,
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.of(context).pop(), child: Text("Cancel")),
+        ElevatedButton(onPressed: _saveLog, child: Text("Save")),
+      ],
     );
   }
 }
