@@ -561,7 +561,6 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 import 'LogDetails/LogInterface.dart';
-import 'Profile.dart';
 
 
 import 'profile/Profile.dart';
