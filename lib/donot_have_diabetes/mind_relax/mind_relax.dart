@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/meal.dart';
 import 'package:mybete_app/donot_have_diabetes/mind_relax/quiz.dart';
 import 'package:mybete_app/donot_have_diabetes/Fitness/exercise.dart';
 import 'package:mybete_app/donot_have_diabetes/mind_relax/sleep.dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/meal.dart';
 
 void main() {
   runApp(const MindRelaxDashboard());
@@ -34,26 +36,26 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 1;
 
-  //navigation bar code
+  
+  //navigation bar
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  setState(() {
+    _selectedIndex = index;
+  });
 
-    if (index == 2) {
-      // Fitness Page
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Exercise()),
-      );
-    } else if (index == 3) {
-      // Meal Plan Page
-      //Navigator.push(
-      // context,
-      //MaterialPageRoute(builder: (context) => MealPlanPage()),
-      //);
-    }
+  if (index == 0) { // Meal Plan Page
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => MealPlannerScreen()),
+    );
+  } else if (index == 2) { // Fitness Page
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Exercise()),
+    );
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -85,18 +87,19 @@ class _HomePageState extends State<HomePage> {
 
               // Sleep Card
               FeatureCard(
-                    title: 'Sleep',
-                    description:
-                        'Quality sleep is essential for mental and physical well-being. Prioritize rest to improve mood, focus, and overall health.',
-                    buttonText: 'Get Start',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Sleep()), // Navigate to Sleep screen
-                      );
-                    },
-                  ),
-
+                title: 'Sleep',
+                description:
+                    'Quality sleep is essential for mental and physical well-being. Prioritize rest to improve mood, focus, and overall health.',
+                buttonText: 'Get Start',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            Sleep()), // Navigate to Sleep screen
+                  );
+                },
+              ),
 
               const SizedBox(height: 20),
 
