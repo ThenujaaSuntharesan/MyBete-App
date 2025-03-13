@@ -43,7 +43,7 @@ class DiabeteOptions extends StatelessWidget {
                 userFriendlyButton(
                   context,
                   "I have diabetes",
-                  Colors.red,
+                  Color(0xFFE28869),
                   Icons.favorite,
                   HaveDiabetesDashboard(),
                 ),
@@ -51,7 +51,7 @@ class DiabeteOptions extends StatelessWidget {
                 userFriendlyButton(
                   context,
                   "I don't have diabetes",
-                  Colors.green,
+                  Color(0xFF288994),
                   Icons.no_food,
                   DonotHaveDiabeteDashboard(),
                 ),
@@ -59,7 +59,7 @@ class DiabeteOptions extends StatelessWidget {
                 userFriendlyButton(
                   context,
                   "Need Guidance",
-                  Colors.amber,
+                  Color(0xFFF1FAEE),
                   Icons.help,
                   NotSureDashboard(),
                 ),
@@ -123,11 +123,11 @@ Widget userFriendlyButton(BuildContext context, String text, Color color,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, color: Colors.white),
+          Icon(icon, color: Colors.black38),
           SizedBox(width: 10),
           Text(
             text,
-            style: TextStyle(color: Colors.white, fontSize: 18),
+            style: TextStyle(color: Colors.black87, fontSize: 18),
           ),
         ],
       ),
