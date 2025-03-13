@@ -36,26 +36,26 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 1;
 
-  
   //navigation bar
   void _onItemTapped(int index) {
-  setState(() {
-    _selectedIndex = index;
-  });
+    setState(() {
+      _selectedIndex = index;
+    });
 
-  if (index == 0) { // Meal Plan Page
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => MealPlannerScreen()),
-    );
-  } else if (index == 2) { // Fitness Page
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Exercise()),
-    );
+    if (index == 0) {
+      // Meal Plan Page
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MealPlannerScreen()),
+      );
+    } else if (index == 2) {
+      // Fitness Page
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Exercise()),
+      );
+    }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
