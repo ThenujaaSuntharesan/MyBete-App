@@ -9,12 +9,12 @@ class RecipeDetailScreen extends StatelessWidget {
       body: Stack(
         children: [
           // Background Image
-          Image.network(
-            'https://images.unsplash.com/photo-1517673132405-a56a62b18caf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2076&q=80',
-            height: double.infinity,
-            width: double.infinity,
-            fit: BoxFit.cover,
-          ),
+        Image.asset(
+        'lib/donot_have_diabetes/meal_plans/meal_images/Oatmeal with Toppings.jpeg',
+        height: double.infinity,
+        width: double.infinity,
+        fit: BoxFit.cover,
+      ),
 
           // Semi-transparent overlay
           Container(
@@ -48,7 +48,7 @@ class RecipeDetailScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: const Icon(
                         Icons.arrow_back,
-                        color: Colors.white,
+
                         size: 24,
                       ),
                     ),
