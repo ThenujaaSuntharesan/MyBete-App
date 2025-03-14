@@ -37,12 +37,20 @@ class DiabeteOptions extends StatelessWidget {
                     final prefs = await SharedPreferences.getInstance();
                     prefs.setBool("onboarding", false);
                   },
-                  child: Text("Choose one option from these three"),
+                  child: Text(
+                    "Choose one option from these three",
+                    style: TextStyle(
+                      color: Color(0xFF35B4C9), // Change 'blue' to any color you like
+                      fontSize: 16, // Optional: adjust the font size
+                      fontWeight: FontWeight.bold, // Optional: adjust the weight
+                    ),
+                  ),
+
                 ),
                 SizedBox(height: 20),
                 userFriendlyButton(
                   context,
-                  "I have diabetes",
+                  "Have Diabetes",
                   Color(0xFFE28869),
                   Icons.favorite,
                   HaveDiabetesDashboard(),
@@ -50,7 +58,7 @@ class DiabeteOptions extends StatelessWidget {
                 SizedBox(height: 20),
                 userFriendlyButton(
                   context,
-                  "I don't have diabetes",
+                  "Don't Have Diabetes",
                   Color(0xFF288994),
                   Icons.no_food,
                   DonotHaveDiabeteDashboard(),
