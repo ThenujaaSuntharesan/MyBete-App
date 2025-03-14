@@ -3,6 +3,7 @@ import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/oatmeal.dart'
 import 'vegetables.dart';
 import 'fruits.dart';
 import 'bakery.dart';
+import 'grains.dart';
 
 
 void main() {
@@ -127,6 +128,10 @@ class FoodCategoryScreen extends StatelessWidget {
                           title: 'Grains',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/grains.png',
                           onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const GrainsScreen()),
+                            );
 
                           },
                         ),
