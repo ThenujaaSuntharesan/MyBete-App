@@ -49,3 +49,33 @@ final List<YogaPose> _poses = [
     icon: Icons.accessibility_new,
   ),
 ];
+Widget _buildIntroductionCard() {
+  return Card(
+    elevation: 4,
+    child: Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          const Text(
+            'Mindful Yoga Practice',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.green,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'Improve flexibility, balance, and mental focus through '
+                'our curated yoga sessions',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey[600],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
