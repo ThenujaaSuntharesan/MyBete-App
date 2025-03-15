@@ -1,39 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-
+import 'LogDetails/LogInterface.dart';
 import 'profile/Profile.dart';
 import 'Reminders.dart';
 import 'Reports.dart';
 
-void main() {
-  runApp(MyApp());
-}
 
-class MyApp extends StatelessWidget {
+class MyActivityScreen extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: DashboardScreen(),
-    );
-  }
+  _MyActivityScreenState createState() => _MyActivityScreenState();
 }
 
-class DashboardScreen extends StatefulWidget {
-  @override
-  _DashboardScreenState createState() => _DashboardScreenState();
-}
-
-class _DashboardScreenState extends State<DashboardScreen> {
+class _MyActivityScreenState extends State<MyActivityScreen> {
   int _selectedIndex = 0;
+
+  // Navigation Bar Screens
   final List<Widget> _screens = [
-    MyActivityScreen(),
+    MyActivityScreenContent(), // Main Activity Screen
     ReportsScreen(),
     RemindersScreen(),
     ProfileScreen(),
   ];
 
-  void _onItemTapped(int index) {
+  void _onTabTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
@@ -42,16 +31,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_selectedIndex],
+      body: _screens[_selectedIndex], // Show selected screen
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        selectedItemColor: Color(0xFF5FB8DD),
+        onTap: _onTabTapped,
+        selectedItemColor: Colors.lightBlue, // Highlight selected tab
         unselectedItemColor: Colors.grey,
+        showUnselectedLabels: true,
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "My Activity"),
-          BottomNavigationBarItem(icon: Icon(Icons.analytics), label: "Reports"),
-          BottomNavigationBarItem(icon: Icon(Icons.alarm), label: "Reminders"),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "My activity"),
+          BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: "Reports"),
+          BottomNavigationBarItem(icon: Icon(Icons.notifications), label: "Reminders"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
       ),
@@ -59,77 +49,153 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 }
 
-class MyActivityScreen extends StatefulWidget {
+// Separate Widget for My Activity Screen Content
+class MyActivityScreenContent extends StatefulWidget {
   @override
-  _MyActivityScreenState createState() => _MyActivityScreenState();
+  _MyActivityScreenContentState createState() => _MyActivityScreenContentState();
 }
 
-class _MyActivityScreenState extends State<MyActivityScreen> {
-  List<Map<String, String>> logs = [];
+class _MyActivityScreenContentState extends State<MyActivityScreenContent> {
+  List<Map<String, dynamic>> logHistory = [];
 
-  void _addLog(Map<String, String> newLog) {
+  void _deleteLogEntry(int index) {
     setState(() {
-      logs.insert(0, newLog);
+      logHistory.removeAt(index);
     });
   }
 
-  void _openLogEntryDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return LogEntryDialog(onSave: _addLog);
-      },
+  void _navigateToLogEntryScreen() async {
+    final newLogEntry = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => LogEntryScreen()),
     );
+
+    if (newLogEntry != null) {
+      setState(() {
+        logHistory.add(newLogEntry);
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("My Activity"),
-        backgroundColor: Color(0xFF5FB8DD),
+        title: Text("My Activity", style: TextStyle(fontWeight: FontWeight.bold)),
+        backgroundColor: Colors.lightBlue[300],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Stats Graph
-            Expanded(
-              child: logs.isEmpty
-                  ? Center(child: Text("No logs available. Add your first entry!"))
-                  : LineChart(
-                LineChartData(
-                  gridData: FlGridData(show: true),
-                  titlesData: FlTitlesData(show: true),
-                  borderData: FlBorderData(show: false),
-                  lineBarsData: [
-                    LineChartBarData(
-                      spots: logs
-                          .asMap()
-                          .entries
-                          .map((entry) => FlSpot(
-                          entry.key.toDouble(),
-                          double.tryParse(entry.value["bloodSugar"] ?? "0") ?? 0))
-                          .toList(),
-                      isCurved: true,
-                      color: Color(0xFF5EB7CF),
-                      barWidth: 4,
+            // Blood Glucose Graph
+            Card(
+              color: Color(0xFFC5EDFF),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+              elevation: 5,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Blood Glucose Level (mg/dL)",
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    SizedBox(height: 10),
+                    Container(
+                      height: 200,
+                      child: LineChart(
+                        LineChartData(
+                          gridData: FlGridData(show: true),
+                          titlesData: FlTitlesData(show: true),
+                          borderData: FlBorderData(show: false),
+                          lineBarsData: [
+                            LineChartBarData(
+                              spots: logHistory.isNotEmpty
+                                  ? logHistory.asMap().entries.map((entry) {
+                                return FlSpot(entry.key.toDouble(), entry.value['bloodSugar']);
+                              }).toList()
+                                  : [FlSpot(0, 0)],
+                              isCurved: true,
+                              color: Color(0xFF5EB7CF),
+                              barWidth: 4,
+                              belowBarData: BarAreaData(show: false),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
             SizedBox(height: 20),
+            // Today's Summary
+            Center(
+              child: Column(
+                children: [
+                  Text("Today", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  //Text("-- -- ----", style: TextStyle(fontSize: 16, color: Colors.grey)),
+                  SizedBox(height: 10),
+                  CircleAvatar(
+                    radius: 40,
+                    backgroundColor: Colors.blue[100],
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          logHistory.isNotEmpty
+                              ? "${logHistory.last['bloodSugar']} mg/dL"
+                              : "---",
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        Text("Average", style: TextStyle(fontSize: 14, color: Colors.grey)),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  TextButton(
+                    onPressed: () {},
+                    child: Text("See more >", style: TextStyle(color: Colors.blue)),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 10),
             // Log History
             Expanded(
-              child: ListView.builder(
-                itemCount: logs.length,
+              child: logHistory.isEmpty
+                  ? Center(
+                child: Text("No log entries yet.", style: TextStyle(color: Colors.grey)),
+              )
+                  : ListView.builder(
+                itemCount: logHistory.length,
                 itemBuilder: (context, index) {
-                  final log = logs[index];
-                  return ListTile(
-                    title: Text("${log['date']} at ${log['time']}"),
-                    subtitle: Text("Blood Sugar: ${log['bloodSugar']} mg/dL"),
-                    leading: Icon(Icons.history, color: Color(0xFF5FB8DD)),
+                  final log = logHistory[index];
+                  return Card(
+                    margin: EdgeInsets.symmetric(vertical: 5),
+                    child: ExpansionTile(
+                      title: Text("${log['date']}"),
+                      children: [
+                        ListTile(
+                          title: Text("Time: ${log['time']}"),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Blood Sugar: ${log['bloodSugar']} mg/dL"),
+                              Text("Pills: ${log['pills']}"),
+                              Text("Blood Pressure: ${log['bloodPressure']} mmHg"),
+                              Text("Body Weight: ${log['bodyWeight']} kg"),
+                              Text("Food: ${log['foodType']}"),
+                            ],
+                          ),
+                          trailing: IconButton(
+                            icon: Icon(Icons.delete, color: Colors.red),
+                            onPressed: () => _deleteLogEntry(index),
+                          ),
+                        ),
+                      ],
+                    ),
                   );
                 },
               ),
@@ -139,99 +205,9 @@ class _MyActivityScreenState extends State<MyActivityScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xFF5FB8DD),
-        onPressed: _openLogEntryDialog,
+        onPressed: _navigateToLogEntryScreen,
         child: Icon(Icons.add, color: Colors.white),
       ),
-    );
-  }
-}
-
-class LogEntryDialog extends StatefulWidget {
-  final Function(Map<String, String>) onSave;
-
-  LogEntryDialog({required this.onSave});
-
-  @override
-  _LogEntryDialogState createState() => _LogEntryDialogState();
-}
-
-class _LogEntryDialogState extends State<LogEntryDialog> {
-  TextEditingController dateController = TextEditingController();
-  TextEditingController timeController = TextEditingController();
-  TextEditingController bloodSugarController = TextEditingController();
-
-  Future<void> _selectDate() async {
-    DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (pickedDate != null) {
-      setState(() {
-        dateController.text = "${pickedDate.toLocal()}".split(' ')[0];
-      });
-    }
-  }
-
-  Future<void> _selectTime() async {
-    TimeOfDay? pickedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-    if (pickedTime != null) {
-      setState(() {
-        timeController.text = pickedTime.format(context);
-      });
-    }
-  }
-
-  void _saveLog() {
-    if (dateController.text.isEmpty ||
-        timeController.text.isEmpty ||
-        bloodSugarController.text.isEmpty) {
-      return;
-    }
-
-    widget.onSave({
-      "date": dateController.text,
-      "time": timeController.text,
-      "bloodSugar": bloodSugarController.text,
-    });
-
-    Navigator.of(context).pop();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text("Add Log"),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: dateController,
-            decoration: InputDecoration(labelText: "Date"),
-            readOnly: true,
-            onTap: _selectDate,
-          ),
-          TextField(
-            controller: timeController,
-            decoration: InputDecoration(labelText: "Time"),
-            readOnly: true,
-            onTap: _selectTime,
-          ),
-          TextField(
-            controller: bloodSugarController,
-            decoration: InputDecoration(labelText: "Blood Sugar (mg/dL)"),
-            keyboardType: TextInputType.number,
-          ),
-        ],
-      ),
-      actions: [
-        TextButton(onPressed: () => Navigator.of(context).pop(), child: Text("Cancel")),
-        ElevatedButton(onPressed: _saveLog, child: Text("Save")),
-      ],
     );
   }
 }
