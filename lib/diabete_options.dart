@@ -37,21 +37,29 @@ class DiabeteOptions extends StatelessWidget {
                     final prefs = await SharedPreferences.getInstance();
                     prefs.setBool("onboarding", false);
                   },
-                  child: Text("Choose one option from these three"),
+                  child: Text(
+                    "Choose one option from these three",
+                    style: TextStyle(
+                      color: Color(0xFF288994), // Change 'blue' to any color you like
+                      fontSize: 24, // Optional: adjust the font size
+                      fontWeight: FontWeight.bold, // Optional: adjust the weight
+                    ),
+                  ),
+
                 ),
                 SizedBox(height: 20),
                 userFriendlyButton(
                   context,
-                  "I have diabetes",
-                  Colors.red,
+                  "Have Diabetes",
+                  Color(0xFFE28869),
                   Icons.favorite,
                   HaveDiabetesDashboard(),
                 ),
                 SizedBox(height: 20),
                 userFriendlyButton(
                   context,
-                  "I don't have diabetes",
-                  Colors.green,
+                  "Don't Have Diabetes",
+                  Color(0xFF288994),
                   Icons.no_food,
                   DonotHaveDiabeteDashboard(),
                 ),
@@ -59,7 +67,7 @@ class DiabeteOptions extends StatelessWidget {
                 userFriendlyButton(
                   context,
                   "Need Guidance",
-                  Colors.amber,
+                  Color(0xFFF1FAEE),
                   Icons.help,
                   NotSureDashboard(),
                 ),
@@ -123,11 +131,11 @@ Widget userFriendlyButton(BuildContext context, String text, Color color,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, color: Colors.white),
+          Icon(icon, color: Colors.black38),
           SizedBox(width: 10),
           Text(
             text,
-            style: TextStyle(color: Colors.white, fontSize: 18),
+            style: TextStyle(color: Colors.black87, fontSize: 18),
           ),
         ],
       ),
