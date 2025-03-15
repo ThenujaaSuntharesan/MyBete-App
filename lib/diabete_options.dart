@@ -40,8 +40,8 @@ class DiabeteOptions extends StatelessWidget {
                   child: Text(
                     "Choose one option from these three",
                     style: TextStyle(
-                      color: Color(0xFF35B4C9), // Change 'blue' to any color you like
-                      fontSize: 16, // Optional: adjust the font size
+                      color: Color(0xFF288994), // Change 'blue' to any color you like
+                      fontSize: 24, // Optional: adjust the font size
                       fontWeight: FontWeight.bold, // Optional: adjust the weight
                     ),
                   ),
