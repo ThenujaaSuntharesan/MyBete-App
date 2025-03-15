@@ -44,12 +44,12 @@ class NotSureDashboard extends StatelessWidget {
             itemBuilder: (context, index) {
               return ListTile(
                 leading: CircleAvatar(
-                  backgroundColor: Colors.blue.withOpacity(0.2), // Blue with opacity
+                  backgroundColor: Colors.blue.withOpacity(0.2),
                   child: Text(
                     '${index + 1}',
                     style: const TextStyle(
-                      color: Color(0xFF288994), // Blue text for the number
-                      fontSize: 18,
+                      color: Color(0xFF288994), // Blue number
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -57,8 +57,8 @@ class NotSureDashboard extends StatelessWidget {
                 title: Text(
                   symptoms[index],
                   style: const TextStyle(
-                    color: Color(0xFF288994), // Blue text for the symptom
-                    fontSize: 18,
+                    color: Color(0xFF288994), // Blue text
+                    fontSize: 20,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -138,7 +138,14 @@ class LevelDetailScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: const Text('Check Symptom'),
+              child: Text(
+                "Check Symptom",
+                style: TextStyle(
+                  color: Color(0xFF288994),
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ],
         ),
