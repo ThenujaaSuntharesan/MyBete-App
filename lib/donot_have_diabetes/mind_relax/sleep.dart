@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mybete_app/donot_have_diabetes/mind_relax/mind_relax.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
+      statusBarColor: Color.fromARGB(0, 209, 207, 207),
       statusBarIconBrightness: Brightness.light,
     ),
   );
@@ -37,10 +38,10 @@ class WelcomeScreen extends StatelessWidget {
         children: [
           // Background with wave patterns
           ...buildBackgroundWaves(),
-          
+
           // Stars
           ...buildStars(),
-          
+
           // Main content
           SafeArea(
             child: Column(
@@ -48,19 +49,26 @@ class WelcomeScreen extends StatelessWidget {
               children: [
                 // Back button
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0, top: 16.0),
+                  padding: const EdgeInsets.only(left: 16.0),
                   child: IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.white,
-                      size: 28,
-                    ),
+                    icon: const Icon(Icons.arrow_back, size: 28),
                     onPressed: () {
-                      Navigator.pop(context); // Navigate back to Mind Relax Dashboard
+                      if (Navigator.canPop(context)) {
+                        Navigator.pop(context); // Go back if possible
+                      } else {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  MindRelaxDashboard()), // Replace with actual previous screen
+                        );
+                      }
                     },
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
                   ),
                 ),
-                
+
                 // Moon icon
                 Center(
                   child: Padding(
@@ -79,9 +87,9 @@ class WelcomeScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                
+
                 const Spacer(flex: 1),
-                
+
                 // Welcome text
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -111,12 +119,13 @@ class WelcomeScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                
+
                 const Spacer(flex: 2),
-                
+
                 // Get Started button
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 24.0, vertical: 32.0),
                   child: ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
@@ -138,7 +147,7 @@ class WelcomeScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                
+
                 // Bottom navigation
                 Container(
                   height: 70,
@@ -215,7 +224,8 @@ class WelcomeScreen extends StatelessWidget {
     ];
   }
 
-  Widget buildStar({double? top, double? left, double? right, required double size}) {
+  Widget buildStar(
+      {double? top, double? left, double? right, required double size}) {
     return Positioned(
       top: top,
       left: left,
