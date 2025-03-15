@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/oatmeal.dart';
+import 'vegetables.dart';
+import 'fruits.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -21,7 +25,9 @@ class MyApp extends StatelessWidget {
 }
 
 class FoodCategoryScreen extends StatelessWidget {
-  const FoodCategoryScreen({Key? key, required String mealType}) : super(key: key);
+  final String mealType;
+
+  const FoodCategoryScreen({Key? key, required this.mealType}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +40,15 @@ class FoodCategoryScreen extends StatelessWidget {
               padding: const EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0),
               child: Row(
                 children: [
-                  // Back Button
+                  // Back Button - FIXED to actually go back
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
                     child: const Icon(
                       Icons.arrow_back,
                       size: 30,
-                      color: Colors.black,
+
                     ),
                   ),
                   const Spacer(),
@@ -53,60 +61,90 @@ class FoodCategoryScreen extends StatelessWidget {
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 children: [
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
 
-                  // Select food category Title
-                  const Text(
-                    'Select food category',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF0048FF),
+                  ShaderMask(
+                    shaderCallback: (bounds) => const LinearGradient(
+                      colors: [
+                        Color(0xFF0066FF),
+                        Color(0xFF00CCFF),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ).createShader(bounds),
+                    child: const Text(
+                      'Select your Meal',
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-
                   const SizedBox(height: 18),
 
                   // Food Categories Horizontal Scroller
                   SizedBox(
-                    height: 120,
+                    height: 150,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: [
                         CategoryItem(
                           title: 'Vegetables',
-                          imagePath: 'assets/vegetables.png',
-                          onTap: () {},
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/vegetable.png',
+                          onTap: () {
+                            // Navigate to VegetableScreen when tapped
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const VegetablesScreen()),
+                            );
+                          },
                         ),
                         CategoryItem(
                           title: 'Fruits',
-                          imagePath: 'assets/fruits.png',
-                          onTap: () {},
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/fruits.png',
+                          onTap: () {
+                            // Navigate to FruitScreen when tapped
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const FruitsScreen()),
+                            );
+                          },
                         ),
                         CategoryItem(
-                          title: 'Bakery\nItems',
-                          imagePath: 'assets/bakery.png',
-                          onTap: () {},
+                          title: 'Bakery Items',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/cake.png',
+                          onTap: () {
+
+                          },
                         ),
                         CategoryItem(
                           title: 'Grains',
-                          imagePath: 'assets/grains.png',
-                          onTap: () {},
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/grains.png',
+                          onTap: () {
+
+                          },
                         ),
                         CategoryItem(
-                          title: 'Dairy\nProducts',
-                          imagePath: 'assets/milk.png',
-                          onTap: () {},
+                          title: 'Dairy Products',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/milk.png',
+                          onTap: () {
+
+                          },
                         ),
                         CategoryItem(
                           title: 'Animal\nProtiens',
-                          imagePath: 'assets/meat.png',
-                          onTap: () {},
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/protein.png',
+                          onTap: () {
+
+                          },
                         ),
                         CategoryItem(
                           title: 'Beverages',
-                          imagePath: 'assets/wine.png',
-                          onTap: () {},
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/wine.png',
+                          onTap: () {
+
+                          },
                         ),
                       ],
                     ),
@@ -114,16 +152,24 @@ class FoodCategoryScreen extends StatelessWidget {
 
                   const SizedBox(height: 24),
 
-                  // Custom recipes Title
-                  const Text(
-                    'Custom recipes',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF0048FF),
+                  ShaderMask(
+                    shaderCallback: (bounds) => const LinearGradient(
+                      colors: [
+                        Color(0xFF0066FF),
+                        Color(0xFF00CCFF),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ).createShader(bounds),
+                    child: const Text(
+                      'Custom Recipies',
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-
                   const SizedBox(height: 16),
 
                   // Breakfast Section
@@ -132,7 +178,7 @@ class FoodCategoryScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+
                     ),
                   ),
 
@@ -140,31 +186,66 @@ class FoodCategoryScreen extends StatelessWidget {
 
                   // Breakfast Recipes Horizontal Scroller
                   SizedBox(
-                    height: 180,
+                    height: 280,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: [
                         RecipeCard(
                           title: 'Oatmeal with Nuts & Fruits',
-                          imagePath: 'assets/oatmeal.jpg',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/Oatmeal with Toppings.jpeg',
                           isFavorite: true,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const RecipeDetailScreen()),
+                            );
+                          },
                         ),
                         RecipeCard(
                           title: 'Scrambled Eggs with Veggies',
-                          imagePath: 'assets/scrambled_eggs.jpg',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/scramble.png',
                           isFavorite: false,
                           onTap: () {},
                         ),
                         RecipeCard(
                           title: 'Overnight Oats with Peanut Butter & Banana',
-                          imagePath: 'assets/overnight_oats.jpg',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/oats.png',
                           isFavorite: false,
                           onTap: () {},
                         ),
                         RecipeCard(
                           title: 'Chia Seed Pudding',
-                          imagePath: 'assets/overnight_oats.jpg',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/chia_pudding.png',
+                          isFavorite: false,
+                          onTap: () {},
+                        ),
+                        RecipeCard(
+                          title: 'Chia Seed Pudding',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/chia_pudding.png',
+                          isFavorite: false,
+                          onTap: () {},
+                        ),
+                        RecipeCard(
+                          title: 'Chia Seed Pudding',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/chia_pudding.png',
+                          isFavorite: false,
+                          onTap: () {},
+                        ),
+                        RecipeCard(
+                          title: 'Chia Seed Pudding',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/chia_pudding.png',
+                          isFavorite: false,
+                          onTap: () {},
+                        ),
+                        RecipeCard(
+                          title: 'Chia Seed Pudding',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/chia_pudding.png',
+                          isFavorite: false,
+                          onTap: () {},
+                        ),
+                        RecipeCard(
+                          title: 'Chia Seed Pudding',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/chia_pudding.png',
                           isFavorite: false,
                           onTap: () {},
                         ),
@@ -172,7 +253,7 @@ class FoodCategoryScreen extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 30),
 
                   // Lunch Section
                   const Text(
@@ -180,7 +261,7 @@ class FoodCategoryScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+
                     ),
                   ),
 
@@ -194,19 +275,19 @@ class FoodCategoryScreen extends StatelessWidget {
                       children: [
                         RecipeCard(
                           title: 'Grilled Chicken & Quinoa Salad',
-                          imagePath: 'assets/chicken_salad.jpg',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/chicken_salad.jpg',
                           isFavorite: false,
                           onTap: () {},
                         ),
                         RecipeCard(
                           title: 'Lentil & Vegetable Soup',
-                          imagePath: 'assets/lentil_soup.jpg',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/lentil_soup.jpg',
                           isFavorite: false,
                           onTap: () {},
                         ),
                         RecipeCard(
                           title: 'Chickpea & Avocado Sandwich',
-                          imagePath: 'assets/chickpea_sandwich.jpg',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/chickpea_sandwich.jpg',
                           isFavorite: false,
                           onTap: () {},
                         ),
@@ -222,7 +303,7 @@ class FoodCategoryScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+
                     ),
                   ),
 
@@ -236,19 +317,19 @@ class FoodCategoryScreen extends StatelessWidget {
                       children: [
                         RecipeCard(
                           title: 'Stuffed Bell Peppers',
-                          imagePath: 'assets/stuffed_peppers.jpg',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/stuffed_peppers.jpg',
                           isFavorite: false,
                           onTap: () {},
                         ),
                         RecipeCard(
                           title: 'Baked Cod with Roasted Vegetables',
-                          imagePath: 'assets/baked_cod.jpg',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/baked_cod.jpg',
                           isFavorite: false,
                           onTap: () {},
                         ),
                         RecipeCard(
                           title: 'Lemon Garlic Shrimp with Asparagus',
-                          imagePath: 'assets/shrimp.jpg',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/shrimp.jpg',
                           isFavorite: false,
                           onTap: () {},
                         ),
@@ -264,7 +345,7 @@ class FoodCategoryScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+
                     ),
                   ),
 
@@ -278,19 +359,19 @@ class FoodCategoryScreen extends StatelessWidget {
                       children: [
                         RecipeCard(
                           title: 'Banana with Peanut Butter',
-                          imagePath: 'assets/banana_pb.jpg',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/banana_pb.jpg',
                           isFavorite: false,
                           onTap: () {},
                         ),
                         RecipeCard(
                           title: 'Greek Yogurt and Honey',
-                          imagePath: 'assets/greek_yogurt.jpg',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/greek_yogurt.jpg',
                           isFavorite: false,
                           onTap: () {},
                         ),
                         RecipeCard(
                           title: 'Carrot Sticks with Hummus',
-                          imagePath: 'assets/carrot_hummus.jpg',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/carrot_hummus.jpg',
                           isFavorite: false,
                           onTap: () {},
                         ),
@@ -370,7 +451,7 @@ class CategoryItem extends StatelessWidget {
         margin: const EdgeInsets.only(right: 16),
         child: Column(
           children: [
-            // Category Image
+            // Category Image - FIXED to use Image.asset
             Container(
               height: 80,
               width: 80,
@@ -380,12 +461,15 @@ class CategoryItem extends StatelessWidget {
               child: Image.asset(
                 imagePath,
                 fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) => Container(
-                  height: 80,
-                  width: 80,
-                  color: Colors.grey.shade200,
-                  child: const Icon(Icons.image, size: 40),
-                ),
+                errorBuilder: (context, error, stackTrace) {
+                  print('Error loading image: $imagePath - $error'); // Added for debugging
+                  return Container(
+                    height: 80,
+                    width: 80,
+                    color: Colors.grey.shade200,
+                    child: const Icon(Icons.image, size: 40),
+                  );
+                },
               ),
             ),
 
@@ -395,9 +479,9 @@ class CategoryItem extends StatelessWidget {
             Text(
               title,
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 19,
                 fontWeight: FontWeight.w500,
-                color: Colors.black,
+
               ),
               textAlign: TextAlign.center,
             ),
@@ -437,17 +521,20 @@ class RecipeCard extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(12),
-                  child: Image.asset(
+                  child: Image.asset(  // FIXED to use Image.asset
                     imagePath,
-                    height: 120,
+                    height: 200,
                     width: 150,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      height: 120,
-                      width: 150,
-                      color: Colors.grey.shade200,
-                      child: const Icon(Icons.image, size: 40),
-                    ),
+                    errorBuilder: (context, error, stackTrace) {
+                      print('Error loading image: $imagePath - $error'); // Added for debugging
+                      return Container(
+                        height: 120,
+                        width: 150,
+                        color: Colors.grey.shade200,
+                        child: const Icon(Icons.image, size: 40),
+                      );
+                    },
                   ),
                 ),
                 Positioned(
@@ -476,9 +563,9 @@ class RecipeCard extends StatelessWidget {
             Text(
               title,
               style: const TextStyle(
-                fontSize: 14,
+                fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: Colors.black,
+
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,

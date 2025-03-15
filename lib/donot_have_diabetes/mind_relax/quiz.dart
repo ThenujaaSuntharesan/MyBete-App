@@ -1,5 +1,5 @@
-import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mybete_app/donot_have_diabetes/mind_relax/mind_relax.dart';
 
 void main() {
@@ -52,6 +52,56 @@ class _MindRelaxQuestionnairePageState
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Status Bar Mockup
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            '9:41',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Icon(Icons.signal_cellular_4_bar, size: 18),
+                              SizedBox(width: 4),
+                              Icon(Icons.wifi, size: 18),
+                              SizedBox(width: 4),
+                              Icon(Icons.battery_full, size: 18),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Back Button
+                    // Back Button
+Padding(
+  padding: const EdgeInsets.only(left: 16.0),
+  child: IconButton(
+    icon: const Icon(Icons.arrow_back, size: 28),
+    onPressed: () {
+      if (Navigator.canPop(context)) {
+        Navigator.pop(context); // Go back if possible
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) =>  MindRelaxDashboard()), // Replace with actual previous screen
+        );
+      }
+    },
+    padding: EdgeInsets.zero,
+    constraints: const BoxConstraints(),
+  ),
+),
+
+                    const SizedBox(height: 16),
+
                     // Title
                     Center(
                       child: Column(
@@ -104,26 +154,13 @@ class _MindRelaxQuestionnairePageState
                           const SizedBox(height: 24),
 
                           // Zen Stones Image
-                           ClipRRect(
+                          ClipRRect(
                             borderRadius: BorderRadius.circular(8),
-                            child: Image.asset(
-                              'lib/donot_have_diabetes/mind_relax/mind images/quiz1.png',
+                            child: Image.network(
+                              'https://images.unsplash.com/photo-1591438252948-fa5dd3701c2a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
                               width: 250,
                               height: 150,
                               fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  width: 250,
-                                  height: 150,
-                                  color: Colors.grey.shade300,
-                                  child: const Center(
-                                    child: Text(
-                                      'Image not found',
-                                      style: TextStyle(color: Colors.black54),
-                                    ),
-                                  ),
-                                );
-                              },
                             ),
                           ),
                           const SizedBox(height: 80),
@@ -199,7 +236,9 @@ class _MindRelaxQuestionnairePageState
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 32.0),
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                // Navigate to next screen
+                              },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF45B3D0),
                                 foregroundColor: Colors.white,
@@ -228,7 +267,50 @@ class _MindRelaxQuestionnairePageState
                 ),
               ),
             ),
+
+            // Bottom Navigation Bar
+            Container(
+              height: 60,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, -2),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildNavItem(0, Icons.book_outlined),
+                  _buildNavItem(1, Icons.favorite, isActive: true),
+                  _buildNavItem(2, Icons.fitness_center),
+                  _buildNavItem(3, Icons.person_outline),
+                ],
+              ),
+            ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNavItem(int index, IconData icon, {bool isActive = false}) {
+    return InkWell(
+      onTap: () {
+        setState(() {
+          _selectedIndex = index;
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Icon(
+          icon,
+          color:
+              index == _selectedIndex ? const Color(0xFF0048FF) : Colors.black,
+          size: 28,
         ),
       ),
     );
