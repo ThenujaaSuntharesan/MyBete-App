@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mybete_app/not_sure/navigation.dart';
 import 'symptom_levels/6_blurry_vision_check/blurry_vision.dart';
 import 'symptom_levels/5_frequent_urinary_check/frequent_urinary.dart';
 import 'symptom_levels/7_feel_tired_check/more_tired.dart';
@@ -78,6 +79,7 @@ class NotSureDashboard extends StatelessWidget {
           ),
         ],
       ),
+      bottomNavigationBar: NavigationBarWidget(currentIndex: 1),
     );
   }
 }
