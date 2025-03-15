@@ -231,7 +231,7 @@ class FoodCategoryScreen extends StatelessWidget {
                         ),
                         RecipeCard(
                           title: 'Green Smoothie',
-                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/green_smoothie.png',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/Spinach Smoothie.jpeg',
                           isFavorite: false,
                           onTap: () {},
                         ),
@@ -243,7 +243,7 @@ class FoodCategoryScreen extends StatelessWidget {
                         ),
                         RecipeCard(
                           title: 'Quinoa Breakfast Bowl',
-                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/quinoa_breakfast_bowl.png',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/Summer Quinoa Breakfast Bowls.jpeg',
                           isFavorite: false,
                           onTap: () {},
                         ),
@@ -297,7 +297,7 @@ class FoodCategoryScreen extends StatelessWidget {
                         ),
                         RecipeCard(
                           title: 'Lentil & Vegetable Soup',
-                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/lentil_soup.jpg',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/lentil_soup.png',
                           isFavorite: false,
                           onTap: () {},
                         ),
@@ -309,44 +309,44 @@ class FoodCategoryScreen extends StatelessWidget {
                         ),
                         RecipeCard(
                           title: 'Baked Salmon with Steamed Vegetables',
-                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/chickpea_sandwich.jpg',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/baked_salmon_vege.png',
                           isFavorite: false,
                           onTap: () {},
                         ),
                         RecipeCard(
                           title: 'Veggie Stir-Fry with Brown Rice',
-                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/chickpea_sandwich.jpg',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/brown_rice.png',
                           isFavorite: false,
                           onTap: () {},
                         ),
                         RecipeCard(
                           title: 'Tuna & Avocado Salad',
-                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/chickpea_sandwich.jpg',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/Chicago-Style Tuna Salad.jpeg',
                           isFavorite: false,
                           onTap: () {},
                         ),
                         RecipeCard(
                           title: ' Mediterranean Chickpea Salad',
-                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/chickpea_sandwich.jpg',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/Mediterranean Chickpea Salad (15 minute recipe!) _ Choosing Chia.jpeg',
                           isFavorite: false,
                           onTap: () {},
                         ),
                         RecipeCard(
                           title: 'Baked Sweet Potato with Black Beans',
-                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/chickpea_sandwich.jpg',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/Baked Sweet Potato with Black Beans.png',
                           isFavorite: false,
                           onTap: () {},
                         ),
 
                         RecipeCard(
                           title: 'Shrimp & Avocado Salad',
-                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/chickpea_sandwich.jpg',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/Shrimp & Avocado Salad.png',
                           isFavorite: false,
                           onTap: () {},
                         ),
                         RecipeCard(
                           title: 'Spaghetti Squash with Tomato Sauce',
-                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/chickpea_sandwich.jpg',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/Spaghetti Squash Primavera_ Healthy Pasta Recipe Idea.jpeg',
                           isFavorite: false,
                           onTap: () {},
                         ),
