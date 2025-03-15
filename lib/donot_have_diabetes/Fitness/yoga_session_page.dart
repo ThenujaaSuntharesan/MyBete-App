@@ -29,3 +29,23 @@ class YogaPose {
     required this.icon,
   });
 }
+final List<YogaPose> _poses = [
+  YogaPose(
+    name: 'Mountain Pose',
+    duration: '5 mins',
+    benefits: 'Improves posture, reduces stress',
+    icon: Icons.landscape,
+  ),
+  YogaPose(
+    name: 'Downward Dog',
+    duration: '7 mins',
+    benefits: 'Strengthens arms and legs',
+    icon: Icons.architecture,
+  ),
+  YogaPose(
+    name: 'Warrior II',
+    duration: '6 mins',
+    benefits: 'Enhances balance and focus',
+    icon: Icons.accessibility_new,
+  ),
+];
