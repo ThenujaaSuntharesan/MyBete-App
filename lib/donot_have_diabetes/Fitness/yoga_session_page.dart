@@ -79,3 +79,32 @@ Widget _buildIntroductionCard() {
     ),
   );
 }
+
+Widget _buildSessionInstructions() {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Text(
+        'Practice Guidelines:',
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      ),
+      const SizedBox(height: 16),
+      _buildInstructionStep('1. Find a quiet space', Icons.self_improvement),
+      _buildInstructionStep('2. Use a yoga mat', Icons.airline_seat_flat),
+      _buildInstructionStep('3. Focus on breathing', Icons.air),
+    ],
+  );
+}
+
+Widget _buildInstructionStep(String text, IconData icon) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8),
+    child: Row(
+      children: [
+        Icon(icon, color: Colors.green),
+        const SizedBox(width: 16),
+        Expanded(child: Text(text)),
+      ],
+    ),
+  );
+}
