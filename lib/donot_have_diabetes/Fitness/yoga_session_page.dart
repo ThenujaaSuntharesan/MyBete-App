@@ -16,3 +16,16 @@ class _YogaSessionPageState extends State<YogaSessionPage> {
     );
   }
 }
+class YogaPose {
+  final String name;
+  final String duration;
+  final String benefits;
+  final IconData icon;
+
+  YogaPose({
+    required this.name,
+    required this.duration,
+    required this.benefits,
+    required this.icon,
+  });
+}
