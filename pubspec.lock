@@ -177,8 +177,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "9.1.0"
-<<<<<<< HEAD
-=======
+
   file_selector_linux:
     dependency: transitive
     description:
@@ -211,7 +210,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.3+4"
->>>>>>> 868c913 (update account settings and suugestion part)
+
   firebase_auth:
     dependency: "direct main"
     description:
@@ -839,10 +838,8 @@ packages:
       sha256: fb31f383e2ee25fbbfe06b40fe21e1e458d14080e3c67e7ba0acfde4df4e0bbd
       url: "https://pub.dev"
     source: hosted
-<<<<<<< HEAD
+
     version: "0.7.4"
-=======
-    version: "0.7.3"
   timezone:
     dependency: "direct main"
     description:
@@ -851,7 +848,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.4"
->>>>>>> 868c913 (update account settings and suugestion part)
   typed_data:
     dependency: transitive
     description:
