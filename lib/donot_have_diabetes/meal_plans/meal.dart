@@ -52,7 +52,7 @@ class MealPlannerScreen extends StatelessWidget {
                       ShaderMask(
                         shaderCallback: (bounds) => const LinearGradient(
                           colors: [
-                            Color(0xFF0066FF),
+                            Color(0xFF00FAFF),
                             Color(0xFF00CCFF),
                           ],
                           begin: Alignment.topLeft,
@@ -74,7 +74,7 @@ class MealPlannerScreen extends StatelessWidget {
                       ShaderMask(
                         shaderCallback: (bounds) => const LinearGradient(
                           colors: [
-                            Color(0xFF07234B),
+                            Color(0xFF0066FF),
                             Color(0xFF00CCFF),
                           ],
                           begin: Alignment.topLeft,
@@ -132,7 +132,7 @@ class MealPlannerScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+
                         ),
                       ),
 
@@ -170,18 +170,20 @@ class MealPlannerScreen extends StatelessWidget {
 
                           const SizedBox(width: 24),
 
-                          // Food and Calorie Icon
-                          Image.network(
-                            'https://i.imgur.com/JHy6oQw.png',
+                          // Food and Calorie Icon - CHANGED TO ASSET
+                          Image.asset(
+                            'lib/donot_have_diabetes/meal_plans/meal_images/calories (1).png', // Update with your actual icon path
                             width: 100,
                             height: 100,
-                            errorBuilder: (context, error, stackTrace) =>
-                                Container(
-                                  width: 100,
-                                  height: 100,
-                                  color: Colors.grey.shade200,
-                                  child: const Icon(Icons.fastfood, size: 40),
-                                ),
+                            errorBuilder: (context, error, stackTrace) {
+                              print('Error loading food icon: $error'); // Added for debugging
+                              return Container(
+                                width: 100,
+                                height: 100,
+                                color: Colors.grey.shade200,
+                                child: const Icon(Icons.fastfood, size: 40),
+                              );
+                            },
                           ),
                         ],
                       ),
@@ -219,28 +221,28 @@ class MealPlannerScreen extends StatelessWidget {
                             // Breakfast Card
                             _mealCard(
                               context,
-                              imageUrl: 'lib/donot_have_diabetes/meal_plans/meal images/breakfast.jpg',
+                              imageUrl: 'lib/donot_have_diabetes/meal_plans/meal_images/breakfast.jpg',
                               label: 'Breakfast',
                             ),
                             const SizedBox(width: 16),
                             // Lunch Card
                             _mealCard(
                               context,
-                              imageUrl: 'donot_have_diabetes/meal_plans/meal images/lunch.jpg',
+                              imageUrl: 'lib/donot_have_diabetes/meal_plans/meal_images/lunch.jpg',
                               label: 'Lunch',
                             ),
                             const SizedBox(width: 16),
                             // Dinner Card
                             _mealCard(
                               context,
-                              imageUrl: 'donot_have_diabetes/meal_plans/meal images/dinner.jpg',
+                              imageUrl: 'lib/donot_have_diabetes/meal_plans/meal_images/dinner.jpg',
                               label: 'Dinner',
                             ),
                             const SizedBox(width: 16),
                             // Snack Card
                             _mealCard(
                               context,
-                              imageUrl: 'donot_have_diabetes/meal_plans/meal images/snack.jpg',
+                              imageUrl: 'lib/donot_have_diabetes/meal_plans/meal_images/snack.jpg',
                               label: 'Snack',
                             ),
                           ],
@@ -248,8 +250,7 @@ class MealPlannerScreen extends StatelessWidget {
                       ),
 
                       const SizedBox(height: 24),
-
-                ],
+                    ],
                   ),
                 ),
               ),
@@ -299,7 +300,7 @@ class MealPlannerScreen extends StatelessWidget {
     );
   }
 
-  // Helper function to generate meal cards
+  // Helper function to generate meal cards with label overlaid on image
   Widget _mealCard(BuildContext context, {required String imageUrl, required String label}) {
     return GestureDetector(
       onTap: () {
@@ -311,7 +312,7 @@ class MealPlannerScreen extends StatelessWidget {
       },
       child: Container(
         height: 180,
-        width: 180,
+        width: 280,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(24),
@@ -323,41 +324,58 @@ class MealPlannerScreen extends StatelessWidget {
             ),
           ],
         ),
-        child: Row(
+        child: Stack(
           children: [
             // Meal Image
             ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(24),
-                bottomLeft: Radius.circular(24),
-              ),
-              child: Image.network(
+              borderRadius: BorderRadius.circular(24),
+              child: Image.asset(
                 imageUrl,
-                width: 180,
+                width: 280,
                 height: 180,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(
-                  width: 180,
-                  height: 180,
-                  color: Colors.grey.shade200,
-                  child: const Icon(Icons.image, size: 40),
+                errorBuilder: (context, error, stackTrace) {
+                  print('Error loading image: $imageUrl - $error');
+                  return Container(
+                    width: 280,
+                    height: 180,
+                    color: Colors.grey.shade200,
+                    child: const Icon(Icons.image, size: 40),
+                  );
+                },
+              ),
+            ),
+            // Semi-transparent overlay for better text visibility
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(24),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.black.withOpacity(0.1),
+                    Colors.black.withOpacity(0.5),
+                  ],
                 ),
               ),
             ),
             // Meal Label
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    label,
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black.withOpacity(0.8),
+            Positioned(
+              bottom: 16,
+              left: 16,
+              child: Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  shadows: [
+                    Shadow(
+                      offset: Offset(1, 1),
+                      blurRadius: 3,
+                      color: Color.fromARGB(255, 0, 0, 0),
                     ),
-                  ),
+                  ],
                 ),
               ),
             ),
@@ -432,7 +450,7 @@ class NutritionProgressIndicator extends StatelessWidget {
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+
           ),
         ),
       ],

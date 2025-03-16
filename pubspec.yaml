@@ -49,9 +49,13 @@ dependencies:
   fluttertoast: ^8.2.12
   flutter_animate: ^4.5.2
   font_awesome_flutter: ^10.8.0
-  intl: ^0.18.0
   share_plus: ^7.2.1
   url_launcher: ^6.1.14
+  intl: ^0.19.0 # (If you don't have it already)
+  flutter_local_notifications: ^17.0.0
+  timezone: ^0.9.2
+  image_picker: ^1.0.7
+
 
 dependency_overrides:
   shared_preferences_android: 2.3.1
@@ -265,3 +269,11 @@ flutter_native_splash:
   #  - 'ios/Runner/Info-Debug.plist'
   #  - 'ios/Runner/Info-Release.plist'
 
+  dependencies:
+    flutter:
+      sdk: flutter
+    fl_chart: ^0.63.0
+    firebase_core: latest_version
+    firebase_storage: latest_version
+    cloud_firestore: latest_version
+    file_picker: latest_version
