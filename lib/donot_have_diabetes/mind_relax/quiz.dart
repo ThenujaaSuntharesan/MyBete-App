@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mybete_app/donot_have_diabetes/mind_relax/mind_relax.dart';
+import 'package:mybete_app/donot_have_diabetes/mind_relax/quiz1.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(
@@ -81,24 +82,26 @@ class _MindRelaxQuestionnairePageState
 
                     // Back Button
                     // Back Button
-Padding(
-  padding: const EdgeInsets.only(left: 16.0),
-  child: IconButton(
-    icon: const Icon(Icons.arrow_back, size: 28),
-    onPressed: () {
-      if (Navigator.canPop(context)) {
-        Navigator.pop(context); // Go back if possible
-      } else {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) =>  MindRelaxDashboard()), // Replace with actual previous screen
-        );
-      }
-    },
-    padding: EdgeInsets.zero,
-    constraints: const BoxConstraints(),
-  ),
-),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16.0),
+                      child: IconButton(
+                        icon: const Icon(Icons.arrow_back, size: 28),
+                        onPressed: () {
+                          if (Navigator.canPop(context)) {
+                            Navigator.pop(context); // Go back if possible
+                          } else {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      MindRelaxDashboard()), // Replace with actual previous screen
+                            );
+                          }
+                        },
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                      ),
+                    ),
 
                     const SizedBox(height: 16),
 
@@ -237,7 +240,10 @@ Padding(
                                 const EdgeInsets.symmetric(horizontal: 32.0),
                             child: ElevatedButton(
                               onPressed: () {
-                                // Navigate to next screen
+                                Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => const Quiz1()), // Ensure Quiz1 is imported
+                                   );// Navigate to next screen
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF45B3D0),
