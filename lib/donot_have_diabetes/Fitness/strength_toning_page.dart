@@ -16,3 +16,29 @@ class _StrengthToningPageState extends State<StrengthToningPage> {
     );
   }
 }
+Widget _buildIntroductionCard() {
+  return Card(
+    elevation: 4,
+    child: Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          const Text(
+            'Build Strength & Tone Muscles',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.deepPurple,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'Develop lean muscle mass and improve muscular endurance.',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+          ),
+        ],
+      ),
+    ),
+  );
+}
