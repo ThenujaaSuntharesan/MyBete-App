@@ -6,6 +6,9 @@ import 'package:mybete_app/firebase_options.dart';
 import 'sign_up_screen.dart';
 import 'log_in_screen.dart';
 import 'diabete_options.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
