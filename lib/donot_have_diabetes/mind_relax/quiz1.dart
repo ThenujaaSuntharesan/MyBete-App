@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:mybete_app/donot_have_diabetes/mind_relax/Quiz.dart';
 
 void main() {
-  runApp(const Quiz1());
+  runApp(const MyApp());
 }
 
-class Quiz1 extends StatelessWidget {
-  const Quiz1({Key? key}) : super(key: key);
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,8 +51,15 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         IconButton(
-                          icon: const Icon(Icons.arrow_back, color: Colors.black),
-                          onPressed: () {},
+                          icon:
+                              const Icon(Icons.arrow_back, color: Colors.black),
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Quiz()),
+                            );
+                          },
                         ),
                         ElevatedButton(
                           onPressed: () {},
@@ -61,9 +69,12 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
                             ),
-                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 12),
                           ),
-                          child: const Text('Skip', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+                          child: const Text('Skip',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w500)),
                         ),
                       ],
                     ),
@@ -73,7 +84,10 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
                       padding: EdgeInsets.only(left: 16.0),
                       child: Text(
                         'Mood & Well-being Check',
-                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -82,8 +96,10 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
                       question: '1. How are you feeling today?',
                       options: [
                         MoodOption(emoji: '😄', label: 'Happy', value: 'happy'),
-                        MoodOption(emoji: '😐', label: 'Stressed', value: 'stressed'),
-                        MoodOption(emoji: '😠', label: 'Anxious', value: 'anxious'),
+                        MoodOption(
+                            emoji: '😐', label: 'Stressed', value: 'stressed'),
+                        MoodOption(
+                            emoji: '😠', label: 'Anxious', value: 'anxious'),
                         MoodOption(emoji: '😌', label: 'Calm', value: 'calm'),
                       ],
                       selectedValue: selectedMood,
@@ -112,7 +128,8 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
                     const SizedBox(height: 24),
                     // Question 3
                     QuestionCard(
-                      question: '3. What\'s one thing you\'re grateful for today?',
+                      question:
+                          '3. What\'s one thing you\'re grateful for today?',
                       options: [
                         TextOption(label: 'Family', value: 'family'),
                         TextOption(label: 'Health', value: 'health'),
@@ -179,7 +196,8 @@ class QuestionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.8), // Adjust opacity for better visibility
+        color: Colors.white
+            .withOpacity(0.8), // Adjust opacity for better visibility
         borderRadius: BorderRadius.circular(16),
       ),
       padding: const EdgeInsets.all(20),
@@ -223,7 +241,8 @@ abstract class Option {
 class MoodOption extends Option {
   final String emoji;
 
-  MoodOption({required this.emoji, required String label, required String value})
+  MoodOption(
+      {required this.emoji, required String label, required String value})
       : super(label: label, value: value);
 
   @override
