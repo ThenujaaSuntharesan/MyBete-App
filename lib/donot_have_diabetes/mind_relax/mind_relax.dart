@@ -110,6 +110,7 @@ class _HomePageState extends State<HomePage> {
                 description:
                     'Meditation and relaxing music can help reduce stress, improve focus, and promote a sense of calm for better well-being.',
                 buttonText: 'Get Start',
+                
               ),
               const SizedBox(height: 20),
             ],
