@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:mybete_app/donot_have_diabetes/mind_relax/Quiz.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const Quiz1());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class Quiz1 extends StatelessWidget {
+  const Quiz1({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
