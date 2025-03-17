@@ -108,3 +108,4 @@ Widget _buildInstructionStep(String text, IconData icon) {
     ),
   );
 }
+
