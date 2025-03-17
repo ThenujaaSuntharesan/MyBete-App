@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mybete_app/donot_have_diabetes/mind_relax/Quiz.dart';
+import 'package:mybete_app/donot_have_diabetes/mind_relax/Quiz2.dart'; // Import Quiz2
 
 void main() {
   runApp(const Quiz1());
@@ -14,7 +15,7 @@ class Quiz1 extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'Roboto',
-        scaffoldBackgroundColor: const Color(0xFFC5EDFF),
+        scaffoldBackgroundColor: const Color.fromRGBO(197, 237, 255, 1),
       ),
       home: const MoodCheckScreen(),
     );
@@ -51,13 +52,11 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         IconButton(
-                          icon:
-                              const Icon(Icons.arrow_back, color: Colors.black),
+                          icon: const Icon(Icons.arrow_back, color: Colors.black),
                           onPressed: () {
                             Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(
-                                  builder: (context) => const Quiz()),
+                              MaterialPageRoute(builder: (context) => const Quiz()),
                             );
                           },
                         ),
@@ -69,12 +68,12 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
                             ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 24, vertical: 12),
+                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                           ),
-                          child: const Text('Skip',
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w500)),
+                          child: const Text(
+                            'Skip',
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                          ),
                         ),
                       ],
                     ),
@@ -84,10 +83,7 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
                       padding: EdgeInsets.only(left: 16.0),
                       child: Text(
                         'Mood & Well-being Check',
-                        style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black),
+                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -96,10 +92,8 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
                       question: '1. How are you feeling today?',
                       options: [
                         MoodOption(emoji: '😄', label: 'Happy', value: 'happy'),
-                        MoodOption(
-                            emoji: '😐', label: 'Stressed', value: 'stressed'),
-                        MoodOption(
-                            emoji: '😠', label: 'Anxious', value: 'anxious'),
+                        MoodOption(emoji: '😐', label: 'Stressed', value: 'stressed'),
+                        MoodOption(emoji: '😠', label: 'Anxious', value: 'anxious'),
                         MoodOption(emoji: '😌', label: 'Calm', value: 'calm'),
                       ],
                       selectedValue: selectedMood,
@@ -128,8 +122,7 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
                     const SizedBox(height: 24),
                     // Question 3
                     QuestionCard(
-                      question:
-                          '3. What\'s one thing you\'re grateful for today?',
+                      question: '3. What\'s one thing you\'re grateful for today?',
                       options: [
                         TextOption(label: 'Family', value: 'family'),
                         TextOption(label: 'Health', value: 'health'),
@@ -154,7 +147,12 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Quiz2()), // Navigate to Quiz2
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF5EB7CF),
                     foregroundColor: Colors.white,
@@ -196,8 +194,7 @@ class QuestionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white
-            .withOpacity(0.8), // Adjust opacity for better visibility
+        color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.8),
         borderRadius: BorderRadius.circular(16),
       ),
       padding: const EdgeInsets.all(20),
@@ -241,8 +238,7 @@ abstract class Option {
 class MoodOption extends Option {
   final String emoji;
 
-  MoodOption(
-      {required this.emoji, required String label, required String value})
+  MoodOption({required this.emoji, required String label, required String value})
       : super(label: label, value: value);
 
   @override
