@@ -15,7 +15,7 @@ class Quiz1 extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'Roboto',
-        scaffoldBackgroundColor: const Color.fromRGBO(197, 237, 255, 1),
+        scaffoldBackgroundColor: const Color(0xFFC5EDFF),
       ),
       home: const MoodCheckScreen(),
     );
@@ -47,7 +47,8 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 16),
-                    // Header with Back & Skip Button
+                    
+                    // Back & Skip Button
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -61,7 +62,12 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
                           },
                         ),
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => const Quiz2()),
+                            );
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF5EB7CF),
                             foregroundColor: Colors.white,
@@ -77,7 +83,9 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
                         ),
                       ],
                     ),
+                    
                     const SizedBox(height: 16),
+                    
                     // Title
                     const Padding(
                       padding: EdgeInsets.only(left: 16.0),
@@ -86,62 +94,42 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
                         style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
                       ),
                     ),
+                    
                     const SizedBox(height: 24),
-                    // Question 1
+                    
+                    // Questions
                     QuestionCard(
                       question: '1. How are you feeling today?',
-                      options: [
-                        MoodOption(emoji: '😄', label: 'Happy', value: 'happy'),
-                        MoodOption(emoji: '😐', label: 'Stressed', value: 'stressed'),
-                        MoodOption(emoji: '😠', label: 'Anxious', value: 'anxious'),
-                        MoodOption(emoji: '😌', label: 'Calm', value: 'calm'),
-                      ],
+                      options: ['Happy', 'Stressed', 'Anxious', 'Calm'],
                       selectedValue: selectedMood,
-                      onSelected: (value) {
-                        setState(() {
-                          selectedMood = value;
-                        });
-                      },
+                      onSelected: (value) => setState(() => selectedMood = value),
                     ),
+                    
                     const SizedBox(height: 24),
-                    // Question 2
+                    
                     QuestionCard(
                       question: '2. What\'s your stress level right now?',
-                      options: [
-                        TextOption(label: 'Low', value: 'low'),
-                        TextOption(label: 'Medium', value: 'medium'),
-                        TextOption(label: 'High', value: 'high'),
-                      ],
+                      options: ['Low', 'Medium', 'High'],
                       selectedValue: selectedStressLevel,
-                      onSelected: (value) {
-                        setState(() {
-                          selectedStressLevel = value;
-                        });
-                      },
+                      onSelected: (value) => setState(() => selectedStressLevel = value),
                     ),
+                    
                     const SizedBox(height: 24),
-                    // Question 3
+                    
                     QuestionCard(
                       question: '3. What\'s one thing you\'re grateful for today?',
-                      options: [
-                        TextOption(label: 'Family', value: 'family'),
-                        TextOption(label: 'Health', value: 'health'),
-                        TextOption(label: 'Friends', value: 'friends'),
-                        TextOption(label: 'Work', value: 'work'),
-                      ],
+                      options: ['Family', 'Health', 'Friends', 'Work'],
                       selectedValue: selectedGratitude,
-                      onSelected: (value) {
-                        setState(() {
-                          selectedGratitude = value;
-                        });
-                      },
+                      onSelected: (value) => setState(() => selectedGratitude = value),
                     ),
+                    
                     const SizedBox(height: 16),
                   ],
                 ),
               ),
             ),
-            // Fixed Next Button
+            
+            // Next Button
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: SizedBox(
@@ -150,7 +138,7 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const Quiz2()), // Navigate to Quiz2
+                      MaterialPageRoute(builder: (context) => const Quiz2()),
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -175,10 +163,9 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
   }
 }
 
-// --------------------------- Question Card ----------------------------
 class QuestionCard extends StatelessWidget {
   final String question;
-  final List<Option> options;
+  final List<String> options;
   final String? selectedValue;
   final Function(String) onSelected;
 
@@ -193,106 +180,29 @@ class QuestionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.8),
+        color: Colors.white.withOpacity(0.8),
         borderRadius: BorderRadius.circular(16),
       ),
-      padding: const EdgeInsets.all(20),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             question,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
           ),
           const SizedBox(height: 16),
-          ...options.map((option) => Padding(
-                padding: const EdgeInsets.only(bottom: 12.0),
-                child: OptionTile(
-                  option: option,
-                  isSelected: selectedValue == option.value,
-                  onTap: () => onSelected(option.value),
-                ),
+          ...options.map((option) => RadioListTile<String>(
+                title: Text(option, style: const TextStyle(fontSize: 16)),
+                value: option,
+                groupValue: selectedValue,
+                onChanged: (value) {
+                  if (value != null) {
+                    onSelected(value);
+                  }
+                },
               )),
-        ],
-      ),
-    );
-  }
-}
-
-// --------------------------- Option Types ----------------------------
-abstract class Option {
-  final String label;
-  final String value;
-
-  Option({required this.label, required this.value});
-
-  Widget buildLeading();
-}
-
-class MoodOption extends Option {
-  final String emoji;
-
-  MoodOption({required this.emoji, required String label, required String value})
-      : super(label: label, value: value);
-
-  @override
-  Widget buildLeading() {
-    return Text(
-      emoji,
-      style: const TextStyle(fontSize: 24),
-    );
-  }
-}
-
-class TextOption extends Option {
-  TextOption({required String label, required String value})
-      : super(label: label, value: value);
-
-  @override
-  Widget buildLeading() {
-    return const SizedBox.shrink();
-  }
-}
-
-// --------------------------- Option Tile ----------------------------
-class OptionTile extends StatelessWidget {
-  final Option option;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const OptionTile({
-    Key? key,
-    required this.option,
-    required this.isSelected,
-    required this.onTap,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Row(
-        children: [
-          Radio(
-            value: true,
-            groupValue: isSelected,
-            onChanged: (_) => onTap(),
-            activeColor: const Color(0xFF5EB7CF),
-          ),
-          if (option is MoodOption) ...[
-            option.buildLeading(),
-            const SizedBox(width: 12),
-          ],
-          Text(
-            option.label,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-          ),
         ],
       ),
     );
