@@ -132,7 +132,7 @@ class FruitsScreen extends StatelessWidget {
                             child: FruitCard(
                               name: 'Watermelon',
                               calories: 30,
-                              imagePath: 'assets/watermelon.png',
+                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/watermelon.png',
                               onAdd: () {},
                             ),
                           ),
@@ -141,7 +141,7 @@ class FruitsScreen extends StatelessWidget {
                             child: FruitCard(
                               name: 'Strawberry',
                               calories: 32,
-                              imagePath: 'assets/strawberry.png',
+                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/strawberry.png',
                               onAdd: () {},
                             ),
                           ),
@@ -150,7 +150,7 @@ class FruitsScreen extends StatelessWidget {
                             child: FruitCard(
                               name: 'Cantaloupe',
                               calories: 34,
-                              imagePath: 'assets/cantaloupe.png',
+                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/cantaloupe.png',
                               onAdd: () {},
                             ),
                           ),
@@ -187,7 +187,7 @@ class FruitsScreen extends StatelessWidget {
                             child: FruitCard(
                               name: 'Apple',
                               calories: 52,
-                              imagePath: 'assets/apple.png',
+                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/apple.png',
                               onAdd: () {},
                             ),
                           ),
@@ -196,7 +196,7 @@ class FruitsScreen extends StatelessWidget {
                             child: FruitCard(
                               name: 'Pear',
                               calories: 57,
-                              imagePath: 'assets/pear.png',
+                              imagePath: 'alib/donot_have_diabetes/meal_plans/meal_images/pear.png',
                               onAdd: () {},
                             ),
                           ),
@@ -205,7 +205,7 @@ class FruitsScreen extends StatelessWidget {
                             child: FruitCard(
                               name: 'Mango',
                               calories: 60,
-                              imagePath: 'assets/mango.png',
+                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/mango.png',
                               onAdd: () {},
                             ),
                           ),
@@ -242,7 +242,7 @@ class FruitsScreen extends StatelessWidget {
                             child: FruitCard(
                               name: 'Avocado',
                               calories: 160,
-                              imagePath: 'assets/avocado.png',
+                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/avacado.png',
                               onAdd: () {},
                             ),
                           ),
@@ -251,7 +251,7 @@ class FruitsScreen extends StatelessWidget {
                             child: FruitCard(
                               name: 'Dates(dried)',
                               calories: 282,
-                              imagePath: 'assets/dates.png',
+                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/dates.png',
                               onAdd: () {},
                             ),
                           ),

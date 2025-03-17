@@ -132,7 +132,7 @@ class GrainsScreen extends StatelessWidget {
                             child: GrainCard(
                               name: 'Oats (Cooked)',
                               calories: 71,
-                              imagePath: 'assets/oats.png',
+                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/oats.png',
                               onAdd: () {},
                             ),
                           ),
@@ -141,7 +141,7 @@ class GrainsScreen extends StatelessWidget {
                             child: GrainCard(
                               name: 'Quinoa (Cooked)',
                               calories: 120,
-                              imagePath: 'assets/quinoa.png',
+                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/quinoa.png',
                               onAdd: () {},
                             ),
                           ),

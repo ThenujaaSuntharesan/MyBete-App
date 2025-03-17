@@ -340,7 +340,7 @@ class MealPlannerScreen extends StatelessWidget {
                     width: 280,
                     height: 180,
                     color: Colors.grey.shade200,
-                    child: const Icon(Icons.image, size: 40),
+                    child: const Icon(Icons.image, size: 100),
                   );
                 },
               ),
