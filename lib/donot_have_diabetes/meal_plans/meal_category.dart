@@ -163,6 +163,10 @@ class FoodCategoryScreen extends StatelessWidget {
                           title: 'Beverages',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/wine.png',
                           onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const BeveragesScreen()),
+                            );
 
                           },
                         ),
