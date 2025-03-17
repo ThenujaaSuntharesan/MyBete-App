@@ -559,13 +559,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-
 import 'LogDetails/LogInterface.dart';
 import 'package:mybete_app/have_diabetes/DashBoard/profile/Profile.dart';
-
-
 import 'profile/Profile.dart';
-
 import 'Reminders.dart';
 import 'Reports.dart';
 
