@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'total_screen.dart'; // Add this line
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -132,7 +137,7 @@ class GrainsScreen extends StatelessWidget {
                             child: GrainCard(
                               name: 'Oats (Cooked)',
                               calories: 71,
-                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/oats.png',
+                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/oat.png',
                               onAdd: () {},
                             ),
                           ),
