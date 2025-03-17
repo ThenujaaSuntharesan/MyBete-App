@@ -5,6 +5,7 @@ import 'fruits.dart';
 import 'bakery.dart';
 import 'grains.dart';
 import 'Animal.dart';
+import 'dairy.dart';
 
 
 void main() {
@@ -140,6 +141,10 @@ class FoodCategoryScreen extends StatelessWidget {
                           title: 'Dairy Products',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/milk.png',
                           onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const  DairyProductsScreen()),
+                            );
 
                           },
                         ),
