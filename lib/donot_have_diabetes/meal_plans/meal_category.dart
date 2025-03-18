@@ -4,6 +4,7 @@ import 'vegetables.dart';
 import 'fruits.dart';
 import 'bakery.dart';
 import 'grains.dart';
+import 'Animal.dart';
 
 
 void main() {
@@ -146,6 +147,10 @@ class FoodCategoryScreen extends StatelessWidget {
                           title: 'Animal\nProtiens',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/protein.png',
                           onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const AnimalProteinsScreen()),
+                            );
 
                           },
                         ),
