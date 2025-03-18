@@ -2316,6 +2316,7 @@ class _LogInterfaceState extends State<LogEntryScreen> {
       ),
     );
   }
+<<<<<<< HEAD
 
   @override
   Widget build(BuildContext context) {
@@ -3137,3 +3138,6 @@ class _LogInterfaceState extends State<LogEntryScreen> {
   }
 }
 
+=======
+}
+>>>>>>> main
