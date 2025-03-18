@@ -25,8 +25,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class VegetablesScreen extends StatelessWidget {
-  const VegetablesScreen({Key? key}) : super(key: key);
+class FruitsScreen extends StatelessWidget {
+  const FruitsScreen({Key? key}) : super(key: key);
 
   // Function to add calorie to Firestore
   void _addCalorieToFirebase(String name, int calories) async {

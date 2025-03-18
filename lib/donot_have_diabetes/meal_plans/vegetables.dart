@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'total_screen.dart'; // Add this line
+import 'total_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -77,14 +77,15 @@ class VegetablesScreen extends StatelessWidget {
                 children: [
                   // Back Button
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pop(context); // Navigates back to the previous screen
+                    },
                     child: const Icon(
                       Icons.arrow_back,
                       size: 30,
                       color: Colors.black,
                     ),
                   ),
-                  const Spacer(),
                 ],
               ),
             ),
@@ -205,6 +206,126 @@ class VegetablesScreen extends StatelessWidget {
                       ),
 
                       const SizedBox(height: 24),
+
+                      // Moderate-Calorie Vegetables Section
+                      const Text(
+                        'Moderate-Calorie Vegetables',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+
+                      const Text(
+                        '(Below 30 - 60kcal per 100g)',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // Moderate-Calorie Vegetables Grid
+                      Row(
+                        children: [
+                          Expanded(
+                            child: VegetableCard(
+                              name: 'Carrot',
+                              calories: 41,
+                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/carrot.png',
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: VegetableCard(
+                              name: 'Green Peas',
+                              calories: 42,
+                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/peas.png',
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: VegetableCard(
+                              name: 'Beetroot',
+                              calories: 43,
+                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/beetroot.png',
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // High-Calorie Vegetables Section
+                      const Text(
+                        'High-Calorie Vegetables',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+
+                      const Text(
+                        '(60 + kcal per 100g)',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // High-Calorie Vegetables Grid
+                      Row(
+                        children: [
+                          Expanded(
+                            child: VegetableCard(
+                              name: 'Potatoes',
+                              calories: 86,
+                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/potato.png',
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: VegetableCard(
+                              name: 'Sweet potatoes',
+                              calories: 87,
+                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/sweet_potato.png',
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: VegetableCard(
+                              name: 'Cassava',
+                              calories: 160,
+                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/cassava.png',
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
 
                       // Add View Total Calories Button
                       Padding(
@@ -346,13 +467,22 @@ class VegetableCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF00C853),
+                    color: Color(0xFF009439),
                   ),
                 ),
 
                 GestureDetector(
                   onTap: () {
-                    onAdd(name, calories);  // Trigger the onAdd callback
+                    onAdd(name, calories);  // Trigger the onAdd callback with proper parameters
+
+                    // Show a snackbar to confirm addition
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Added $name ($calories kcal)'),
+                        duration: const Duration(seconds: 1),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
                   },
                   child: Container(
                     width: 28,
@@ -401,4 +531,3 @@ class NavBarItem extends StatelessWidget {
     );
   }
 }
-
