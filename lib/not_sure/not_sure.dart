@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mybete_app/not_sure/navigation.dart';
 import 'symptom_levels/6_blurry_vision_check/blurry_vision.dart';
 import 'symptom_levels/5_frequent_urinary_check/frequent_urinary.dart';
 import 'symptom_levels/7_feel_tired_check/more_tired.dart';
@@ -28,34 +29,57 @@ class NotSureDashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Diabetes Dashboard"),
+        title: const Text("Diabetes Dashboard"),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back), // Back arrow icon
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context); // Navigate back to the previous screen
+            Navigator.pop(context);
           },
         ),
       ),
-      body: ListView.builder(
-        itemCount: symptoms.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            leading: CircleAvatar(
-              child: Text('${index + 1}'),
-            ),
-            title: Text(symptoms[index]),
-            onTap: () {
-              // Navigate to the level details screen
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => LevelDetailScreen(level: index + 1, symptom: symptoms[index]),
+      body: Stack(
+        children: [
+          // BouncingCircles(), // Bouncing circles in the background
+          ListView.builder(
+            itemCount: symptoms.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: Colors.blue.withOpacity(0.2),
+                  child: Text(
+                    '${index + 1}',
+                    style: const TextStyle(
+                      color: Color(0xFF288994), // Blue number
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
+                title: Text(
+                  symptoms[index],
+                  style: const TextStyle(
+                    color: Color(0xFF288994), // Blue text
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LevelDetailScreen(
+                        level: index + 1,
+                        symptom: symptoms[index],
+                      ),
+                    ),
+                  );
+                },
               );
             },
-          );
-        },
+          ),
+        ],
       ),
+      bottomNavigationBar: NavigationBarWidget(currentIndex: 1),
     );
   }
 }
@@ -78,13 +102,12 @@ class LevelDetailScreen extends StatelessWidget {
           children: [
             Text(
               'Level $level: $symptom',
-              style: TextStyle(fontSize: 24),
+              style: const TextStyle(fontSize: 24),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Navigate to the method or game page
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -117,7 +140,14 @@ class LevelDetailScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: Text('Check Symptom'),
+              child: Text(
+                "Check Symptom",
+                style: TextStyle(
+                  color: Color(0xFF288994),
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ],
         ),
@@ -125,3 +155,68 @@ class LevelDetailScreen extends StatelessWidget {
     );
   }
 }
+
+// class BouncingCircles extends StatefulWidget {
+//   @override
+//   _BouncingCirclesState createState() => _BouncingCirclesState();
+// }
+//
+// class _BouncingCirclesState extends State<BouncingCircles> with SingleTickerProviderStateMixin {
+//   AnimationController? _controller;
+//   List<Offset> positions = [Offset(0, 0), Offset(200, 200), Offset(100, 100)];
+//   List<Offset> directions = [Offset(2, 2), Offset(-2, 2), Offset(2, -2)];
+//   List<double> sizes = [60, 80, 100];
+//   Size? screenSize;
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     _controller = AnimationController(
+//       duration: const Duration(seconds: 5),
+//       vsync: this,
+//     )..addListener(() {
+//       setState(() {
+//         for (int i = 0; i < positions.length; i++) {
+//           positions[i] += directions[i];
+//
+//           if (positions[i].dx <= 0 || positions[i].dx >= (screenSize!.width - sizes[i])) {
+//             directions[i] = Offset(-directions[i].dx, directions[i].dy);
+//           }
+//           if (positions[i].dy <= 0 || positions[i].dy >= (screenSize!.height - sizes[i])) {
+//             directions[i] = Offset(directions[i].dx, -directions[i].dy);
+//           }
+//         }
+//       });
+//     })..repeat();
+//   }
+//
+//   @override
+//   void dispose() {
+//     _controller?.dispose();
+//     super.dispose();
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     screenSize = MediaQuery.of(context).size;
+//
+//     return Stack(
+//       children: positions
+//           .asMap()
+//           .entries
+//           .map((entry) => Positioned(
+//         left: entry.value.dx,
+//         top: entry.value.dy,
+//         child: Container(
+//           width: sizes[entry.key],
+//           height: sizes[entry.key],
+//           decoration: BoxDecoration(
+//             color: Color(0xFF06333B),
+//             shape: BoxShape.circle,
+//           ),
+//         ),
+//       ))
+//           .toList(),
+//     );
+//   }
+// }
