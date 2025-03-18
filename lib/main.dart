@@ -12,7 +12,6 @@ void main() async {
   await Firebase.initializeApp();
   // Enable offline persistence
   FirebaseFirestore.instance.settings = Settings(persistenceEnabled: true);
-
   runApp(MyApp());
 }
 
