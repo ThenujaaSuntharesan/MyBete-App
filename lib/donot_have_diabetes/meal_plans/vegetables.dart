@@ -335,7 +335,7 @@ class VegetablesScreen extends StatelessWidget {
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const TotalScreen(category: 'vegetables')), // Navigate to TotalScreen
+                                MaterialPageRoute(builder: (context) => const TotalScreen(category: 'Vegetables')), // Navigate to TotalScreen
                               );
                             },
                             child: const Text(

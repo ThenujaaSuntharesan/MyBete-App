@@ -52,7 +52,7 @@ class FruitsScreen extends StatelessWidget {
       }, SetOptions(merge: true));
 
       // Optionally: You can also add a document in a subcollection for individual vegetables
-      await userRef.collection('vegetable_calories').add({
+      await userRef.collection('fruit_calories').add({
         'name': name,
         'calories': calories,
         'timestamp': FieldValue.serverTimestamp(), // Adds a timestamp for the entry
@@ -77,14 +77,15 @@ class FruitsScreen extends StatelessWidget {
                 children: [
                   // Back Button
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
                     child: const Icon(
                       Icons.arrow_back,
                       size: 30,
                       color: Colors.black,
                     ),
                   ),
-                  const Spacer(),
                 ],
               ),
             ),
@@ -174,7 +175,9 @@ class FruitsScreen extends StatelessWidget {
                               name: 'Watermelon',
                               calories: 30,
                               imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/watermelon.png',
-                              onAdd: () {},
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -183,7 +186,9 @@ class FruitsScreen extends StatelessWidget {
                               name: 'Strawberry',
                               calories: 32,
                               imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/strawberry.png',
-                              onAdd: () {},
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -192,7 +197,9 @@ class FruitsScreen extends StatelessWidget {
                               name: 'Cantaloupe',
                               calories: 34,
                               imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/cantaloupe.png',
-                              onAdd: () {},
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
                           ),
                         ],
@@ -229,7 +236,9 @@ class FruitsScreen extends StatelessWidget {
                               name: 'Apple',
                               calories: 52,
                               imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/apple.png',
-                              onAdd: () {},
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -238,7 +247,9 @@ class FruitsScreen extends StatelessWidget {
                               name: 'Pear',
                               calories: 57,
                               imagePath: 'alib/donot_have_diabetes/meal_plans/meal_images/pear.png',
-                              onAdd: () {},
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -247,7 +258,9 @@ class FruitsScreen extends StatelessWidget {
                               name: 'Mango',
                               calories: 60,
                               imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/mango.png',
-                              onAdd: () {},
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
                           ),
                         ],
@@ -284,7 +297,9 @@ class FruitsScreen extends StatelessWidget {
                               name: 'Avocado',
                               calories: 160,
                               imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/avacado.png',
-                              onAdd: () {},
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -293,7 +308,9 @@ class FruitsScreen extends StatelessWidget {
                               name: 'Dates(dried)',
                               calories: 282,
                               imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/dates.png',
-                              onAdd: () {},
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -302,7 +319,9 @@ class FruitsScreen extends StatelessWidget {
                               name: 'Figs(dried)',
                               calories: 249,
                               imagePath: 'assets/figs.png',
-                              onAdd: () {},
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
                           ),
                         ],
@@ -317,7 +336,7 @@ class FruitsScreen extends StatelessWidget {
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const TotalScreen(category: 'vegetables')), // Navigate to TotalScreen
+                                MaterialPageRoute(builder: (context) => const TotalScreen(category: 'Fruits')), // Navigate to TotalScreen
                               );
                             },
                             child: const Text(
@@ -384,7 +403,7 @@ class FruitCard extends StatelessWidget {
   final String name;
   final int calories;
   final String imagePath;
-  final VoidCallback onAdd;
+  final void Function(String, int) onAdd;
 
   const FruitCard({
     Key? key,
@@ -455,7 +474,18 @@ class FruitCard extends StatelessWidget {
                 ),
 
                 GestureDetector(
-                  onTap: onAdd,
+                  onTap: () {
+                    onAdd(name, calories);  // Trigger the onAdd callback with proper parameters
+
+                    // Show a snackbar to confirm addition
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Added $name ($calories kcal)'),
+                        duration: const Duration(seconds: 1),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  },
                   child: Container(
                     width: 28,
                     height: 28,
