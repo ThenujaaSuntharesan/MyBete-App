@@ -6,19 +6,25 @@ class FirestoreService {
   Future<void> addUser({
     required String uid,
     required String username,
-    required String phone,
+    required String email,
     required String age,
     required String gender,
-    String? email,
   }) async {
     try {
-      await _db.collection('users').doc(uid).set({
+      // Store user data with username as document ID
+      await _db.collection('users').doc(username).set({
+        'uid': uid,
+        'email': email,
         'username': username,
-        'phone': phone,
         'age': age,
         'gender': gender,
-        'email': email,
       });
+
+      // Map username to UID
+      await _db.collection('usernames').doc(username).set({
+        'uid': uid,
+      });
+
       print('User added successfully');
     } catch (e) {
       print('Error adding user: $e');
@@ -26,3 +32,4 @@ class FirestoreService {
     }
   }
 }
+
