@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Symptom8Screen extends StatefulWidget {
   @override
@@ -6,6 +7,8 @@ class Symptom8Screen extends StatefulWidget {
 }
 
 class _SkinChangesCheckerState extends State<Symptom8Screen> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  List<Map<String, dynamic>> _records = [];
   List<String> _selectedSkinChanges = [];
   final List<Map<String, String>> _skinChangesOptions = [
     {'name': 'Blisters', 'image': 'assets/images/blisters.png'},
@@ -17,20 +20,91 @@ class _SkinChangesCheckerState extends State<Symptom8Screen> {
     {'name': 'White Patches (Vitiligo)', 'image': 'assets/images/vitiligo.png'},
     {'name': 'Other', 'image': 'assets/images/other.png'},
   ];
-  List<Map<String, dynamic>> _report = [];
 
-  void _saveReport() {
-    final now = DateTime.now();
-    final Map<String, dynamic> entry = {
-      'date': now.toString(),
-      'skinChanges': List<String>.from(_selectedSkinChanges),
-    };
-    setState(() {
-      _report.add(entry);
-      _selectedSkinChanges.clear();
-    });
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Skin changes saved successfully!')),
+  @override
+  void initState() {
+    super.initState();
+    _fetchRecords();
+  }
+
+  Future<void> _fetchRecords() async {
+    try {
+      QuerySnapshot querySnapshot = await _firestore
+          .collection('skin_changes_records')
+          .orderBy('timestamp', descending: true)
+          .get();
+      setState(() {
+        _records = querySnapshot.docs.map((doc) {
+          return {
+            'id': doc.id,
+            'date': doc['timestamp'],
+            'skinChanges': doc['skinChanges'],
+          };
+        }).toList();
+      });
+    } catch (e) {
+      print('Error fetching records: $e');
+    }
+  }
+
+  Future<void> _addRecord() async {
+    if (_selectedSkinChanges.isEmpty) return;
+
+    try {
+      final timestamp = DateTime.now().toIso8601String();
+      await _firestore.collection('skin_changes_records').add({
+        'timestamp': timestamp,
+        'skinChanges': _selectedSkinChanges,
+      });
+      _fetchRecords();
+      setState(() {
+        _selectedSkinChanges.clear(); // Clear local selection after saving
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Skin changes saved successfully!')),
+      );
+    } catch (e) {
+      print('Error adding record: $e');
+    }
+  }
+
+  Future<void> _clearRecords() async {
+    try {
+      QuerySnapshot querySnapshot =
+      await _firestore.collection('skin_changes_records').get();
+      for (var doc in querySnapshot.docs) {
+        await _firestore.collection('skin_changes_records').doc(doc.id).delete();
+      }
+      _fetchRecords();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('All records cleared successfully!')),
+      );
+    } catch (e) {
+      print('Error clearing records: $e');
+    }
+  }
+
+  void _generateReport() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Skin Changes Report'),
+          content: Text(
+            _records.isNotEmpty
+                ? 'You have ${_records.length} recorded skin change events.'
+                : 'No records available to generate a report.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -40,29 +114,19 @@ class _SkinChangesCheckerState extends State<Symptom8Screen> {
       appBar: AppBar(
         title: Text(
           'Skin Changes Checker',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
-        backgroundColor: Colors.teal,
+        backgroundColor: Color(0xFF06333B),
         centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Identify Your Symptoms:',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-                color: Colors.teal,
-              ),
-            ),
-            SizedBox(height: 10),
             Expanded(
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, // Two columns
+                  crossAxisCount: 2,
                   crossAxisSpacing: 12,
                   mainAxisSpacing: 12,
                 ),
@@ -85,7 +149,7 @@ class _SkinChangesCheckerState extends State<Symptom8Screen> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       color: _selectedSkinChanges.contains(option['name']!)
-                          ? Colors.teal.shade100
+                          ? Color(0xFF96D8E3)
                           : Colors.white,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -101,8 +165,8 @@ class _SkinChangesCheckerState extends State<Symptom8Screen> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.teal.shade900,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF288994),
                             ),
                           ),
                         ],
@@ -112,55 +176,48 @@ class _SkinChangesCheckerState extends State<Symptom8Screen> {
                 },
               ),
             ),
-            SizedBox(height: 15),
-            Center(
-              child: ElevatedButton.icon(
-                onPressed: _selectedSkinChanges.isNotEmpty ? _saveReport : null,
-                icon: Icon(Icons.save),
-                label: Text('Save Report'),
-                style: ElevatedButton.styleFrom(
-                  // primary: Colors.teal,
-                  // onPrimary: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: _addRecord,
+              child: Text('Save Record'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF35B4C9),
+                foregroundColor: Colors.white,
               ),
             ),
-            Divider(height: 30, thickness: 2, color: Colors.teal.shade200),
-            Text(
-              'Saved Reports:',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-                color: Colors.teal,
+            ElevatedButton(
+              onPressed: _clearRecords,
+              child: Text('Clear Records'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFFE28869),
+                foregroundColor: Colors.white,
               ),
             ),
+            ElevatedButton(
+              onPressed: _generateReport,
+              child: Text('Generate Report'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF245D6B),
+                foregroundColor: Colors.white,
+              ),
+            ),
+            SizedBox(height: 10),
             Expanded(
-              child: _report.isEmpty
+              child: _records.isEmpty
                   ? Center(
                 child: Text(
-                  'No reports saved yet.',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey.shade600,
-                  ),
+                  'No records yet. Log your first skin change event!',
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               )
                   : ListView.builder(
-                itemCount: _report.length,
+                itemCount: _records.length,
                 itemBuilder: (context, index) {
-                  final entry = _report[index];
+                  final record = _records[index];
                   return ListTile(
-                    leading: Icon(Icons.calendar_today, color: Colors.teal),
-                    title: Text(
-                      'Date: ${entry['date']}',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                    ),
+                    title: Text('Date: ${record['date']}'),
                     subtitle: Text(
-                      'Skin Changes: ${entry['skinChanges'].join(', ')}',
-                      style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
+                      'Skin Changes: ${record['skinChanges'].join(', ')}',
                     ),
                   );
                 },
