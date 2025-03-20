@@ -122,21 +122,27 @@ class _SummaryScreenState extends State<SummaryScreen> {
       });
 
       // Format date for Firestore query
-      final dateStr = DateFormat('yyyy-MM-dd').format(selectedDate);
       final startOfDay = DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
       final endOfDay = startOfDay.add(const Duration(days: 1));
 
       // Fetch data for each category
       for (final category in categoriesData.keys) {
         // For food categories, check the corresponding collection
-        final collectionName = category == 'vegetables'
-            ? 'vegetable_calories'
-            : '${category}_calories';
+        String collectionName;
+        if (category == 'vegetables') {
+          collectionName = 'vegetable_calories';
+        } else if (category == 'fruits') {
+          collectionName = 'fruit_calories';
+        } else if (category == 'grains') {
+          collectionName = 'grain_calories';
+        } else {
+          collectionName = '${category}_calories';
+        }
 
         final querySnapshot = await userRef
             .collection(collectionName)
-            .where('timestamp', isGreaterThanOrEqualTo: startOfDay)
-            .where('timestamp', isLessThan: endOfDay)
+            .where('timestamp', isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
+            .where('timestamp', isLessThan: Timestamp.fromDate(endOfDay))
             .get();
 
         for (final doc in querySnapshot.docs) {
@@ -217,7 +223,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Nutrition Summary'),
-        backgroundColor: const Color(0xFF00FF62),
+        backgroundColor: const Color(0xFF0065F3),
         foregroundColor: Colors.white,
         elevation: 0,
         actions: [
@@ -410,31 +416,38 @@ class _SummaryScreenState extends State<SummaryScreen> {
   List<PieChartSectionData> _createPieChartSections() {
     final List<PieChartSectionData> sections = [];
 
-    // Filter categories with calories > 0
-    final nonEmptyCategories = categoriesData.values
+    // Only include categories with calories > 0
+    final activeCategories = categoriesData.values
         .where((category) => category.totalCalories > 0)
         .toList();
 
-    for (int i = 0; i < nonEmptyCategories.length; i++) {
-      final category = nonEmptyCategories[i];
-      final percentage = category.totalCalories / grandTotalCalories;
+    // If no categories have calories, return empty list
+    if (activeCategories.isEmpty) {
+      return sections;
+    }
 
-      // Only add to chart if it's at least 1% of total
-      if (percentage >= 0.01) {
-        sections.add(
-          PieChartSectionData(
-            color: category.color,
-            value: category.totalCalories.toDouble(),
-            title: '${(percentage * 100).toStringAsFixed(0)}%',
-            radius: 100,
-            titleStyle: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+    // Calculate total calories for percentage calculation
+    final totalCalories = activeCategories
+        .fold(0, (sum, category) => sum + category.totalCalories);
+
+    // Create a section for each active category
+    for (final category in activeCategories) {
+      // Calculate percentage
+      final percentage = (category.totalCalories / totalCalories) * 100;
+
+      sections.add(
+        PieChartSectionData(
+          color: category.color,
+          value: category.totalCalories.toDouble(),
+          title: percentage >= 5 ? '${percentage.toInt()}%' : '',
+          radius: 100,
+          titleStyle: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
-        );
-      }
+        ),
+      );
     }
 
     return sections;

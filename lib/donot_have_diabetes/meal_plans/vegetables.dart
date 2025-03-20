@@ -106,7 +106,7 @@ class VegetablesScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 36,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: Colors.green,
                         ),
                       ),
 
@@ -152,7 +152,7 @@ class VegetablesScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+
                         ),
                       ),
 
@@ -161,48 +161,147 @@ class VegetablesScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+
                         ),
                       ),
 
                       const SizedBox(height: 16),
 
-                      // Low-Calorie Vegetables Grid
-                      Row(
-                        children: [
-                          Expanded(
-                            child: VegetableCard(
-                              name: 'Tomato',
-                              calories: 18,
-                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/tomato.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                            ),
+                      // Low-Calorie Vegetables - HORIZONTAL SCROLLING
+                      SizedBox(
+                        height: 200, // Set a fixed height for the horizontal scroll area
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              VegetableCard(
+                                name: 'Tomato',
+                                calories: 18,
+                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/tomato.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                              const SizedBox(width: 12),
+                              VegetableCard(
+                                name: 'Cucumber',
+                                calories: 15,
+                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/cucumber.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                              const SizedBox(width: 12),
+                              VegetableCard(
+                                name: 'Spinach',
+                                calories: 23,
+                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/spinach.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                              const SizedBox(width: 12),
+                              VegetableCard(
+                                name: 'Zucchini',
+                                calories: 17,
+                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/zucchini.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                              const SizedBox(width: 12),
+                              VegetableCard(
+                                name: 'Radish',
+                                calories: 16,
+                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/radish.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                              const SizedBox(width: 12),
+                              VegetableCard(
+                                name: 'Cabbage',
+                                calories: 25,
+                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/cabbage.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                              const SizedBox(width: 12),
+                              VegetableCard(
+                                name: 'Celery',
+                                calories: 16,
+                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/celery.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                              const SizedBox(width: 12),
+                              VegetableCard(
+                                name: 'Cauliflower',
+                                calories: 25,
+                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/cauliflower.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                              const SizedBox(width: 12),
+                              VegetableCard(
+                                name: 'Bell Pepper',
+                                calories: 20,
+                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/bell_pepper.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                              const SizedBox(width: 12),
+                              VegetableCard(
+                                name: 'Lettuce',
+                                calories: 15,
+                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/lettuce.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                              const SizedBox(width: 12),
+                              VegetableCard(
+                                name: 'Asparagus',
+                                calories: 15,
+                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/asparagus.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                              const SizedBox(width: 12),
+                              VegetableCard(
+                                name: 'Mushroom',
+                                calories: 22,
+                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/mushroom.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                              const SizedBox(width: 12),
+                              VegetableCard(
+                                name: 'Bok Choy',
+                                calories: 13,
+                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/bok_choy.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                              const SizedBox(width: 12),
+                              VegetableCard(
+                                name: 'Watercress',
+                                calories: 11,
+                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/watercress.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: VegetableCard(
-                              name: 'Cucumber',
-                              calories: 15,
-                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/cucumber.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: VegetableCard(
-                              name: 'Spinach',
-                              calories: 23,
-                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/spinach.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
 
                       const SizedBox(height: 24),
@@ -213,7 +312,7 @@ class VegetablesScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+
                         ),
                       ),
 
@@ -222,48 +321,102 @@ class VegetablesScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+
                         ),
                       ),
 
                       const SizedBox(height: 16),
 
-                      // Moderate-Calorie Vegetables Grid
-                      Row(
-                        children: [
-                          Expanded(
-                            child: VegetableCard(
-                              name: 'Carrot',
-                              calories: 41,
-                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/carrot.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                            ),
+                      // Moderate-Calorie Vegetables - HORIZONTAL SCROLLING
+                      SizedBox(
+                        height: 200, // Set a fixed height for the horizontal scroll area
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              VegetableCard(
+                                name: 'Carrot',
+                                calories: 41,
+                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/carrot.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                              const SizedBox(width: 12),
+                              VegetableCard(
+                                name: 'Green Peas',
+                                calories: 42,
+                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/green_peas.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                              const SizedBox(width: 12),
+                              VegetableCard(
+                                name: 'Beetroot',
+                                calories: 43,
+                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/beetroot.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                              const SizedBox(width: 12),
+                              VegetableCard(
+                                name: 'Eggplant',
+                                calories: 35,
+                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/eggplant.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                              const SizedBox(width: 12),
+                              VegetableCard(
+                                name: 'Pumpkin',
+                                calories: 45,
+                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/pumpkin.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                              const SizedBox(width: 12),
+                              VegetableCard(
+                                name: 'Sweet Corn',
+                                calories: 86,
+                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/sweetcorn.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                              const SizedBox(width: 12),
+                              VegetableCard(
+                                name: 'Onion',
+                                calories: 40,
+                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/onion.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                              const SizedBox(width: 12),
+                              VegetableCard(
+                                name: 'Shallots',
+                                calories: 72,
+                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/shallots.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                              const SizedBox(width: 12),
+                              VegetableCard(
+                                name: 'Leeks',
+                                calories: 61,
+                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/leeks.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: VegetableCard(
-                              name: 'Green Peas',
-                              calories: 42,
-                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/peas.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: VegetableCard(
-                              name: 'Beetroot',
-                              calories: 43,
-                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/beetroot.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
 
                       const SizedBox(height: 24),
@@ -274,7 +427,7 @@ class VegetablesScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+
                         ),
                       ),
 
@@ -283,48 +436,49 @@ class VegetablesScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+
                         ),
                       ),
 
                       const SizedBox(height: 16),
 
-                      // High-Calorie Vegetables Grid
-                      Row(
-                        children: [
-                          Expanded(
-                            child: VegetableCard(
-                              name: 'Potatoes',
-                              calories: 86,
-                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/potato.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                            ),
+                      // High-Calorie Vegetables - HORIZONTAL SCROLLING
+                      SizedBox(
+                        height: 200, // Reduced height for consistency with other sections
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              VegetableCard(
+                                name: 'Potatoes',
+                                calories: 86,
+                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/potatoes.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                              const SizedBox(width: 12),
+                              VegetableCard(
+                                // Removed the invalid height parameter
+                                name: 'Sweet potatoes',
+                                calories: 87,
+                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/sweet_potatoes.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                              const SizedBox(width: 12),
+                              VegetableCard(
+                                name: 'Cassava',
+                                calories: 160,
+                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/cassava.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: VegetableCard(
-                              name: 'Sweet potatoes',
-                              calories: 87,
-                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/sweet_potato.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: VegetableCard(
-                              name: 'Cassava',
-                              calories: 160,
-                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/cassava.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
 
                       // Add View Total Calories Button
@@ -414,6 +568,7 @@ class VegetableCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 140, // Set a fixed width for each card in horizontal scroll
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -431,25 +586,25 @@ class VegetableCard extends StatelessWidget {
           children: [
             // Vegetable Image
             SizedBox(
-              height: 80,
+              height: 100,
               child: Image.asset(
                 imagePath,
                 fit: BoxFit.contain,
                 errorBuilder: (context, error, stackTrace) => Container(
                   height: 80,
                   color: Colors.grey.shade200,
-                  child: const Icon(Icons.image, size: 40),
+                  child: const Icon(Icons.image, size: 80),
                 ),
               ),
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: 15),
 
             // Vegetable Name
             Text(
               name,
               style: const TextStyle(
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),

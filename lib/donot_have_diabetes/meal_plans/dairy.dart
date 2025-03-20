@@ -9,7 +9,6 @@ void main() async {
   runApp(const MyApp());
 }
 
-
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -28,6 +27,42 @@ class MyApp extends StatelessWidget {
 
 class DairyProductsScreen extends StatelessWidget {
   const DairyProductsScreen({Key? key}) : super(key: key);
+
+  // Function to add calorie to Firestore
+  void _addCalorieToFirebase(String name, int calories) async {
+    final userId = 'user123'; // Replace with actual user ID
+    final userRef = FirebaseFirestore.instance.collection('users').doc(userId);
+
+    try {
+      // Get the current total calorie count for the user
+      final userDoc = await userRef.get();
+      int totalCalories = 0;
+
+      if (userDoc.exists) {
+        // If user document exists, fetch total calories (or set to 0 if not present)
+        totalCalories = userDoc.data()?['total_calories'] ?? 0;
+      }
+
+      // Update the total calorie count by adding the vegetable's calories
+      totalCalories += calories;
+
+      // Save the updated total calorie count back to Firestore
+      await userRef.set({
+        'total_calories': totalCalories,
+      }, SetOptions(merge: true));
+
+      // Optionally: You can also add a document in a subcollection for individual vegetables
+      await userRef.collection('dairy_calories').add({
+        'name': name,
+        'calories': calories,
+        'timestamp': FieldValue.serverTimestamp(), // Adds a timestamp for the entry
+      });
+
+      print("Calories added successfully!");
+    } catch (e) {
+      print("Error adding calories: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -138,8 +173,10 @@ class DairyProductsScreen extends StatelessWidget {
                             child: DairyItemCard(
                               name: 'Skim Milk',
                               calories: 34,
-                              imagePath: 'assets/skim_milk.png',
-                              onAdd: () {},
+                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/milk-carton.png',
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -147,8 +184,10 @@ class DairyProductsScreen extends StatelessWidget {
                             child: DairyItemCard(
                               name: 'Low-fat Milk(1%)',
                               calories: 42,
-                              imagePath: 'assets/lowfat_milk.png',
-                              onAdd: () {},
+                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/milk.png',
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -156,8 +195,10 @@ class DairyProductsScreen extends StatelessWidget {
                             child: DairyItemCard(
                               name: 'Buttermilk',
                               calories: 40,
-                              imagePath: 'assets/buttermilk.png',
-                              onAdd: () {},
+                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/milk (1).png',
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
                           ),
                         ],
@@ -193,8 +234,10 @@ class DairyProductsScreen extends StatelessWidget {
                             child: DairyItemCard(
                               name: 'Whole Milk',
                               calories: 61,
-                              imagePath: 'assets/whole_milk.png',
-                              onAdd: () {},
+                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/milk-box.png',
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -203,7 +246,9 @@ class DairyProductsScreen extends StatelessWidget {
                               name: 'Plain Yogurt (Whole Milk)',
                               calories: 61,
                               imagePath: 'assets/plain_yogurt.png',
-                              onAdd: () {},
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -212,7 +257,9 @@ class DairyProductsScreen extends StatelessWidget {
                               name: 'Greek Yogurt (Whole Milk)',
                               calories: 97,
                               imagePath: 'assets/greek_yogurt.png',
-                              onAdd: () {},
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
                           ),
                         ],
@@ -249,7 +296,9 @@ class DairyProductsScreen extends StatelessWidget {
                               name: 'Butter',
                               calories: 717,
                               imagePath: 'assets/butter.png',
-                              onAdd: () {},
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -258,7 +307,9 @@ class DairyProductsScreen extends StatelessWidget {
                               name: 'Heavy Cream',
                               calories: 340,
                               imagePath: 'assets/heavy_cream.png',
-                              onAdd: () {},
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -267,13 +318,32 @@ class DairyProductsScreen extends StatelessWidget {
                               name: 'Cheddar Cheese',
                               calories: 403,
                               imagePath: 'assets/cheddar_cheese.png',
-                              onAdd: () {},
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
                           ),
                         ],
                       ),
 
-                      const SizedBox(height: 24),
+                      // Add View Total Calories Button
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        child: Center(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const TotalScreen(category: 'Dairy')), // Navigate to TotalScreen
+                              );
+                            },
+                            child: const Text(
+                              'View Total Calories',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -330,7 +400,7 @@ class DairyItemCard extends StatelessWidget {
   final String name;
   final int calories;
   final String imagePath;
-  final VoidCallback onAdd;
+  final void Function(String, int) onAdd;
 
   const DairyItemCard({
     Key? key,
@@ -403,7 +473,18 @@ class DairyItemCard extends StatelessWidget {
                 ),
 
                 GestureDetector(
-                  onTap: onAdd,
+                  onTap: () {
+                    onAdd(name, calories);  // Trigger the onAdd callback with proper parameters
+
+                    // Show a snackbar to confirm addition
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Added $name ($calories kcal)'),
+                        duration: const Duration(seconds: 1),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  },
                   child: Container(
                     width: 28,
                     height: 28,
