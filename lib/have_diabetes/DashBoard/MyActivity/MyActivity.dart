@@ -2142,7 +2142,7 @@ class _MyActivityScreenState extends State<MyActivityScreen> {
         mainContent = ReportScreen();
         break;
       case 2:
-        mainContent = RemindersScreen();
+        mainContent = ReminderScreen();
         break;
       case 3:
         mainContent = ProfileScreen();
