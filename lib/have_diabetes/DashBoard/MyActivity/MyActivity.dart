@@ -1151,7 +1151,7 @@ import 'package:mybete_app/have_diabetes/DashBoard/profile/Profile.dart';
 import 'dart:math';
 
 import '../LogDetails/LogInterface.dart';
-import '../Reminder/Reminders.dart';
+import '../Reminder/Reminder_screen.dart';
 import '../Report/Reports.dart';
 import 'weekly_stats_screen.dart';
 
