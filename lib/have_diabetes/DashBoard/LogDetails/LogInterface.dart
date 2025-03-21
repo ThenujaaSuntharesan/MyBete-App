@@ -1,19 +1,16 @@
-//
-//
-//
-//
 // import 'package:flutter/material.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:flutter/services.dart';
 // import 'package:intl/intl.dart';
 // import 'package:google_fonts/google_fonts.dart';
 // import '../MyActivity/MyActivity.dart';
-// import 'package:flutter/services.dart';
-//
-//
 //
 // class LogEntryScreen extends StatefulWidget {
-//   const LogEntryScreen({Key? key}) : super(key: key);
+//   final Map<String, dynamic>? logEntry;
+//
+//   const LogEntryScreen({Key? key, this.logEntry}) : super(key: key);
+//
 //   @override
 //   _LogInterfaceState createState() => _LogInterfaceState();
 // }
@@ -63,6 +60,61 @@
 //     _bloodSugarController.addListener(_onFormChanged);
 //     _pillsController.addListener(_onFormChanged);
 //     _bodyWeightController.addListener(_onFormChanged);
+//
+//     // Load data from logEntry if editing an existing entry
+//     if (widget.logEntry != null) {
+//       // Set blood sugar
+//       if (widget.logEntry!['bloodSugar'] != null) {
+//         _bloodSugarController.text = widget.logEntry!['bloodSugar'].toString();
+//       }
+//
+//       // Set pills
+//       if (widget.logEntry!['pills'] != null) {
+//         _pillsController.text = widget.logEntry!['pills'];
+//       }
+//
+//       // Set body weight
+//       if (widget.logEntry!['bodyWeight'] != null) {
+//         _bodyWeightController.text = widget.logEntry!['bodyWeight'].toString();
+//       }
+//
+//       // Set blood pressure
+//       if (widget.logEntry!['bloodPressure'] != null) {
+//         final bpParts = widget.logEntry!['bloodPressure'].toString().split('/');
+//         if (bpParts.length == 2) {
+//           try {
+//             _systolicValue = int.parse(bpParts[0]);
+//             _diastolicValue = int.parse(bpParts[1]);
+//             _hasBloodPressure = true;
+//           } catch (e) {
+//             print('Error parsing blood pressure: $e');
+//           }
+//         }
+//       }
+//
+//       // Set date
+//       if (widget.logEntry!['date'] != null) {
+//         _selectedDateTime = (widget.logEntry!['date'] as Timestamp).toDate();
+//       }
+//
+//       // Set tracking moment
+//       if (widget.logEntry!['trackingMoment'] != null) {
+//         _selectedTrackingMoment = widget.logEntry!['trackingMoment'];
+//       }
+//
+//       // Set meal time
+//       if (widget.logEntry!['mealTime'] != null) {
+//         _selectedMealTime = widget.logEntry!['mealTime'];
+//       }
+//
+//       // Set food type
+//       if (widget.logEntry!['foodType'] != null) {
+//         _selectedFoodType = widget.logEntry!['foodType'];
+//       }
+//
+//       // Mark as having changes to enable save button
+//       _hasChanges = true;
+//     }
 //   }
 //
 //   void _onFormChanged() {
@@ -290,9 +342,19 @@
 //       }
 //     }
 //
+//     // Check if user is authenticated
+//     final user = FirebaseAuth.instance.currentUser;
+//     if (user == null) {
+//       print('Authentication error: No user is currently signed in');
+//       _showSnackBar('You must be logged in to save data');
+//       return;
+//     }
+//
+//     print('Attempting to save data for user: ${user.uid}'); // Add logging
+//
 //     try {
-//       // Debug log to verify function is called
-//       print('Attempting to save log entry to Firestore');
+//       // Check if we're editing an existing entry
+//       final String? existingId = widget.logEntry != null ? widget.logEntry!['id'] as String? : null;
 //
 //       final user = FirebaseAuth.instance.currentUser;
 //       if (user == null) {
@@ -300,8 +362,15 @@
 //         return;
 //       }
 //
-//       // Debug log to verify user is authenticated
-//       print('User authenticated: ${user.uid}');
+//       // Log what we're about to save
+//       print('Preparing to save log entry with:');
+//       print('- Blood Sugar: ${_bloodSugarController.text.isEmpty ? "null" : _bloodSugarController.text}');
+//       print('- Pills: ${_pillsController.text.isEmpty ? "null" : _pillsController.text}');
+//       print('- Blood Pressure: ${_hasBloodPressure ? "$_systolicValue/$_diastolicValue" : "null"}');
+//       print('- Body Weight: ${_bodyWeightController.text.isEmpty ? "null" : _bodyWeightController.text}');
+//       print('- Tracking Moment: $_selectedTrackingMoment');
+//       print('- Meal Time: $_selectedMealTime');
+//       print('- Food Type: $_selectedFoodType');
 //
 //       // Show loading indicator
 //       _showLoadingDialog();
@@ -330,53 +399,42 @@
 //       // Remove null values
 //       data.removeWhere((key, value) => value == null);
 //
-//       // Debug log to verify data structure
-//       print('Saving data to Firestore: $data');
-//
-//       // Verify Firestore instance
-//       final firestore = FirebaseFirestore.instance;
-//       print('Firestore instance obtained');
-//
-//       // Save to Firestore with explicit error handling
+//       // Save to Firestore
 //       try {
-//         final docRef = await firestore.collection('logEntries').add(data);
-//         print('Document saved successfully with ID: ${docRef.id}');
+//         print('Attempting to save to Firestore collection: logEntries');
+//
+//         if (existingId != null) {
+//           // Update existing document
+//           await FirebaseFirestore.instance.collection('logEntries').doc(existingId).update(data);
+//           print('Document updated successfully with ID: $existingId');
+//         } else {
+//           // Create new document
+//           final docRef = await FirebaseFirestore.instance.collection('logEntries').add(data);
+//           print('Document saved successfully with ID: ${docRef.id}');
+//         }
 //
 //         // Dismiss loading dialog
-//         if (Navigator.of(context).canPop()) {
-//           Navigator.of(context).pop();
-//         }
+//         Navigator.of(context).pop();
 //
 //         // Navigate back to MyActivity
 //         _navigateToMyActivity();
 //
 //         // Show success message
-//         _showSnackBar('Log entry saved successfully', isSuccess: true);
+//         _showSnackBar('Log entry ${existingId != null ? 'updated' : 'saved'} successfully', isSuccess: true);
 //       } catch (firestoreError) {
 //         print('Firestore error: $firestoreError');
-//
-//         // Dismiss loading dialog if showing
 //         if (Navigator.of(context).canPop()) {
 //           Navigator.of(context).pop();
 //         }
-//
-//         // Show specific error message based on error type
-//         if (firestoreError.toString().contains('permission-denied')) {
-//           _showSnackBar('Permission denied. Check your Firestore rules.');
-//         } else if (firestoreError.toString().contains('unavailable')) {
-//           _showSnackBar('Network error. Check your internet connection.');
-//         } else {
-//           _showSnackBar('Error saving log entry: $firestoreError');
-//         }
+//         _showSnackBar('Error saving to database: $firestoreError');
 //       }
 //     } catch (e) {
-//       print('General error: $e');
-//
 //       // Dismiss loading dialog if showing
 //       if (Navigator.of(context).canPop()) {
 //         Navigator.of(context).pop();
 //       }
 //
+//       print('Error saving log entry: $e'); // Add detailed console logging
 //       _showSnackBar('Error saving log entry: $e');
 //     }
 //   }
@@ -435,7 +493,7 @@
 //   // Navigate to MyActivity
 //   void _navigateToMyActivity() {
 //     Navigator.of(context).pushReplacement(
-//       MaterialPageRoute(builder: (context) =>  MyActivityScreen()),
+//       MaterialPageRoute(builder: (context) => const MyActivityScreen()),
 //     );
 //   }
 //
@@ -721,6 +779,7 @@
 //       ),
 //     );
 //   }
+//
 //
 //   @override
 //   Widget build(BuildContext context) {
@@ -1155,6 +1214,10 @@
 //                                     color: _textColor,
 //                                   ),
 //                                 ),
+//                                 Icon(
+//                                   Icons.keyboard_arrow_down,
+//                                   color: _accentColor,
+//                                 ),
 //                               ],
 //                             ),
 //                             const SizedBox(height: 16),
@@ -1322,6 +1385,10 @@
 //                                     fontWeight: FontWeight.w600,
 //                                     color: _textColor,
 //                                   ),
+//                                 ),
+//                                 Icon(
+//                                   Icons.keyboard_arrow_down,
+//                                   color: _accentColor,
 //                                 ),
 //                               ],
 //                             ),
@@ -1534,13 +1601,13 @@
 //   }
 // }
 //
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
-
 import '../MyActivity/MyActivity.dart';
 
 class LogEntryScreen extends StatefulWidget {
@@ -1588,6 +1655,9 @@ class _LogInterfaceState extends State<LogEntryScreen> {
   // Scroll controllers for blood pressure
   final FixedExtentScrollController _systolicScrollController = FixedExtentScrollController(initialItem: 70); // 120 - 50
   final FixedExtentScrollController _diastolicScrollController = FixedExtentScrollController(initialItem: 60); // 80 - 20
+
+  // Loading state
+  bool _isSaving = false;
 
   @override
   void initState() {
@@ -1853,6 +1923,9 @@ class _LogInterfaceState extends State<LogEntryScreen> {
 
   // Save log entry to Firestore
   Future<void> _saveLogEntry() async {
+    // Check if already saving to prevent multiple attempts
+    if (_isSaving) return;
+
     // Check if any data has been entered
     if (!_hasAnyData()) {
       _showEmptyFieldsAlert();
@@ -1887,116 +1960,20 @@ class _LogInterfaceState extends State<LogEntryScreen> {
       return;
     }
 
-    print('Attempting to save data for user: ${user.uid}'); // Add logging
+    // Set saving state to true
+    setState(() {
+      _isSaving = true;
+    });
 
-    try {
-      // Check if we're editing an existing entry
-      final String? existingId = widget.logEntry != null ? widget.logEntry!['id'] as String? : null;
+    print('Attempting to save data for user: ${user.uid}');
 
-      final user = FirebaseAuth.instance.currentUser;
-      if (user == null) {
-        _showSnackBar('You must be logged in to save data');
-        return;
-      }
-
-      // Log what we're about to save
-      print('Preparing to save log entry with:');
-      print('- Blood Sugar: ${_bloodSugarController.text.isEmpty ? "null" : _bloodSugarController.text}');
-      print('- Pills: ${_pillsController.text.isEmpty ? "null" : _pillsController.text}');
-      print('- Blood Pressure: ${_hasBloodPressure ? "$_systolicValue/$_diastolicValue" : "null"}');
-      print('- Body Weight: ${_bodyWeightController.text.isEmpty ? "null" : _bodyWeightController.text}');
-      print('- Tracking Moment: $_selectedTrackingMoment');
-      print('- Meal Time: $_selectedMealTime');
-      print('- Food Type: $_selectedFoodType');
-
-      // Show loading indicator
-      _showLoadingDialog();
-
-      // Create data map
-      final data = {
-        'userId': user.uid,
-        'date': Timestamp.fromDate(_selectedDateTime),
-        'bloodSugar': _bloodSugarController.text.isEmpty
-            ? null
-            : double.parse(_bloodSugarController.text),
-        'pills': _pillsController.text.isEmpty ? null : _pillsController.text,
-        'bloodPressure': _hasBloodPressure
-            ? '$_systolicValue/$_diastolicValue'
-            : null,
-        'bodyWeight': _bodyWeightController.text.isEmpty
-            ? null
-            : double.parse(_bodyWeightController.text),
-        'trackingMoment': _selectedTrackingMoment,
-        'mealTime': _selectedMealTime,
-        'foodType': _selectedFoodType,
-        'createdAt': Timestamp.now(),
-        'updatedAt': Timestamp.now(),
-      };
-
-      // Remove null values
-      data.removeWhere((key, value) => value == null);
-
-      // Save to Firestore
-      try {
-        print('Attempting to save to Firestore collection: logEntries');
-
-        if (existingId != null) {
-          // Update existing document
-          await FirebaseFirestore.instance.collection('logEntries').doc(existingId).update(data);
-          print('Document updated successfully with ID: $existingId');
-        } else {
-          // Create new document
-          final docRef = await FirebaseFirestore.instance.collection('logEntries').add(data);
-          print('Document saved successfully with ID: ${docRef.id}');
-        }
-
-        // Dismiss loading dialog
-        Navigator.of(context).pop();
-
-        // Navigate back to MyActivity
-        _navigateToMyActivity();
-
-        // Show success message
-        _showSnackBar('Log entry ${existingId != null ? 'updated' : 'saved'} successfully', isSuccess: true);
-      } catch (firestoreError) {
-        print('Firestore error: $firestoreError');
-        if (Navigator.of(context).canPop()) {
-          Navigator.of(context).pop();
-        }
-        _showSnackBar('Error saving to database: $firestoreError');
-      }
-    } catch (e) {
-      // Dismiss loading dialog if showing
-      if (Navigator.of(context).canPop()) {
-        Navigator.of(context).pop();
-      }
-
-      print('Error saving log entry: $e'); // Add detailed console logging
-      _showSnackBar('Error saving log entry: $e');
-    }
-  }
-
-  // Show a snackbar message
-  void _showSnackBar(String message, {bool isSuccess = false}) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: isSuccess ? Colors.green : Colors.red,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        margin: const EdgeInsets.all(10),
-      ),
-    );
-  }
-
-  // Show loading dialog
-  void _showLoadingDialog() {
+    // Show loading dialog
+    BuildContext? dialogContext;
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
+        dialogContext = context;
         return Dialog(
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
@@ -2025,7 +2002,132 @@ class _LogInterfaceState extends State<LogEntryScreen> {
         );
       },
     );
+
+    try {
+      // Check if we're editing an existing entry
+      final String? existingId = widget.logEntry != null ? widget.logEntry!['id'] as String? : null;
+
+      // Create data map
+      final data = {
+        'userId': user.uid,
+        'date': Timestamp.fromDate(_selectedDateTime),
+        'bloodSugar': _bloodSugarController.text.isEmpty
+            ? null
+            : double.parse(_bloodSugarController.text),
+        'pills': _pillsController.text.isEmpty ? null : _pillsController.text,
+        'bloodPressure': _hasBloodPressure
+            ? '$_systolicValue/$_diastolicValue'
+            : null,
+        'bodyWeight': _bodyWeightController.text.isEmpty
+            ? null
+            : double.parse(_bodyWeightController.text),
+        'trackingMoment': _selectedTrackingMoment,
+        'mealTime': _selectedMealTime,
+        'foodType': _selectedFoodType,
+        'createdAt': Timestamp.now(),
+        'updatedAt': Timestamp.now(),
+      };
+
+      // Remove null values
+      data.removeWhere((key, value) => value == null);
+
+      // Save to Firestore
+      if (existingId != null) {
+        // Update existing document
+        await FirebaseFirestore.instance.collection('logEntries').doc(existingId).update(data);
+        print('Document updated successfully with ID: $existingId');
+      } else {
+        // Create new document
+        final docRef = await FirebaseFirestore.instance.collection('logEntries').add(data);
+        print('Document saved successfully with ID: ${docRef.id}');
+      }
+
+      // Ensure we close the dialog first
+      if (dialogContext != null && Navigator.of(dialogContext!).canPop()) {
+        Navigator.of(dialogContext!).pop();
+      }
+
+      // Reset saving state
+      setState(() {
+        _isSaving = false;
+      });
+
+      // Show success message
+      _showSnackBar('Log entry ${existingId != null ? 'updated' : 'saved'} successfully', isSuccess: true);
+
+      // Navigate back to MyActivity after a short delay to ensure dialog is closed
+      Future.delayed(Duration(milliseconds: 100), () {
+        _navigateToMyActivity();
+      });
+
+    } catch (e) {
+      print('Error saving log entry: $e');
+
+      // Ensure we close the dialog
+      if (dialogContext != null && Navigator.of(dialogContext!).canPop()) {
+        Navigator.of(dialogContext!).pop();
+      }
+
+      // Reset saving state
+      setState(() {
+        _isSaving = false;
+      });
+
+      // Show error message
+      _showSnackBar('Error saving log entry: $e');
+    }
   }
+
+  // Show a snackbar message
+  void _showSnackBar(String message, {bool isSuccess = false}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: isSuccess ? Colors.green : Colors.red,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        margin: const EdgeInsets.all(10),
+      ),
+    );
+  }
+
+  // Show loading dialog
+  // void _showLoadingDialog() {
+  //   showDialog(
+  //     context: context,
+  //     barrierDismissible: false,
+  //     builder: (BuildContext context) {
+  //       return Dialog(
+  //         backgroundColor: Colors.white,
+  //         shape: RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.circular(15),
+  //         ),
+  //         child: Padding(
+  //           padding: const EdgeInsets.symmetric(vertical: 20),
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               CircularProgressIndicator(
+  //                 valueColor: AlwaysStoppedAnimation<Color>(_accentColor),
+  //               ),
+  //               const SizedBox(height: 16),
+  //               Text(
+  //                 'Saving...',
+  //                 style: TextStyle(
+  //                   fontFamily: GoogleFonts.poppins().fontFamily,
+  //                   color: _textColor,
+  //                   fontWeight: FontWeight.w500,
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   // Navigate to MyActivity
   void _navigateToMyActivity() {
@@ -2316,7 +2418,6 @@ class _LogInterfaceState extends State<LogEntryScreen> {
       ),
     );
   }
-<<<<<<< HEAD
 
   @override
   Widget build(BuildContext context) {
@@ -2383,13 +2484,13 @@ class _LogInterfaceState extends State<LogEntryScreen> {
                       Material(
                         color: Colors.transparent,
                         child: InkWell(
-                          onTap: _saveLogEntry,
+                          onTap: _isSaving ? null : _saveLogEntry,
                           borderRadius: BorderRadius.circular(30),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Icon(
                               Icons.check,
-                              color: Colors.black87,
+                              color: _isSaving ? Colors.grey : Colors.black87,
                               size: 28,
                             ),
                           ),
@@ -3022,8 +3123,8 @@ class _LogInterfaceState extends State<LogEntryScreen> {
                     children: [
                       // Clear button
                       Expanded(
-                        child: StatefulBuilder(
-                          builder: (context, setState) => GestureDetector(
+                        child: StatefulBuilder (
+                          builder: (context, setState) => GestureDetector (
                             onTapDown: (_) => setState(() => _isClearHovered = true),
                             onTapUp: (_) {
                               setState(() => _isClearHovered = false);
@@ -3138,6 +3239,3 @@ class _LogInterfaceState extends State<LogEntryScreen> {
   }
 }
 
-=======
-}
->>>>>>> main
