@@ -1148,17 +1148,6 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
       ),
     );
   }
-<<<<<<<< HEAD:lib/have_diabetes/DashBoard/Reminder/Reminder_screen.dart
 }
 
 
-
-
-
-
-
-
-
-========
-}
->>>>>>>> 70ed968f93df4befbad0667d0141e7e2c836aa77:lib/have_diabetes/DashBoard/Reminder/Reminders.dart
