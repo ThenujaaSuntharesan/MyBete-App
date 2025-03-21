@@ -93,6 +93,7 @@ flutter:
   assets:
     - assets/images/
     - lib/donot_have_diabetes/meal_plans/meal_images/
+    - lib/donot_have_diabetes/mind_relax/mind images/
   #    - assets/images/onboard_img_1.svg
 
   #   - images/a_dot_ham.jpeg
