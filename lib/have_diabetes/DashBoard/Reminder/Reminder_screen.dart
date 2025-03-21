@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:provider/provider.dart';
-import 'package:mybete_app/have_diabetes/DashBoard/Reminder/reminder_model.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz_init;
 import 'dart:convert';
@@ -687,337 +685,245 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Reminders'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+        appBar: AppBar(
+          title: const Text('Reminders'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          backgroundColor: const Color(0xFF89D0ED), // Using midShade from your MyActivity
         ),
-        backgroundColor: const Color(0xFF89D0ED), // Using midShade from your MyActivity
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Reminder Type Selector (One Time / Repeat)
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  padding: const EdgeInsets.all(4),
-                  margin: const EdgeInsets.only(bottom: 24),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              reminderType = 'one-time';
-                            });
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                            decoration: BoxDecoration(
-                              color: reminderType == 'one-time'
-                                  ? const Color(0xFF5FB8DD) // Using primaryColor from your MyActivity
-                                  : Colors.transparent,
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: Center(
-                              child: Text(
-                                'One Time',
-                                style: TextStyle(
+        body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Reminder Type Selector (One Time / Repeat)
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      padding: const EdgeInsets.all(4),
+                      margin: const EdgeInsets.only(bottom: 24),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  reminderType = 'one-time';
+                                });
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(vertical: 8),
+                                decoration: BoxDecoration(
                                   color: reminderType == 'one-time'
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontWeight: FontWeight.w500,
+                                      ? const Color(0xFF5FB8DD) // Using primaryColor from your MyActivity
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'One Time',
+                                    style: TextStyle(
+                                      color: reminderType == 'one-time'
+                                          ? Colors.white
+                                          : Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              reminderType = 'repeat';
-                            });
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                            decoration: BoxDecoration(
-                              color: reminderType == 'repeat'
-                                  ? const Color(0xFF5FB8DD) // Using primaryColor from your MyActivity
-                                  : Colors.transparent,
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: Center(
-                              child: Text(
-                                'Repeat',
-                                style: TextStyle(
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  reminderType = 'repeat';
+                                });
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(vertical: 8),
+                                decoration: BoxDecoration(
                                   color: reminderType == 'repeat'
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontWeight: FontWeight.w500,
+                                      ? const Color(0xFF5FB8DD) // Using primaryColor from your MyActivity
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Repeat',
+                                    style: TextStyle(
+                                      color: reminderType == 'repeat'
+                                          ? Colors.white
+                                          : Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
                           ),
+                        ],
+                      ),
+                    ),
+
+                    // Repeat Type Selector (Daily / Custom) - Only shown for repeat reminders
+                    if (reminderType == 'repeat')
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        padding: const EdgeInsets.all(4),
+                        margin: const EdgeInsets.only(bottom: 24),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    repeatType = 'daily';
+                                  });
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 8),
+                                  decoration: BoxDecoration(
+                                    color: repeatType == 'daily'
+                                        ? const Color(0xFF5FB8DD) // Using primaryColor from your MyActivity
+                                        : Colors.transparent,
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Daily',
+                                      style: TextStyle(
+                                        color: repeatType == 'daily'
+                                            ? Colors.white
+                                            : Colors.black,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    repeatType = 'custom';
+                                  });
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 8),
+                                  decoration: BoxDecoration(
+                                    color: repeatType == 'custom'
+                                        ? const Color(0xFF5FB8DD) // Using primaryColor from your MyActivity
+                                        : Colors.transparent,
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Custom',
+                                      style: TextStyle(
+                                        color: repeatType == 'custom'
+                                            ? Colors.white
+                                            : Colors.black,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
 
-                // Repeat Type Selector (Daily / Custom) - Only shown for repeat reminders
-                if (reminderType == 'repeat')
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    padding: const EdgeInsets.all(4),
-                    margin: const EdgeInsets.only(bottom: 24),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                repeatType = 'daily';
-                              });
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              decoration: BoxDecoration(
-                                color: repeatType == 'daily'
-                                    ? const Color(0xFF5FB8DD) // Using primaryColor from your MyActivity
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Daily',
-                                  style: TextStyle(
-                                    color: repeatType == 'daily'
-                                        ? Colors.white
-                                        : Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
+                    // Reminder Form Fields
+                    Card(
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: BorderSide(color: Colors.grey[300]!),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Task Title
+                            const Text(
+                              'Task Title*',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black87,
                               ),
                             ),
-                          ),
-                        ),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                repeatType = 'custom';
-                              });
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              decoration: BoxDecoration(
-                                color: repeatType == 'custom'
-                                    ? const Color(0xFF5FB8DD) // Using primaryColor from your MyActivity
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(30),
+                            const SizedBox(height: 8),
+                            TextFormField(
+                              controller: titleController,
+                              decoration: const InputDecoration(
+                                hintText: 'Enter task title',
                               ),
-                              child: Center(
-                                child: Text(
-                                  'Custom',
-                                  style: TextStyle(
-                                    color: repeatType == 'custom'
-                                        ? Colors.white
-                                        : Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter a task title';
+                                }
+                                return null;
+                              },
                             ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                            const SizedBox(height: 16),
 
-                // Reminder Form Fields
-                Card(
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    side: BorderSide(color: Colors.grey[300]!),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Task Title
-                        const Text(
-                          'Task Title*',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        TextFormField(
-                          controller: titleController,
-                          decoration: const InputDecoration(
-                            hintText: 'Enter task title',
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter a task title';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 16),
-
-                        // Reminder Date - Only for one-time reminders
-                        if (reminderType == 'one-time') ...[
-                          const Text(
-                            'Reminder Date*',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          InkWell(
-                            onTap: () {
-                              _selectDate(
-                                context,
-                                initialDate: dateValue ?? DateTime.now(),
-                                onSelect: (date) {
-                                  setState(() {
-                                    dateValue = date;
-                                  });
-                                },
-                              );
-                            },
-                            child: InputDecorator(
-                              decoration: InputDecoration(
-                                suffixIcon: const Icon(Icons.calendar_today),
-                                hintText: 'Select date',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                              child: Text(
-                                dateValue != null ? _formatDate(dateValue!) : 'Select date',
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                        ],
-
-                        // Reminder Time
-                        const Text(
-                          'Reminder Time*',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        InkWell(
-                          onTap: () {
-                            _selectTime(context);
-                          },
-                          child: InputDecorator(
-                            decoration: InputDecoration(
-                              suffixIcon: const Icon(Icons.access_time),
-                              hintText: 'Select time',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            child: Text(timeController.text),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-
-                        // Custom repeat options
-                        if (reminderType == 'repeat' && repeatType == 'custom') ...[
-                          const Text(
-                            'Starts on*',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          InkWell(
-                            onTap: () {
-                              _selectDate(
-                                context,
-                                initialDate: startsOnValue ?? DateTime.now(),
-                                onSelect: (date) {
-                                  setState(() {
-                                    startsOnValue = date;
-                                    // If end date is before start date, update it
-                                    if (!neverEnds && endsOnValue != null && endsOnValue!.isBefore(date)) {
-                                      endsOnValue = date;
-                                    }
-                                  });
-                                },
-                              );
-                            },
-                            child: InputDecorator(
-                              decoration: InputDecoration(
-                                suffixIcon: const Icon(Icons.calendar_today),
-                                hintText: 'Select start date',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                              child: Text(
-                                startsOnValue != null ? _formatDate(startsOnValue!) : 'Select start date',
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-
-                          // Task never ends toggle
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
+                            // Reminder Date - Only for one-time reminders
+                            if (reminderType == 'one-time') ...[
                               const Text(
-                                'Task never ends',
+                                'Reminder Date*',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   color: Colors.black87,
                                 ),
                               ),
-                              Switch(
-                                value: neverEnds,
-                                onChanged: (value) {
-                                  setState(() {
-                                    neverEnds = value;
-                                  });
+                              const SizedBox(height: 8),
+                              InkWell(
+                                onTap: () {
+                                  _selectDate(
+                                    context,
+                                    initialDate: dateValue ?? DateTime.now(),
+                                    onSelect: (date) {
+                                      setState(() {
+                                        dateValue = date;
+                                      });
+                                    },
+                                  );
                                 },
-                                activeColor: const Color(0xFF5FB8DD), // Using primaryColor from your MyActivity
+                                child: InputDecorator(
+                                  decoration: InputDecoration(
+                                    suffixIcon: const Icon(Icons.calendar_today),
+                                    hintText: 'Select date',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    dateValue != null ? _formatDate(dateValue!) : 'Select date',
+                                  ),
+                                ),
                               ),
+                              const SizedBox(height: 16),
                             ],
-                          ),
-                          const SizedBox(height: 16),
 
-                          // End date - only if task doesn't never end
-                          if (!neverEnds) ...[
+                            // Reminder Time
                             const Text(
-                              'Ends on*',
+                              'Reminder Time*',
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 color: Colors.black87,
@@ -1026,86 +932,177 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
                             const SizedBox(height: 8),
                             InkWell(
                               onTap: () {
-                                _selectDate(
-                                  context,
-                                  initialDate: endsOnValue ?? DateTime.now().add(const Duration(days: 7)),
-                                  onSelect: (date) {
-                                    setState(() {
-                                      endsOnValue = date;
-                                    });
-                                  },
-                                );
+                                _selectTime(context);
                               },
                               child: InputDecorator(
                                 decoration: InputDecoration(
-                                  suffixIcon: const Icon(Icons.calendar_today),
-                                  hintText: 'Select end date',
+                                  suffixIcon: const Icon(Icons.access_time),
+                                  hintText: 'Select time',
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                 ),
-                                child: Text(
-                                  endsOnValue != null ? _formatDate(endsOnValue!) : 'Select end date',
-                                ),
+                                child: Text(timeController.text),
                               ),
                             ),
                             const SizedBox(height: 16),
-                          ],
-                        ],
 
-                        // Note
-                        const Text(
-                          'Note (optional)',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        TextFormField(
-                          controller: noteController,
-                          decoration: const InputDecoration(
-                            hintText: 'Add a note',
-                          ),
-                          maxLines: 3,
-                        ),
-                        const SizedBox(height: 24),
-
-                        // Save and Clear buttons
-                        Row(
-                          children: [
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed: _saveReminder,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF5FB8DD), // Using primaryColor from your MyActivity
-                                  foregroundColor: Colors.white,
+                            // Custom repeat options
+                            if (reminderType == 'repeat' && repeatType == 'custom') ...[
+                              const Text(
+                                'Starts on*',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black87,
                                 ),
-                                child: const Text('Save'),
+                              ),
+                              const SizedBox(height: 8),
+                              InkWell(
+                                onTap: () {
+                                  _selectDate(
+                                    context,
+                                    initialDate: startsOnValue ?? DateTime.now(),
+                                    onSelect: (date) {
+                                      setState(() {
+                                        startsOnValue = date;
+                                        // If end date is before start date, update it
+                                        if (!neverEnds && endsOnValue != null && endsOnValue!.isBefore(date)) {
+                                          endsOnValue = date;
+                                        }
+                                      });
+                                    },
+                                  );
+                                },
+                                child: InputDecorator(
+                                  decoration: InputDecoration(
+                                    suffixIcon: const Icon(Icons.calendar_today),
+                                    hintText: 'Select start date',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    startsOnValue != null ? _formatDate(startsOnValue!) : 'Select start date',
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+
+                              // Task never ends toggle
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    'Task never ends',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  Switch(
+                                    value: neverEnds,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        neverEnds = value;
+                                      });
+                                    },
+                                    activeColor: const Color(0xFF5FB8DD), // Using primaryColor from your MyActivity
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 16),
+
+                              // End date - only if task doesn't never end
+                              if (!neverEnds) ...[
+                                const Text(
+                                  'Ends on*',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                InkWell(
+                                  onTap: () {
+                                    _selectDate(
+                                      context,
+                                      initialDate: endsOnValue ?? DateTime.now().add(const Duration(days: 7)),
+                                      onSelect: (date) {
+                                        setState(() {
+                                          endsOnValue = date;
+                                        });
+                                      },
+                                    );
+                                  },
+                                  child: InputDecorator(
+                                    decoration: InputDecoration(
+                                      suffixIcon: const Icon(Icons.calendar_today),
+                                      hintText: 'Select end date',
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      endsOnValue != null ? _formatDate(endsOnValue!) : 'Select end date',
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                              ],
+                            ],
+
+                            // Note
+                            const Text(
+                              'Note (optional)',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.grey,
                               ),
                             ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: OutlinedButton(
-                                onPressed: _clearForm,
-                                child: const Text('Clear'),
+                            const SizedBox(height: 8),
+                            TextFormField(
+                              controller: noteController,
+                              decoration: const InputDecoration(
+                                hintText: 'Add a note',
                               ),
+                              maxLines: 3,
+                            ),
+                            const SizedBox(height: 24),
+
+                            // Save and Clear buttons
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: ElevatedButton(
+                                    onPressed: _saveReminder,
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFF5FB8DD), // Using primaryColor from your MyActivity
+                                      foregroundColor: Colors.white,
+                                    ),
+                                    child: const Text('Save'),
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: OutlinedButton(
+                                    onPressed: _clearForm,
+                                    child: const Text('Clear'),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
-    );
-  }
+            ),
+        );
+    }
 }
-
 
 
 

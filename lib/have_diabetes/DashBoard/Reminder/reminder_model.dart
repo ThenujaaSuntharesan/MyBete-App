@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Reminder {
@@ -11,6 +12,8 @@ class Reminder {
   DateTime? endsOn; // Only for 'custom' repeat
   bool neverEnds;
   String note;
+  bool isActive;
+  String userId; // Added to associate reminders with specific users
 
   Reminder({
     required this.id,
@@ -23,6 +26,8 @@ class Reminder {
     this.endsOn,
     required this.neverEnds,
     required this.note,
+    required this.isActive,
+    required this.userId,
   });
 
   // Convert Reminder object to Firestore JSON format
@@ -38,6 +43,9 @@ class Reminder {
       'endsOn': endsOn?.toIso8601String(),
       'neverEnds': neverEnds,
       'note': note,
+      'isActive': isActive,
+      'userId': userId,
+      'createdAt': FieldValue.serverTimestamp(), // Add server timestamp
     };
   }
 
@@ -52,12 +60,42 @@ class Reminder {
       reminderTime: DateTime.parse(json['reminderTime']),
       startsOn: json['startsOn'] != null ? DateTime.parse(json['startsOn']) : null,
       endsOn: json['endsOn'] != null ? DateTime.parse(json['endsOn']) : null,
-      neverEnds: json['neverEnds'],
-      note: json['note'],
+      neverEnds: json['neverEnds'] ?? true,
+      note: json['note'] ?? '',
+      isActive: json['isActive'] ?? true,
+      userId: json['userId'] ?? '',
+    );
+  }
+
+  // Create a copy of the reminder with updated fields
+  Reminder copyWith({
+    String? title,
+    String? reminderType,
+    String? repeatType,
+    DateTime? reminderDate,
+    DateTime? reminderTime,
+    DateTime? startsOn,
+    DateTime? endsOn,
+    bool? neverEnds,
+    String? note,
+    bool? isActive,
+  }) {
+    return Reminder(
+      id: this.id,
+      title: title ?? this.title,
+      reminderType: reminderType ?? this.reminderType,
+      repeatType: repeatType ?? this.repeatType,
+      reminderDate: reminderDate ?? this.reminderDate,
+      reminderTime: reminderTime ?? this.reminderTime,
+      startsOn: startsOn ?? this.startsOn,
+      endsOn: endsOn ?? this.endsOn,
+      neverEnds: neverEnds ?? this.neverEnds,
+      note: note ?? this.note,
+      isActive: isActive ?? this.isActive,
+      userId: this.userId,
     );
   }
 }
-
 
 
 

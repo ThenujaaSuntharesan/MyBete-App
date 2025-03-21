@@ -4,9 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:mybete_app/have_diabetes/DashBoard/profile/Profile.dart';
 import 'dart:math';
 
-import '../../../not_sure/profile.dart';
 import '../LogDetails/LogInterface.dart';
 import '../Reminder/Reminder_screen.dart';
 import '../Reports.dart';
