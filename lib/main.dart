@@ -2,9 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mybete_app/firebase_options.dart';
+import 'package:timezone/data/latest.dart' as tz_init;
+import 'sign_up_screen.dart';
+import 'log_in_screen.dart';
 import 'diabete_options.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'firebase_options.dart';
 
 
 void main() async {
@@ -58,7 +63,7 @@ class MyApp extends StatelessWidget {
         date1.month == date2.month &&
         date1.day == date2.day;
   }
-    }
+}
 
 
 

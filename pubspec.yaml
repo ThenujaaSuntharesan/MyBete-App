@@ -1,7 +1,8 @@
+
 name: mybete_app
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
-# pub.dev using flutter pub publish. This is preferred for private packages.
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
@@ -23,10 +24,10 @@ environment:
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
-# consider running flutter pub upgrade --major-versions. Alternatively,
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
 # dependencies can be manually updated by changing the version numbers below to
 # the latest version available on pub.dev. To see which dependencies have newer
-# versions available, run flutter pub outdated.
+# versions available, run `flutter pub outdated`.
 dependencies:
 
   flutter:
@@ -63,6 +64,7 @@ dependencies:
 
   sqflite: ^2.2.1
   path: ^1.8.3
+
   google_fonts: ^6.2.1
   syncfusion_flutter_charts: 28.2.12
 
@@ -78,7 +80,7 @@ dev_dependencies:
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
-  # activated in the analysis_options.yaml file located at the root of your
+  # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
@@ -282,3 +284,12 @@ flutter_native_splash:
   #info_plist_files:
   #  - 'ios/Runner/Info-Debug.plist'
   #  - 'ios/Runner/Info-Release.plist'
+
+  dependencies:
+    flutter:
+      sdk: flutter
+    fl_chart: ^0.63.0
+    firebase_core: latest_version
+    firebase_storage: latest_version
+    cloud_firestore: latest_version
+    file_picker: latest_version
