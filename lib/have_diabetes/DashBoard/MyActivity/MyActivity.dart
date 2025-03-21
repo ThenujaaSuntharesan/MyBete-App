@@ -6,10 +6,11 @@
 // import 'package:fl_chart/fl_chart.dart';
 // import 'dart:math';
 //
-// import '../../../not_sure/profile.dart';
+//
 // import '../LogDetails/LogInterface.dart';
 // import '../Reminders.dart';
-// import '../Reports.dart';
+// import '../Report/Reports.dart';
+// import '../profile/Profile.dart';
 // import 'weekly_stats_screen.dart';
 //
 // class MyActivityScreen extends StatefulWidget {
@@ -38,6 +39,11 @@
 //   double _todayAverage = 0;
 //   bool _isLoading = true;
 //
+//   bool _isSearching = false;
+//   String _searchQuery = '';
+//   final TextEditingController _searchController = TextEditingController();
+//   List<Map<String, dynamic>> _filteredLogEntries = [];
+//
 //   // Expanded sections
 //   Set<String> _expandedSections = {'Today'};
 //
@@ -51,6 +57,7 @@
 //   void dispose() {
 //     _scrollController.dispose();
 //     _statsPageController.dispose();
+//     _searchController.dispose();
 //     super.dispose();
 //   }
 //
@@ -108,6 +115,7 @@
 //
 //       setState(() {
 //         _logEntries = entries;
+//         _filteredLogEntries = entries; // Initialize filtered entries
 //         _groupedByDate = grouped;
 //         _todayAverage = todayCount > 0 ? todaySum / todayCount : 0;
 //         _isLoading = false;
@@ -137,7 +145,9 @@
 //   Future<void> _deleteLogEntry(String id) async {
 //     try {
 //       await FirebaseFirestore.instance.collection('logEntries').doc(id).delete();
+//       // Refresh the data after deletion
 //       _fetchLogEntries();
+//
 //       ScaffoldMessenger.of(context).showSnackBar(
 //         SnackBar(
 //           content: Text(
@@ -155,6 +165,7 @@
 //         ),
 //       );
 //     } catch (e) {
+//       print('Error deleting log entry: $e');
 //       ScaffoldMessenger.of(context).showSnackBar(
 //         SnackBar(
 //           content: Text(
@@ -358,8 +369,8 @@
 //           ),
 //           minX: 0,
 //           maxX: 24,
-//           minY: max(0, spots.map((e) => e.y).reduce(min) - 20),
-//           maxY: spots.map((e) => e.y).reduce(max) + 20,
+//           minY: spots.isEmpty ? 0 : max(0, spots.map((e) => e.y).reduce(min) - 20),
+//           maxY: spots.isEmpty ? 200 : spots.map((e) => e.y).reduce(max) + 20,
 //           lineBarsData: [
 //             LineChartBarData(
 //               spots: spots,
@@ -412,8 +423,8 @@
 //   // Build the average circle
 //   Widget _buildAverageCircle(double average) {
 //     return Container(
-//       width: 100,
-//       height: 100,
+//       width: 120,
+//       height: 120,
 //       decoration: BoxDecoration(
 //         shape: BoxShape.circle,
 //         color: _lightColor,
@@ -430,7 +441,7 @@
 //               average > 0 ? average.toStringAsFixed(1) : '---',
 //               style: TextStyle(
 //                 fontFamily: GoogleFonts.poppins().fontFamily,
-//                 fontSize: 20,
+//                 fontSize: 24,
 //                 fontWeight: FontWeight.bold,
 //                 color: _textColor,
 //               ),
@@ -439,7 +450,7 @@
 //               'mg/dL',
 //               style: TextStyle(
 //                 fontFamily: GoogleFonts.poppins().fontFamily,
-//                 fontSize: 12,
+//                 fontSize: 14,
 //                 color: _textColor.withAlpha(178),
 //               ),
 //             ),
@@ -683,6 +694,66 @@
 //     );
 //   }
 //
+//   // Filter log entries based on search query
+//   void _filterLogEntries() {
+//     if (_searchQuery.isEmpty) {
+//       setState(() {
+//         _filteredLogEntries = _logEntries;
+//       });
+//       return;
+//     }
+//
+//     final query = _searchQuery.toLowerCase();
+//     setState(() {
+//       _filteredLogEntries = _logEntries.where((entry) {
+//         // Search in blood sugar
+//         if (entry['bloodSugar'] != null &&
+//             entry['bloodSugar'].toString().contains(query)) {
+//           return true;
+//         }
+//
+//         // Search in pills
+//         if (entry['pills'] != null &&
+//             entry['pills'].toString().toLowerCase().contains(query)) {
+//           return true;
+//         }
+//
+//         // Search in blood pressure
+//         if (entry['bloodPressure'] != null &&
+//             entry['bloodPressure'].toString().toLowerCase().contains(query)) {
+//           return true;
+//         }
+//
+//         // Search in body weight
+//         if (entry['bodyWeight'] != null &&
+//             entry['bodyWeight'].toString().contains(query)) {
+//           return true;
+//         }
+//
+//         // Search in tracking moment
+//         if (entry['trackingMoment'] != null &&
+//             entry['trackingMoment'].toString().toLowerCase().contains(query)) {
+//           return true;
+//         }
+//
+//         // Search in food type
+//         if (entry['foodType'] != null &&
+//             entry['foodType'].toString().toLowerCase().contains(query)) {
+//           return true;
+//         }
+//
+//         // Search in date
+//         final date = (entry['date'] as Timestamp).toDate();
+//         final dateStr = DateFormat('yyyy-MM-dd HH:mm').format(date).toLowerCase();
+//         if (dateStr.contains(query)) {
+//           return true;
+//         }
+//
+//         return false;
+//       }).toList();
+//     });
+//   }
+//
 //   @override
 //   Widget build(BuildContext context) {
 //     // Navigation destinations
@@ -754,34 +825,155 @@
 //     );
 //   }
 //
+//   // Build search results
+//   Widget _buildSearchResults() {
+//     if (_filteredLogEntries.isEmpty) {
+//       return Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             Icon(
+//               Icons.search_off,
+//               size: 48,
+//               color: _accentColor.withAlpha(128),
+//             ),
+//             const SizedBox(height: 16),
+//             Text(
+//               'No results found',
+//               style: TextStyle(
+//                 fontFamily: GoogleFonts.poppins().fontFamily,
+//                 fontSize: 16,
+//                 color: _textColor.withAlpha(178),
+//               ),
+//             ),
+//             const SizedBox(height: 8),
+//             Text(
+//               'Try a different search term',
+//               style: TextStyle(
+//                 fontFamily: GoogleFonts.poppins().fontFamily,
+//                 fontSize: 14,
+//                 color: _textColor.withAlpha(128),
+//               ),
+//             ),
+//           ],
+//         ),
+//       );
+//     }
+//
+//     return ListView.builder(
+//       padding: const EdgeInsets.all(16),
+//       itemCount: _filteredLogEntries.length,
+//       itemBuilder: (context, index) {
+//         final entry = _filteredLogEntries[index];
+//         final date = (entry['date'] as Timestamp).toDate();
+//         final dateStr = DateFormat('EEEE d MMMM yyyy').format(date);
+//
+//         return Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             if (index == 0 ||
+//                 DateFormat('yyyy-MM-dd').format(date) !=
+//                     DateFormat('yyyy-MM-dd').format((
+//                         _filteredLogEntries[index - 1]['date'] as Timestamp).toDate()))
+//               Padding(
+//                 padding: EdgeInsets.only(bottom: 8, top: index > 0 ? 16 : 0),
+//                 child: Text(
+//                   dateStr,
+//                   style: TextStyle(
+//                     fontFamily: GoogleFonts.poppins().fontFamily,
+//                     fontSize: 16,
+//                     fontWeight: FontWeight.w600,
+//                     color: _textColor,
+//                   ),
+//                 ),
+//               ),
+//             _buildLogEntryItem(entry),
+//             if (index == _filteredLogEntries.length - 1)
+//               const SizedBox(height: 16),
+//           ],
+//         );
+//       },
+//     );
+//   }
+//
 //   // Build My Activity content
 //   Widget _buildMyActivityContent() {
 //     return SafeArea(
 //       child: Column(
 //         children: [
-//           // App bar
+//           // App bar with search functionality
 //           Container(
-//             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+//             padding: const EdgeInsets.symmetric(vertical: 8),
 //             color: _primaryColor,
-//             child: Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               children: [
-//                 Text(
-//                   'My Activity',
-//                   style: TextStyle(
-//                     fontFamily: GoogleFonts.poppins().fontFamily,
-//                     fontSize: 22,
-//                     fontWeight: FontWeight.w600,
-//                     color: Colors.black87,
+//             child: _isSearching
+//                 ? Padding(
+//               padding: const EdgeInsets.symmetric(horizontal: 16),
+//               child: Row(
+//                 children: [
+//                   Expanded(
+//                     child: TextField(
+//                       controller: _searchController,
+//                       autofocus: true,
+//                       decoration: InputDecoration(
+//                         hintText: 'Search logs...',
+//                         hintStyle: TextStyle(
+//                           fontFamily: GoogleFonts.poppins().fontFamily,
+//                           color: Colors.black54,
+//                         ),
+//                         border: InputBorder.none,
+//                         prefixIcon: Icon(Icons.search, color: Colors.black87),
+//                       ),
+//                       style: TextStyle(
+//                         fontFamily: GoogleFonts.poppins().fontFamily,
+//                         fontSize: 16,
+//                         color: Colors.black87,
+//                       ),
+//                       onChanged: (value) {
+//                         setState(() {
+//                           _searchQuery = value;
+//                         });
+//                         _filterLogEntries();
+//                       },
+//                     ),
 //                   ),
-//                 ),
-//                 IconButton(
-//                   icon: const Icon(Icons.search, color: Colors.black87),
-//                   onPressed: () {
-//                     // Search functionality
-//                   },
-//                 ),
-//               ],
+//                   IconButton(
+//                     icon: const Icon(Icons.close, color: Colors.black87),
+//                     onPressed: () {
+//                       setState(() {
+//                         _isSearching = false;
+//                         _searchQuery = '';
+//                         _searchController.clear();
+//                       });
+//                       _filterLogEntries();
+//                     },
+//                   ),
+//                 ],
+//               ),
+//             )
+//                 : Padding(
+//               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+//               child: Row(
+//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                 children: [
+//                   Text(
+//                     'My Activity',
+//                     style: TextStyle(
+//                       fontFamily: GoogleFonts.poppins().fontFamily,
+//                       fontSize: 22,
+//                       fontWeight: FontWeight.w600,
+//                       color: Colors.black87,
+//                     ),
+//                   ),
+//                   IconButton(
+//                     icon: const Icon(Icons.search, color: Colors.black87),
+//                     onPressed: () {
+//                       setState(() {
+//                         _isSearching = true;
+//                       });
+//                     },
+//                   ),
+//                 ],
+//               ),
 //             ),
 //           ),
 //
@@ -833,7 +1025,7 @@
 //                               'Average',
 //                               style: TextStyle(
 //                                 fontFamily: GoogleFonts.poppins().fontFamily,
-//                                 fontSize: 12,
+//                                 fontSize: 14,
 //                                 color: _textColor.withAlpha(178),
 //                               ),
 //                             ),
@@ -858,6 +1050,8 @@
 //                 valueColor: AlwaysStoppedAnimation<Color>(_accentColor),
 //               ),
 //             )
+//                 : _isSearching
+//                 ? _buildSearchResults()
 //                 : _groupedByDate.isEmpty
 //                 ? Center(
 //               child: Column(
@@ -947,21 +1141,20 @@
 // }
 //
 
-
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:mybete_app/have_diabetes/DashBoard/profile/Profile.dart';
 import 'dart:math';
 
-import '../../../not_sure/profile.dart';
 import '../LogDetails/LogInterface.dart';
-import '../Reminders.dart';
-import '../Reports.dart';
+import '../Reminder/Reminders.dart';
+import '../Report/Reports.dart';
 import 'weekly_stats_screen.dart';
+
 
 class MyActivityScreen extends StatefulWidget {
   const MyActivityScreen({Key? key}) : super(key: key);
@@ -1200,172 +1393,324 @@ class _MyActivityScreenState extends State<MyActivityScreen> {
     }
 
     return Container(
-      height: 200,
+      height: 300,
       padding: const EdgeInsets.only(top: 16, right: 16, left: 8),
       child: spots.isEmpty
-          ? Center(
-        child: Text(
-          'No blood sugar data for today',
-          style: TextStyle(
-            fontFamily: GoogleFonts.poppins().fontFamily,
-            color: _textColor.withAlpha(178),
-            fontSize: 14,
-          ),
-        ),
-      )
-          : LineChart(
-        LineChartData(
-          gridData: FlGridData(
-            show: true,
-            drawVerticalLine: true,
-            drawHorizontalLine: true,
-            horizontalInterval: 50,
-            verticalInterval: 4,
-            getDrawingHorizontalLine: (value) {
-              // Highlight high and low glucose levels
-              if (value == 180) { // High glucose level
-                return FlLine(
-                  color: Colors.red.withAlpha(76),
-                  strokeWidth: 1,
-                  dashArray: [5, 5],
-                );
-              } else if (value == 70) { // Low glucose level
-                return FlLine(
-                  color: Colors.orange.withAlpha(76),
-                  strokeWidth: 1,
-                  dashArray: [5, 5],
-                );
-              }
-              return FlLine(
-                color: Colors.grey.withAlpha(51),
-                strokeWidth: 0.5,
-              );
-            },
-            getDrawingVerticalLine: (value) {
-              return FlLine(
-                color: Colors.grey.withAlpha(51),
-                strokeWidth: 0.5,
-              );
-            },
-          ),
-          titlesData: FlTitlesData(
-            show: true,
-            rightTitles: AxisTitles(
-              sideTitles: SideTitles(showTitles: false),
+          ? Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Blood Glucose Level (mg/dL)',
+            style: TextStyle(
+              fontFamily: GoogleFonts.poppins().fontFamily,
+              fontSize: 12,
+              color: _textColor,
+              fontWeight: FontWeight.w500,
             ),
-            topTitles: AxisTitles(
-              sideTitles: SideTitles(showTitles: false),
-            ),
-            bottomTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                reservedSize: 30,
-                interval: 4,
-                getTitlesWidget: (value, meta) {
-                  String text = '';
-                  if (value == 0) {
-                    text = '00:00';
-                  } else if (value == 4) {
-                    text = '04:00';
-                  } else if (value == 8) {
-                    text = '08:00';
-                  } else if (value == 12) {
-                    text = '12:00';
-                  } else if (value == 16) {
-                    text = '16:00';
-                  } else if (value == 20) {
-                    text = '20:00';
-                  } else if (value == 24) {
-                    text = '24:00';
-                  }
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Text(
-                      text,
+          ),
+          const SizedBox(height: 8),
+          Expanded(
+            child: LineChart(
+              LineChartData(
+                gridData: FlGridData(
+                  show: true,
+                  drawVerticalLine: true,
+                  drawHorizontalLine: true,
+                  horizontalInterval: 80,
+                  verticalInterval: 3,
+                  getDrawingHorizontalLine: (value) {
+                    if (value == 160) { // High glucose level
+                      return FlLine(
+                        color: Colors.red.withAlpha(100),
+                        strokeWidth: 1,
+                      );
+                    } else if (value == 80) { // Low glucose level
+                      return FlLine(
+                        color: Colors.blue.withAlpha(100),
+                        strokeWidth: 1,
+                      );
+                    }
+                    return FlLine(
+                      color: Colors.grey.withAlpha(30),
+                      strokeWidth: 0.5,
+                    );
+                  },
+                  getDrawingVerticalLine: (value) {
+                    return FlLine(
+                      color: Colors.grey.withAlpha(30),
+                      strokeWidth: 0.5,
+                    );
+                  },
+                ),
+                titlesData: FlTitlesData(
+                  show: true,
+                  rightTitles: AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  topTitles: AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  bottomTitles: AxisTitles(
+                    axisNameWidget: Text(
+                      'Time of Day (hours)',
                       style: TextStyle(
                         fontFamily: GoogleFonts.poppins().fontFamily,
-                        color: _textColor.withAlpha(178),
-                        fontSize: 10,
+                        fontSize: 12,
+                        color: _textColor,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                  );
-                },
-              ),
-            ),
-            leftTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                interval: 50,
-                getTitlesWidget: (value, meta) {
-                  return Text(
-                    value.toInt().toString(),
-                    style: TextStyle(
-                      fontFamily: GoogleFonts.poppins().fontFamily,
-                      color: _textColor.withAlpha(178),
-                      fontSize: 10,
+                    axisNameSize: 25,
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: 30,
+                      interval: 3,
+                      getTitlesWidget: (value, meta) {
+                        String text = '';
+                        if (value == 0) {
+                          text = '00:00';
+                        } else if (value == 3) {
+                          text = '03:00';
+                        } else if (value == 6) {
+                          text = '06:00';
+                        } else if (value == 9) {
+                          text = '09:00';
+                        } else if (value == 12) {
+                          text = '12:00';
+                        } else if (value == 15) {
+                          text = '15:00';
+                        } else if (value == 18) {
+                          text = '18:00';
+                        } else if (value == 21) {
+                          text = '21:00';
+                        }
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            text,
+                            style: TextStyle(
+                              fontFamily: GoogleFonts.poppins().fontFamily,
+                              color: _textColor.withAlpha(150),
+                              fontSize: 10,
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-                reservedSize: 40,
+                  ),
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      interval: 80,
+                      getTitlesWidget: (value, meta) {
+                        return Text(
+                          value.toInt().toString(),
+                          style: TextStyle(
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                            color: _textColor.withAlpha(150),
+                            fontSize: 10,
+                          ),
+                        );
+                      },
+                      reservedSize: 40,
+                    ),
+                  ),
+                ),
+                borderData: FlBorderData(
+                  show: true,
+                  border: Border(
+                    bottom: BorderSide(color: Colors.grey.withAlpha(50)),
+                    left: BorderSide(color: Colors.grey.withAlpha(50)),
+                  ),
+                ),
+                minX: 0,
+                maxX: 24,
+                minY: 0,
+                maxY: 240,
+                lineBarsData: [],
               ),
             ),
           ),
-          borderData: FlBorderData(
-            show: true,
-            border: Border(
-              bottom: BorderSide(color: Colors.grey.withAlpha(51)),
-              left: BorderSide(color: Colors.grey.withAlpha(51)),
+        ],
+      )
+          : Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Blood Glucose Level (mg/dL)',
+            style: TextStyle(
+              fontFamily: GoogleFonts.poppins().fontFamily,
+              fontSize: 12,
+              color: _textColor,
+              fontWeight: FontWeight.w500,
             ),
           ),
-          minX: 0,
-          maxX: 24,
-          minY: spots.isEmpty ? 0 : max(0, spots.map((e) => e.y).reduce(min) - 20),
-          maxY: spots.isEmpty ? 200 : spots.map((e) => e.y).reduce(max) + 20,
-          lineBarsData: [
-            LineChartBarData(
-              spots: spots,
-              isCurved: true,
-              color: _accentColor,
-              barWidth: 3,
-              isStrokeCapRound: true,
-              dotData: FlDotData(
-                show: true,
-                getDotPainter: (spot, percent, barData, index) {
-                  return FlDotCirclePainter(
-                    radius: 4,
+          const SizedBox(height: 8),
+          Expanded(
+            child: LineChart(
+              LineChartData(
+                gridData: FlGridData(
+                  show: true,
+                  drawVerticalLine: true,
+                  drawHorizontalLine: true,
+                  horizontalInterval: 80,
+                  verticalInterval: 3,
+                  getDrawingHorizontalLine: (value) {
+                    if (value == 160) { // High glucose level
+                      return FlLine(
+                        color: Colors.red.withAlpha(100),
+                        strokeWidth: 1,
+                      );
+                    } else if (value == 80) { // Low glucose level
+                      return FlLine(
+                        color: Colors.blue.withAlpha(100),
+                        strokeWidth: 1,
+                      );
+                    }
+                    return FlLine(
+                      color: Colors.grey.withAlpha(30),
+                      strokeWidth: 0.5,
+                    );
+                  },
+                  getDrawingVerticalLine: (value) {
+                    return FlLine(
+                      color: Colors.grey.withAlpha(30),
+                      strokeWidth: 0.5,
+                    );
+                  },
+                ),
+                titlesData: FlTitlesData(
+                  show: true,
+                  rightTitles: AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  topTitles: AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  bottomTitles: AxisTitles(
+                    axisNameWidget: Text(
+                      'Time of Day (hours)',
+                      style: TextStyle(
+                        fontFamily: GoogleFonts.poppins().fontFamily,
+                        fontSize: 12,
+                        color: _textColor,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    axisNameSize: 25,
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: 30,
+                      interval: 3,
+                      getTitlesWidget: (value, meta) {
+                        String text = '';
+                        if (value == 0) {
+                          text = '00:00';
+                        } else if (value == 3) {
+                          text = '03:00';
+                        } else if (value == 6) {
+                          text = '06:00';
+                        } else if (value == 9) {
+                          text = '09:00';
+                        } else if (value == 12) {
+                          text = '12:00';
+                        } else if (value == 15) {
+                          text = '15:00';
+                        } else if (value == 18) {
+                          text = '18:00';
+                        } else if (value == 21) {
+                          text = '21:00';
+                        }
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            text,
+                            style: TextStyle(
+                              fontFamily: GoogleFonts.poppins().fontFamily,
+                              color: _textColor.withAlpha(150),
+                              fontSize: 10,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      interval: 80,
+                      getTitlesWidget: (value, meta) {
+                        return Text(
+                          value.toInt().toString(),
+                          style: TextStyle(
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                            color: _textColor.withAlpha(150),
+                            fontSize: 10,
+                          ),
+                        );
+                      },
+                      reservedSize: 40,
+                    ),
+                  ),
+                ),
+                borderData: FlBorderData(
+                  show: true,
+                  border: Border(
+                    bottom: BorderSide(color: Colors.grey.withAlpha(50)),
+                    left: BorderSide(color: Colors.grey.withAlpha(50)),
+                  ),
+                ),
+                minX: 0,
+                maxX: 24,
+                minY: 0,
+                maxY: 240,
+                lineBarsData: [
+                  LineChartBarData(
+                    spots: spots,
+                    isCurved: true,
                     color: _accentColor,
-                    strokeWidth: 2,
-                    strokeColor: Colors.white,
-                  );
-                },
-              ),
-              belowBarData: BarAreaData(
-                show: true,
-                color: _accentColor.withAlpha(50),
-              ),
-            ),
-          ],
-          lineTouchData: LineTouchData(
-            touchTooltipData: LineTouchTooltipData(
-              getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
-                return touchedBarSpots.map((barSpot) {
-                  final hour = barSpot.x.toInt();
-                  final minute = ((barSpot.x - hour) * 60).toInt();
-                  final timeStr = '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
-                  return LineTooltipItem(
-                    '${barSpot.y.toStringAsFixed(1)} mg/dL\n$timeStr',
-                    TextStyle(
-                      fontFamily: GoogleFonts.poppins().fontFamily,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      backgroundColor: _textColor.withAlpha(200),
+                    barWidth: 2,
+                    isStrokeCapRound: true,
+                    dotData: FlDotData(
+                      show: true,
+                      getDotPainter: (spot, percent, barData, index) {
+                        return FlDotCirclePainter(
+                          radius: 5,
+                          color: _accentColor,
+                          strokeWidth: 2,
+                          strokeColor: Colors.white,
+                        );
+                      },
                     ),
-                  );
-                }).toList();
-              },
+                    belowBarData: BarAreaData(
+                      show: true,
+                      color: _accentColor.withAlpha(30),
+                    ),
+                  ),
+                ],
+                lineTouchData: LineTouchData(
+                  touchTooltipData: LineTouchTooltipData(
+                    getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
+                      return touchedBarSpots.map((barSpot) {
+                        final hour = barSpot.x.toInt();
+                        final minute = ((barSpot.x - hour) * 60).toInt();
+                        final timeStr = '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
+                        return LineTooltipItem(
+                          '${barSpot.y.toStringAsFixed(1)} mg/dL\n$timeStr',
+                          TextStyle(
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        );
+                      }).toList();
+                    },
+                  ),
+                ),
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -1378,10 +1723,6 @@ class _MyActivityScreenState extends State<MyActivityScreen> {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: _lightColor,
-        border: Border.all(
-          color: _accentColor.withAlpha(76),
-          width: 2,
-        ),
       ),
       child: Center(
         child: Column(
@@ -1423,7 +1764,7 @@ class _MyActivityScreenState extends State<MyActivityScreen> {
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(13),
+            color: Colors.black.withAlpha(5),
             blurRadius: 2,
             offset: const Offset(0, 1),
           ),
@@ -1446,37 +1787,19 @@ class _MyActivityScreenState extends State<MyActivityScreen> {
               ),
               Row(
                 children: [
-                  if (entry['bloodSugar'] != null)
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: _lightColor,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        '${entry['bloodSugar']} mg/dL',
-                        style: TextStyle(
-                          fontFamily: GoogleFonts.poppins().fontFamily,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: _textColor,
-                        ),
-                      ),
-                    ),
-                  const SizedBox(width: 8),
                   // Edit button
                   InkWell(
                     onTap: () => _navigateToLogEntry(logEntry: entry),
                     child: Container(
                       padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                        color: _veryLightColor,
+                        color: Colors.grey[200],
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
                         Icons.edit,
                         size: 16,
-                        color: _tealColor,
+                        color: _textColor,
                       ),
                     ),
                   ),
@@ -1487,7 +1810,7 @@ class _MyActivityScreenState extends State<MyActivityScreen> {
                     child: Container(
                       padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                        color: Colors.red.withAlpha(26),
+                        color: Colors.grey[200],
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
@@ -1501,78 +1824,157 @@ class _MyActivityScreenState extends State<MyActivityScreen> {
               ),
             ],
           ),
-          if (entry['bloodPressure'] != null ||
-              entry['bodyWeight'] != null ||
-              entry['pills'] != null)
-            Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  if (entry['bloodPressure'] != null)
-                    _buildInfoChip('${entry['bloodPressure']} mmHg'),
-                  if (entry['bodyWeight'] != null)
-                    _buildInfoChip('${entry['bodyWeight']} kg'),
-                  if (entry['pills'] != null) _buildInfoChip(entry['pills']),
-                ],
-              ),
-            ),
-          if (entry['trackingMoment'] != null || entry['foodType'] != null)
+
+          // Blood Sugar
+          if (entry['bloodSugar'] != null)
             Padding(
               padding: const EdgeInsets.only(top: 8),
               child: Row(
                 children: [
-                  if (entry['trackingMoment'] != null)
+                  Text(
+                    '${entry['bloodSugar']} mg/dL',
+                    style: TextStyle(
+                      fontFamily: GoogleFonts.poppins().fontFamily,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: _textColor,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    'Blood sugar',
+                    style: TextStyle(
+                      fontFamily: GoogleFonts.poppins().fontFamily,
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+          // Blood Pressure
+          if (entry['bloodPressure'] != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Row(
+                children: [
+                  Text(
+                    '${entry['bloodPressure']}',
+                    style: TextStyle(
+                      fontFamily: GoogleFonts.poppins().fontFamily,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: _textColor,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    'Blood pressure',
+                    style: TextStyle(
+                      fontFamily: GoogleFonts.poppins().fontFamily,
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+          // Body Weight
+          if (entry['bodyWeight'] != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Row(
+                children: [
+                  Text(
+                    '${entry['bodyWeight']} kg',
+                    style: TextStyle(
+                      fontFamily: GoogleFonts.poppins().fontFamily,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: _textColor,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    'Body weight',
+                    style: TextStyle(
+                      fontFamily: GoogleFonts.poppins().fontFamily,
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+          // Tracking Moment
+          if (entry['trackingMoment'] != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Row(
+                children: [
+                  Text(
+                    '${entry['trackingMoment']}',
+                    style: TextStyle(
+                      fontFamily: GoogleFonts.poppins().fontFamily,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: _textColor,
+                    ),
+                  ),
+                  if (entry['mealTime'] != null)
                     Text(
-                      entry['trackingMoment'],
+                      ' (${entry['mealTime']})',
                       style: TextStyle(
                         fontFamily: GoogleFonts.poppins().fontFamily,
                         fontSize: 14,
-                        color: _textColor.withAlpha(178),
+                        fontWeight: FontWeight.w500,
+                        color: _textColor,
                       ),
                     ),
-                  if (entry['trackingMoment'] != null && entry['foodType'] != null)
-                    Text(
-                      ' • ',
-                      style: TextStyle(
-                        fontFamily: GoogleFonts.poppins().fontFamily,
-                        fontSize: 14,
-                        color: _textColor.withAlpha(178),
-                      ),
+                  const SizedBox(width: 4),
+                  Text(
+                    'Blood tracking moment',
+                    style: TextStyle(
+                      fontFamily: GoogleFonts.poppins().fontFamily,
+                      fontSize: 12,
+                      color: Colors.grey[600],
                     ),
-                  if (entry['foodType'] != null)
-                    Text(
-                      entry['foodType'],
-                      style: TextStyle(
-                        fontFamily: GoogleFonts.poppins().fontFamily,
-                        fontSize: 14,
-                        color: _textColor.withAlpha(178),
-                      ),
+                  ),
+                ],
+              ),
+            ),
+
+          // Food Type
+          if (entry['foodType'] != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Row(
+                children: [
+                  Text(
+                    '${entry['foodType']}',
+                    style: TextStyle(
+                      fontFamily: GoogleFonts.poppins().fontFamily,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: _textColor,
                     ),
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    'Food type',
+                    style: TextStyle(
+                      fontFamily: GoogleFonts.poppins().fontFamily,
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                    ),
+                  ),
                 ],
               ),
             ),
         ],
-      ),
-    );
-  }
-
-  // Build info chip
-  Widget _buildInfoChip(String text) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: _veryLightColor,
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontFamily: GoogleFonts.poppins().fontFamily,
-          fontSize: 12,
-          color: _textColor,
-        ),
       ),
     );
   }
@@ -1927,70 +2329,62 @@ class _MyActivityScreenState extends State<MyActivityScreen> {
             ),
           ),
 
-          // Stats section (fixed during scroll)
-          Container(
-            color: Colors.white,
-            child: Column(
-              children: [
-                // Stats graph
-                _buildStatsGraph(),
+          // Stats section
+          _buildStatsGraph(),
 
-                // Today's average and See More button
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Today',
-                            style: TextStyle(
-                              fontFamily: GoogleFonts.poppins().fontFamily,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: _textColor,
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: _navigateToWeeklyStats,
-                            child: Text(
-                              'See more >',
-                              style: TextStyle(
-                                fontFamily: GoogleFonts.poppins().fontFamily,
-                                fontSize: 14,
-                                color: _accentColor,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Center(
-                        child: Column(
-                          children: [
-                            _buildAverageCircle(_todayAverage),
-                            const SizedBox(height: 4),
-                            Text(
-                              'Average',
-                              style: TextStyle(
-                                fontFamily: GoogleFonts.poppins().fontFamily,
-                                fontSize: 14,
-                                color: _textColor.withAlpha(178),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+          // Today's average and See More button
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Today',
+                  style: TextStyle(
+                    fontFamily: GoogleFonts.poppins().fontFamily,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: _textColor,
                   ),
                 ),
-
-                // Divider
-                Divider(height: 1, color: Colors.grey[200]),
+                TextButton(
+                  onPressed: _navigateToWeeklyStats,
+                  child: Text(
+                    'See more >',
+                    style: TextStyle(
+                      fontFamily: GoogleFonts.poppins().fontFamily,
+                      fontSize: 14,
+                      color: _accentColor,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
+
+          // Average circle
+          Center(
+            child: Column(
+              children: [
+                _buildAverageCircle(_todayAverage),
+                const SizedBox(height: 4),
+                Text(
+                  'Average',
+                  style: TextStyle(
+                    fontFamily: GoogleFonts.poppins().fontFamily,
+                    fontSize: 14,
+                    color: _textColor.withAlpha(178),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          // Divider
+          Divider(height: 1, color: Colors.grey[200]),
 
           // Log entries (scrollable)
           Expanded(
@@ -2042,44 +2436,53 @@ class _MyActivityScreenState extends State<MyActivityScreen> {
                 final formattedDate = _formatDate(date);
                 final isExpanded = _expandedSections.contains(formattedDate);
 
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Date header with expand/collapse
-                    InkWell(
-                      onTap: () => _toggleSection(formattedDate),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              formattedDate,
-                              style: TextStyle(
-                                fontFamily: GoogleFonts.poppins().fontFamily,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: _textColor,
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 8),
+                  decoration: BoxDecoration(
+                    color: _lightColor.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Date header with expand/collapse
+                      InkWell(
+                        onTap: () => _toggleSection(formattedDate),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                formattedDate,
+                                style: TextStyle(
+                                  fontFamily: GoogleFonts.poppins().fontFamily,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: _textColor,
+                                ),
                               ),
-                            ),
-                            Icon(
-                              isExpanded
-                                  ? Icons.keyboard_arrow_up
-                                  : Icons.keyboard_arrow_down,
-                              color: _accentColor,
-                            ),
-                          ],
+                              Icon(
+                                isExpanded
+                                    ? Icons.keyboard_arrow_up
+                                    : Icons.keyboard_arrow_down,
+                                color: _accentColor,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
 
-                    // Log entries for this date
-                    if (isExpanded)
-                      ...entries.map((entry) => _buildLogEntryItem(entry)).toList(),
-
-                    // Divider
-                    Divider(height: 16, color: Colors.grey[200]),
-                  ],
+                      // Log entries for this date
+                      if (isExpanded)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          child: Column(
+                            children: entries.map((entry) => _buildLogEntryItem(entry)).toList(),
+                          ),
+                        ),
+                    ],
+                  ),
                 );
               },
             ),

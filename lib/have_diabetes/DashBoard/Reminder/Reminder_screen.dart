@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mybete_app/have_diabetes/DashBoard/Reminder/Reminder_screen.dart';
+import 'package:mybete_app/have_diabetes/DashBoard/Reminder/reminder_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +8,8 @@ import 'package:mybete_app/have_diabetes/DashBoard/Reminder/reminder_model.dart'
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz_init;
 import 'dart:convert';
+
+import 'Reminder_screen.dart';
 
 // Global notifications plugin that can be initialized in main.dart
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -579,17 +583,28 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
     // Initialize with values from initialReminder or defaults
     reminderType = widget.initialReminder?.type ?? 'one-time';
     repeatType = widget.initialReminder?.repeatType ?? 'daily';
-    titleController = TextEditingController(text: widget.initialReminder?.title ?? '');
+    titleController =
+        TextEditingController(text: widget.initialReminder?.title ?? '');
     dateValue = widget.initialReminder?.date ?? DateTime.now();
 
     // Initialize time
-    final initialTime = widget.initialReminder?.time ?? '${TimeOfDay.now().hour.toString().padLeft(2, '0')}:${TimeOfDay.now().minute.toString().padLeft(2, '0')}';
+    final initialTime = widget.initialReminder?.time ?? '${TimeOfDay
+        .now()
+        .hour
+        .toString()
+        .padLeft(2, '0')}:${TimeOfDay
+        .now()
+        .minute
+        .toString()
+        .padLeft(2, '0')}';
     timeController = TextEditingController(text: initialTime);
 
     startsOnValue = widget.initialReminder?.startsOn ?? DateTime.now();
-    endsOnValue = widget.initialReminder?.endsOn ?? DateTime.now().add(const Duration(days: 7));
+    endsOnValue = widget.initialReminder?.endsOn ??
+        DateTime.now().add(const Duration(days: 7));
     neverEnds = widget.initialReminder?.neverEnds ?? true;
-    noteController = TextEditingController(text: widget.initialReminder?.note ?? '');
+    noteController =
+        TextEditingController(text: widget.initialReminder?.note ?? '');
   }
 
   @override
@@ -606,7 +621,8 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
   }
 
   // Show date picker
-  Future<void> _selectDate(BuildContext context, {required DateTime initialDate, required Function(DateTime) onSelect}) async {
+  Future<void> _selectDate(BuildContext context,
+      {required DateTime initialDate, required Function(DateTime) onSelect}) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: initialDate,
@@ -633,7 +649,9 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
 
     if (picked != null) {
       setState(() {
-        timeController.text = '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+        timeController.text =
+        '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString()
+            .padLeft(2, '0')}';
       });
     }
   }
@@ -645,7 +663,10 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
     }
 
     final reminder = Reminder(
-      id: widget.initialReminder?.id ?? DateTime.now().millisecondsSinceEpoch.toString(),
+      id: widget.initialReminder?.id ?? DateTime
+          .now()
+          .millisecondsSinceEpoch
+          .toString(),
       title: titleController.text,
       type: reminderType,
       time: timeController.text,
@@ -677,7 +698,15 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
     setState(() {
       titleController.clear();
       dateValue = DateTime.now();
-      timeController.text = '${TimeOfDay.now().hour.toString().padLeft(2, '0')}:${TimeOfDay.now().minute.toString().padLeft(2, '0')}';
+      timeController.text = '${TimeOfDay
+          .now()
+          .hour
+          .toString()
+          .padLeft(2, '0')}:${TimeOfDay
+          .now()
+          .minute
+          .toString()
+          .padLeft(2, '0')}';
       startsOnValue = DateTime.now();
       endsOnValue = DateTime.now().add(const Duration(days: 7));
       noteController.clear();
@@ -695,7 +724,8 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
             Navigator.pop(context);
           },
         ),
-        backgroundColor: const Color(0xFF89D0ED), // Using midShade from your MyActivity
+        backgroundColor: const Color(
+            0xFF89D0ED), // Using midShade from your MyActivity
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -726,7 +756,8 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
                             padding: const EdgeInsets.symmetric(vertical: 8),
                             decoration: BoxDecoration(
                               color: reminderType == 'one-time'
-                                  ? const Color(0xFF5FB8DD) // Using primaryColor from your MyActivity
+                                  ? const Color(
+                                  0xFF5FB8DD) // Using primaryColor from your MyActivity
                                   : Colors.transparent,
                               borderRadius: BorderRadius.circular(30),
                             ),
@@ -755,7 +786,8 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
                             padding: const EdgeInsets.symmetric(vertical: 8),
                             decoration: BoxDecoration(
                               color: reminderType == 'repeat'
-                                  ? const Color(0xFF5FB8DD) // Using primaryColor from your MyActivity
+                                  ? const Color(
+                                  0xFF5FB8DD) // Using primaryColor from your MyActivity
                                   : Colors.transparent,
                               borderRadius: BorderRadius.circular(30),
                             ),
@@ -799,7 +831,8 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
                               padding: const EdgeInsets.symmetric(vertical: 8),
                               decoration: BoxDecoration(
                                 color: repeatType == 'daily'
-                                    ? const Color(0xFF5FB8DD) // Using primaryColor from your MyActivity
+                                    ? const Color(
+                                    0xFF5FB8DD) // Using primaryColor from your MyActivity
                                     : Colors.transparent,
                                 borderRadius: BorderRadius.circular(30),
                               ),
@@ -828,7 +861,8 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
                               padding: const EdgeInsets.symmetric(vertical: 8),
                               decoration: BoxDecoration(
                                 color: repeatType == 'custom'
-                                    ? const Color(0xFF5FB8DD) // Using primaryColor from your MyActivity
+                                    ? const Color(
+                                    0xFF5FB8DD) // Using primaryColor from your MyActivity
                                     : Colors.transparent,
                                 borderRadius: BorderRadius.circular(30),
                               ),
@@ -916,7 +950,9 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
                                 ),
                               ),
                               child: Text(
-                                dateValue != null ? _formatDate(dateValue!) : 'Select date',
+                                dateValue != null
+                                    ? _formatDate(dateValue!)
+                                    : 'Select date',
                               ),
                             ),
                           ),
@@ -950,7 +986,8 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
                         const SizedBox(height: 16),
 
                         // Custom repeat options
-                        if (reminderType == 'repeat' && repeatType == 'custom') ...[
+                        if (reminderType == 'repeat' &&
+                            repeatType == 'custom') ...[
                           const Text(
                             'Starts on*',
                             style: TextStyle(
@@ -968,7 +1005,8 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
                                   setState(() {
                                     startsOnValue = date;
                                     // If end date is before start date, update it
-                                    if (!neverEnds && endsOnValue != null && endsOnValue!.isBefore(date)) {
+                                    if (!neverEnds && endsOnValue != null &&
+                                        endsOnValue!.isBefore(date)) {
                                       endsOnValue = date;
                                     }
                                   });
@@ -984,7 +1022,8 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
                                 ),
                               ),
                               child: Text(
-                                startsOnValue != null ? _formatDate(startsOnValue!) : 'Select start date',
+                                startsOnValue != null ? _formatDate(
+                                    startsOnValue!) : 'Select start date',
                               ),
                             ),
                           ),
@@ -1008,7 +1047,8 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
                                     neverEnds = value;
                                   });
                                 },
-                                activeColor: const Color(0xFF5FB8DD), // Using primaryColor from your MyActivity
+                                activeColor: const Color(
+                                    0xFF5FB8DD), // Using primaryColor from your MyActivity
                               ),
                             ],
                           ),
@@ -1028,7 +1068,9 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
                               onTap: () {
                                 _selectDate(
                                   context,
-                                  initialDate: endsOnValue ?? DateTime.now().add(const Duration(days: 7)),
+                                  initialDate: endsOnValue ??
+                                      DateTime.now().add(
+                                          const Duration(days: 7)),
                                   onSelect: (date) {
                                     setState(() {
                                       endsOnValue = date;
@@ -1045,7 +1087,8 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
                                   ),
                                 ),
                                 child: Text(
-                                  endsOnValue != null ? _formatDate(endsOnValue!) : 'Select end date',
+                                  endsOnValue != null ? _formatDate(
+                                      endsOnValue!) : 'Select end date',
                                 ),
                               ),
                             ),
@@ -1078,7 +1121,8 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
                               child: ElevatedButton(
                                 onPressed: _saveReminder,
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF5FB8DD), // Using primaryColor from your MyActivity
+                                  backgroundColor: const Color(0xFF5FB8DD),
+                                  // Using primaryColor from your MyActivity
                                   foregroundColor: Colors.white,
                                 ),
                                 child: const Text('Save'),
@@ -1104,6 +1148,7 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
       ),
     );
   }
+<<<<<<<< HEAD:lib/have_diabetes/DashBoard/Reminder/Reminder_screen.dart
 }
 
 
@@ -1114,3 +1159,6 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
 
 
 
+========
+}
+>>>>>>>> 70ed968f93df4befbad0667d0141e7e2c836aa77:lib/have_diabetes/DashBoard/Reminder/Reminders.dart
