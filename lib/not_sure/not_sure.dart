@@ -47,7 +47,7 @@ class NotSureDashboard extends StatelessWidget {
           children: [
             AppBar(
               title: const Text(
-                "Diabetes Dashboard",
+                "Symptoms Levels",
                 style: TextStyle(
                   color: Colors.black87,
                   fontSize: 24,

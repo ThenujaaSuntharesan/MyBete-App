@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Symptom1Screen extends StatefulWidget {
   @override
@@ -15,6 +16,7 @@ class _Symptom1ScreenState extends State<Symptom1Screen> {
   int largeBottles = 0;
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   double getTotalWaterIntake() {
     double total = (smallGlasses * 200 +
@@ -31,10 +33,12 @@ class _Symptom1ScreenState extends State<Symptom1Screen> {
     double totalIntake = getTotalWaterIntake();
     try {
       String today = DateTime.now().toIso8601String().split('T')[0];
+      String userId = _auth.currentUser!.uid; // Get the current user's ID
 
       QuerySnapshot snapshot = await _firestore
           .collection('water_intake_records')
           .where('date', isEqualTo: today)
+          .where('userId', isEqualTo: userId) // Filter by user ID
           .get();
 
       if (snapshot.docs.isNotEmpty) {
@@ -62,6 +66,7 @@ class _Symptom1ScreenState extends State<Symptom1Screen> {
           'status': totalIntake > 5
               ? 'Extreme'
               : (totalIntake >= 2 && totalIntake <= 3 ? 'Healthy' : 'Normal'),
+          'userId': userId, // Include the user ID
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
@@ -77,9 +82,13 @@ class _Symptom1ScreenState extends State<Symptom1Screen> {
   }
 
   Future<void> _clearRecords() async {
+    String userId = _auth.currentUser!.uid; // Get the current user's ID
+
     try {
-      QuerySnapshot snapshot =
-      await _firestore.collection('water_intake_records').get();
+      QuerySnapshot snapshot = await _firestore
+          .collection('water_intake_records')
+          .where('userId', isEqualTo: userId) // Filter by user ID
+          .get();
       for (var doc in snapshot.docs) {
         await _firestore.collection('water_intake_records').doc(doc.id).delete();
       }
@@ -92,8 +101,11 @@ class _Symptom1ScreenState extends State<Symptom1Screen> {
   }
 
   void _viewData() async {
+    String userId = _auth.currentUser!.uid; // Get the current user's ID
+
     QuerySnapshot snapshot = await _firestore
         .collection('water_intake_records')
+        .where('userId', isEqualTo: userId) // Filter by user ID
         .orderBy('date', descending: true)
         .get();
 
@@ -101,7 +113,7 @@ class _Symptom1ScreenState extends State<Symptom1Screen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: Color(0xFFF1FAEE), // Light background
+          backgroundColor: Color(0xFFEEF5FA), // Light background
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
@@ -128,6 +140,7 @@ class _Symptom1ScreenState extends State<Symptom1Screen> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
+                  color: Color(0xFF96D8E3),
                   child: ListTile(
                     leading: Icon(icon, color: iconColor),
                     title: Text(
@@ -166,8 +179,11 @@ class _Symptom1ScreenState extends State<Symptom1Screen> {
   }
 
   void _calculateRisk() async {
+    String userId = _auth.currentUser!.uid; // Get the current user's ID
+
     QuerySnapshot snapshot = await _firestore
         .collection('water_intake_records')
+        .where('userId', isEqualTo: userId) // Filter by user ID
         .orderBy('date', descending: true)
         .get();
 
@@ -191,7 +207,7 @@ class _Symptom1ScreenState extends State<Symptom1Screen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: Color(0xFFf1faee), // Light background
+          backgroundColor: Color(0xffeef6fa), // Light background
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
@@ -245,7 +261,7 @@ class _Symptom1ScreenState extends State<Symptom1Screen> {
         title: Text(
           'Feeling Extra Thirsty (Polydipsia)',
           style: TextStyle(
-            color: Color(0xFFF1FAEE), // Light text
+            color: Color(0xFFEEFAFA), // Light text
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -253,7 +269,7 @@ class _Symptom1ScreenState extends State<Symptom1Screen> {
         elevation: 0,
       ),
       body: Container(
-        color: Colors.white, // Light background
+        color: Color(0xFFEEF9FA), // Light background
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -373,6 +389,7 @@ class _Symptom1ScreenState extends State<Symptom1Screen> {
         borderRadius: BorderRadius.circular(15),
       ),
       margin: EdgeInsets.symmetric(vertical: 8),
+      color: Color(0xFFF1F5F6),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
