@@ -156,7 +156,7 @@ class _TotalScreenState extends State<TotalScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('${widget.category.capitalize()} - Daily Calories'),
+        title: Text('Daily Calories'),
         backgroundColor: const Color(0x0065F3FF),
         foregroundColor: Colors.white,
         elevation: 0,
@@ -226,7 +226,7 @@ class _TotalScreenState extends State<TotalScreen> {
               width: double.infinity,
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: const Color(0xFFE5FFED),
+                color: const Color(0x81FFFBB9),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.05),
@@ -306,7 +306,7 @@ class _TotalScreenState extends State<TotalScreen> {
                       DateFormat('h:mm a').format(itemDate),
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.grey,
+
                       ),
                     ),
                     trailing: Row(
