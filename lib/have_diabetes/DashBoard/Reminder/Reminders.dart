@@ -397,7 +397,7 @@ class _RemindersScreenState extends State<RemindersScreen> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.only(left: 20, right: 20, top: 30, bottom: 16),
             child: ElevatedButton.icon(
               icon: const Icon(Icons.add),
               label: const Text('Add Reminder'),
@@ -417,8 +417,8 @@ class _RemindersScreenState extends State<RemindersScreen> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF5FB8DD), // Using primaryColor from your MyActivity
-                foregroundColor: Colors.white,
+                backgroundColor: Colors.white, // Using primaryColor from your MyActivity
+                foregroundColor: Color(0xFF5FB8DD),
               ),
             ),
           ),
