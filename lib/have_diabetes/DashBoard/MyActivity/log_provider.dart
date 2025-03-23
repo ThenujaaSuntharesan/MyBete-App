@@ -144,15 +144,23 @@ class LogProvider with ChangeNotifier {
         _setLoading(false);
         return;
       }
-
+      print(">> fetchLogs 1");
       final snapshot = await _logsCollection
           .where('userId', isEqualTo: currentUserId)
           .orderBy('date', descending: true)
           .get();
 
+      print(">> fetchLogs 2");
       _logs = snapshot.docs.map((doc) => LogEntry.fromFirestore(doc)).toList();
       _error = null;
+      print(">> _logs ${_logs.length}");
     } catch (e) {
+      _setLoading(false);
+      if (e is FirebaseException) {
+        print(">> Firebase Error: ${e.message}");
+      } else {
+        print(">> Update Error: $e");
+      }
       _error = e.toString();
     } finally {
       _setLoading(false);
@@ -164,7 +172,9 @@ class LogProvider with ChangeNotifier {
     _setLoading(true);
 
     try {
+      print(">> addLog 1");
       final docRef = await _logsCollection.add(log.toFirestore());
+      print(">> addLog 2 $docRef");
       final newLog = LogEntry(
         id: docRef.id,
         userId: log.userId,
@@ -184,6 +194,12 @@ class LogProvider with ChangeNotifier {
       _logs.sort((a, b) => b.date.compareTo(a.date));
       _error = null;
     } catch (e) {
+      _setLoading(false);
+      if (e is FirebaseException) {
+        print(">> Firebase Error: ${e.message}");
+      } else {
+        print(">> Update Error: $e");
+      }
       _error = e.toString();
     } finally {
       _setLoading(false);
@@ -240,7 +256,12 @@ class LogProvider with ChangeNotifier {
       _logs.removeWhere((log) => log.id == id);
       _error = null;
     } catch (e) {
-      _error = e.toString();
+      _setLoading(false);
+      if (e is FirebaseException) {
+        print(">> Firebase Error: ${e.message}");
+      } else {
+        print(">> Update Error: $e");
+      }
     } finally {
       _setLoading(false);
     }
