@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mybete_app/firebase_options.dart';
 import 'package:timezone/data/latest.dart' as tz_init;
-import 'have_diabetes/DashBoard/Reminder/Reminders.dart';
+import 'package:provider/provider.dart';
+import 'have_diabetes/DashBoard/MyActivity/log_provider.dart';
+import 'have_diabetes/DashBoard/Reminder/Reminder_screen.dart';
 import 'sign_up_screen.dart';
 import 'log_in_screen.dart';
 import 'diabete_options.dart';
@@ -13,44 +15,44 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'firebase_options.dart';
 
 
-// // Global notifications plugin
-// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-// FlutterLocalNotificationsPlugin();
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp();
+
   // Enable offline persistence
   FirebaseFirestore.instance.settings = Settings(persistenceEnabled: true);
-
-  // // Initialize notifications
-  // await initNotifications();
 
   runApp(MyApp());
 }
 
+
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-
-      title: 'MyBete',
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
-      themeMode: ThemeMode.system,
-      home: FutureBuilder<bool>(
-        future: _checkLoginStatus(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasData && snapshot.data == true) {
-            return DiabeteOptions();
-          } else {
-            return DiabeteOptions();
-          }
-        },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => LogProvider()..initialize(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'MyBete',
+        theme: ThemeData.light(),
+        darkTheme: ThemeData.dark(),
+        themeMode: ThemeMode.system,
+        home: FutureBuilder<bool>(
+          future: _checkLoginStatus(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasData && snapshot.data == true) {
+              return DiabeteOptions();
+            } else {
+              return DiabeteOptions();
+            }
+          },
+        ),
       ),
     );
   }
@@ -74,11 +76,29 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
+
+// import 'package:firebase_core/firebase_core.dart';
+// import 'package:flutter/cupertino.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'package:timezone/data/latest.dart' as tz_init;
+// import 'package:provider/provider.dart';
+// import 'package:mybete_app/have_diabetes/DashBoard/Reminder/reminder_provider.dart';
 //
-// // Initialize notifications
-// Future<void> initNotifications() async {
+// // Add this at the beginning of your main() function
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//
+//   // Initialize Firebase
+//   await Firebase.initializeApp();
+//
+//   // Initialize timezone data for notifications
 //   tz_init.initializeTimeZones();
 //
+//   // Initialize notifications
+//   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+//   FlutterLocalNotificationsPlugin();
 //   const AndroidInitializationSettings initializationSettingsAndroid =
 //   AndroidInitializationSettings('@mipmap/ic_launcher');
 //   final DarwinInitializationSettings initializationSettingsIOS =
@@ -91,9 +111,23 @@ class MyApp extends StatelessWidget {
 //     android: initializationSettingsAndroid,
 //     iOS: initializationSettingsIOS,
 //   );
-//   await flutterLocalNotificationsPlugin.initialize(
-//     initializationSettings,
-//   );
+//   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+//
+//   runApp(MyApp());
 // }
-
-
+//
+// // Wrap your app with ChangeNotifierProvider for ReminderProvider
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MultiProvider(
+//       providers: [
+//         ChangeNotifierProvider(create: (_) => ReminderProvider()),
+//         // Add other providers here
+//       ],
+//       child: MaterialApp(
+//         // Your existing app configuration
+//       ),
+//     );
+//   }
+// }
