@@ -133,7 +133,7 @@ class WelcomeScreen extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                const SleepTimerScreen()), // Navigate to Sleep2 screen
+                                const SleepScheduleScreen()), // Navigate to Sleep2 screen
                       );
                     },
                     style: ElevatedButton.styleFrom(
