@@ -62,8 +62,17 @@ dependencies:
   sqflite: ^2.2.1
   path: ^1.8.3
   google_fonts: ^6.2.1
+
   syncfusion_flutter_charts: ^28.2.12
 
+  provider: ^6.0.5
+  path_provider: ^2.1.1
+  permission_handler: ^11.0.1
+  cross_file: ^0.3.3+4
+
+  csv: ^5.0.2
+  pdf: ^3.10.4
+  open_file: ^3.3.2
 
 dependency_overrides:
   shared_preferences_android: 2.4.8
