@@ -403,7 +403,7 @@ class _RemindersScreenState extends State<RemindersScreen> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.only(left: 20, right: 20, top: 30, bottom: 16),
             child: ElevatedButton.icon(
               icon: const Icon(Icons.add),
               label: const Text('Add Reminder'),
@@ -423,8 +423,8 @@ class _RemindersScreenState extends State<RemindersScreen> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF5FB8DD), // Using primaryColor from your MyActivity
-                foregroundColor: Colors.white,
+                backgroundColor: Colors.white, // Using primaryColor from your MyActivity
+                foregroundColor: Color(0xFF5FB8DD),
               ),
             ),
           ),
@@ -718,12 +718,6 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Reminders'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
         backgroundColor: const Color(
             0xFF89D0ED), // Using midShade from your MyActivity
       ),
@@ -1148,17 +1142,6 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
       ),
     );
   }
-<<<<<<<< HEAD:lib/have_diabetes/DashBoard/Reminder/Reminder_screen.dart
 }
 
 
-
-
-
-
-
-
-
-========
-}
->>>>>>>> 70ed968f93df4befbad0667d0141e7e2c836aa77:lib/have_diabetes/DashBoard/Reminder/Reminders.dart
