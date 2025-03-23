@@ -718,12 +718,6 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Reminders'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
         backgroundColor: const Color(
             0xFF89D0ED), // Using midShade from your MyActivity
       ),
