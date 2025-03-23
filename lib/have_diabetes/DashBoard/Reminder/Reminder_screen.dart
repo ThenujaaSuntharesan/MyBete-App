@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:mybete_app/have_diabetes/DashBoard/Reminder/Reminder_screen.dart';
+import 'package:mybete_app/have_diabetes/DashBoard/Reminder/reminder_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:provider/provider.dart';
+import 'package:mybete_app/have_diabetes/DashBoard/Reminder/reminder_model.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz_init;
 import 'dart:convert';
+
+import 'Reminder_screen.dart';
 
 // Global notifications plugin that can be initialized in main.dart
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -1143,3 +1149,5 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
     );
   }
 }
+
+
