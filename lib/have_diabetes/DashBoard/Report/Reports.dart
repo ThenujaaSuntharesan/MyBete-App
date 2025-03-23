@@ -215,7 +215,7 @@ class _ReportScreenState extends State<ReportScreen> {
   final Color mediumBlue = Color(0xFF5EB7CF);
   final Color brightBlue = Color(0xFF5FB8DD);
   final Color paleBlue = Color(0xFFC5EDFF);
-  final Color bgColor = Color(0xFFE6F7FF); // Light blue background
+  final Color bgColor = Color(0xFFFFFFFF); // Light blue background
 
   void _showFormatSelectionDialog() {
     showDialog(
