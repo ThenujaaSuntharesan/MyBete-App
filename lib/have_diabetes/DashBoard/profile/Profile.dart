@@ -272,11 +272,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Container(
             width: double.infinity,
             color: Color(0xFF89D0ED),
-            padding: EdgeInsets.only(top: 40, bottom: 15, left: 20, right: 20),
+            padding: EdgeInsets.only(left: 20, right: 20, top: 70, bottom: 16),
             child: Text(
               "Profile",
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 23,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
