@@ -5,10 +5,17 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'dart:math';
+<<<<<<< HEAD
+
+import '../LogDetails/LogInterface.dart';
+import '../Reminder/Reminder.dart';
+import '../Report/Reports.dart';
+=======
 import '../Reminder/Reminder_screen.dart';
 import '../Report/report_screen.dart';
 import 'LogDetails/LogInterface.dart';
 import 'log_provider.dart';
+>>>>>>> 7b29e56476d55121b262964d9c0f9a8b8319df6e
 import 'weekly_stats_screen.dart';
 
 class MyActivityScreen extends StatefulWidget {
