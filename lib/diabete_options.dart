@@ -13,68 +13,71 @@ class DiabeteOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Diabetes Options"),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.account_circle, size: 30),
-            onPressed: () {
-              _showLogoutMenu(context);
-            },
-          ),
-        ],
-      ),
-      body: Stack(
-        children: [
-          BouncingCircles(),
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextButton(
-                  onPressed: () async {
-                    final prefs = await SharedPreferences.getInstance();
-                    prefs.setBool("onboarding", false);
-                  },
-                  child: Text(
-                    "Choose one option from these three",
-                    style: TextStyle(
-                      color: Color(0xFF288994), // Change 'blue' to any color you like
-                      fontSize: 24, // Optional: adjust the font size
-                      fontWeight: FontWeight.bold, // Optional: adjust the weight
+    return Container(
+      color: Colors.lightBlue[50], // Light blue background color
+      child: Scaffold(
+        backgroundColor: Colors.transparent, // Make Scaffold background transparent
+        appBar: AppBar(
+          title: Text("Diabetes Options"),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.account_circle, size: 30),
+              onPressed: () {
+                _showLogoutMenu(context);
+              },
+            ),
+          ],
+        ),
+        body: Stack(
+          children: [
+            BouncingCircles(),
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () async {
+                      final prefs = await SharedPreferences.getInstance();
+                      prefs.setBool("onboarding", false);
+                    },
+                    child: Text(
+                      "Choose one option from these three",
+                      style: TextStyle(
+                        color: Color(0xFF288994), // Change 'blue' to any color you like
+                        fontSize: 24, // Optional: adjust the font size
+                        fontWeight: FontWeight.bold, // Optional: adjust the weight
+                      ),
                     ),
                   ),
-
-                ),
-                SizedBox(height: 20),
-                userFriendlyButton(
-                  context,
-                  "Have Diabetes",
-                  Color(0xFFE28869),
-                  Icons.favorite,
-                  HaveDiabetesDashboard(),
-                ),
-                SizedBox(height: 20),
-                userFriendlyButton(
-                  context,
-                  "Don't Have Diabetes",
-                  Color(0xFF288994),
-                  Icons.no_food,
-                  DonotHaveDiabeteDashboard(),
-                ),
-                SizedBox(height: 20),
-                userFriendlyButton(
-                  context,
-                  "Need Guidance",
-                  Color(0xFFF1FAEE),
-                  Icons.help,
-                  NotSureDashboard(),
-                ),
-              ],
+                  SizedBox(height: 20),
+                  userFriendlyButton(
+                    context,
+                    "Have Diabetes",
+                    Color(0xFFE28869),
+                    Icons.favorite,
+                    HaveDiabetesDashboard(),
+                  ),
+                  SizedBox(height: 20),
+                  userFriendlyButton(
+                    context,
+                    "Don't Have Diabetes",
+                    Color(0xFF288994),
+                    Icons.no_food,
+                    DonotHaveDiabeteDashboard(),
+                  ),
+                  SizedBox(height: 20),
+                  userFriendlyButton(
+                    context,
+                    "Need Guidance",
+                    Color(0xFFF1FAEE),
+                    Icons.help,
+                    NotSureDashboard(),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -95,7 +98,7 @@ class DiabeteOptions extends StatelessWidget {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => LoginPage()),
-                (route) => false,
+                    (route) => false,
               );
             },
           ),
@@ -201,17 +204,17 @@ class _BouncingCirclesState extends State<BouncingCircles>
           .asMap()
           .entries
           .map((entry) => Positioned(
-                left: entry.value.dx,
-                top: entry.value.dy,
-                child: Container(
-                  width: sizes[entry.key],
-                  height: sizes[entry.key],
-                  decoration: BoxDecoration(
-                    color: Color(0xFF06333B),
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ))
+        left: entry.value.dx,
+        top: entry.value.dy,
+        child: Container(
+          width: sizes[entry.key],
+          height: sizes[entry.key],
+          decoration: BoxDecoration(
+            color: Color(0xFF96D8E3),
+            shape: BoxShape.circle,
+          ),
+        ),
+      ))
           .toList(),
     );
   }

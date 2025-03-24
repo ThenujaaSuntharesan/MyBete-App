@@ -1,7 +1,8 @@
+
 name: mybete_app
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
-# pub.dev using flutter pub publish. This is preferred for private packages.
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
@@ -23,10 +24,10 @@ environment:
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
-# consider running flutter pub upgrade --major-versions. Alternatively,
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
 # dependencies can be manually updated by changing the version numbers below to
 # the latest version available on pub.dev. To see which dependencies have newer
-# versions available, run flutter pub outdated.
+# versions available, run `flutter pub outdated`.
 dependencies:
 
   flutter:
@@ -60,6 +61,18 @@ dependencies:
   image_picker: ^1.0.7
   sqflite: ^2.2.1
   path: ^1.8.3
+  google_fonts: ^6.2.1
+
+  syncfusion_flutter_charts: ^28.2.12
+
+  provider: ^6.0.5
+  path_provider: ^2.1.1
+  permission_handler: ^11.0.1
+  cross_file: ^0.3.3+4
+
+  csv: ^5.0.2
+  pdf: ^3.10.4
+  open_file: ^3.3.2
 
 dependency_overrides:
   shared_preferences_android: 2.4.8
@@ -71,7 +84,7 @@ dev_dependencies:
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
-  # activated in the analysis_options.yaml file located at the root of your
+  # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
@@ -93,7 +106,7 @@ flutter:
   assets:
     - assets/images/
     - lib/donot_have_diabetes/meal_plans/meal_images/
-
+    - lib/donot_have_diabetes/mind_relax/mind images/
   #    - assets/images/onboard_img_1.svg
 
   #   - images/a_dot_ham.jpeg
