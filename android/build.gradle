@@ -7,7 +7,8 @@ buildscript {
         // The classpath for the Android Gradle plugin
         classpath 'com.android.tools.build:gradle:7.4.0' // or the latest version
         classpath 'com.google.gms:google-services:4.3.15' // Firebase services plugin
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10' // Kotlin plugin for Android
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.0' // Kotlin plugin for Android
+
     }
 }
 
