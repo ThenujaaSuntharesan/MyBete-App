@@ -172,9 +172,7 @@ class LogProvider with ChangeNotifier {
     _setLoading(true);
 
     try {
-      print(">> addLog 1");
       final docRef = await _logsCollection.add(log.toFirestore());
-      print(">> addLog 2 $docRef");
       final newLog = LogEntry(
         id: docRef.id,
         userId: log.userId,
@@ -209,20 +207,17 @@ class LogProvider with ChangeNotifier {
   // Update an existing log
   Future<void> updateLog(LogEntry log) async {
     _setLoading(true);
-
     try {
       print(">> log id: ${log.id}");
       if (log.id == null) {
         throw Exception('Log entry ID is required for update');
       }
-
       final docRef = _logsCollection.doc(log.id);
       final docSnap = await docRef.get();
 
       if (!docSnap.exists) {
         throw Exception("Log entry with ID ${log.id} does not exist.");
       }
-
       print(">> Preparing to update: ${log.toFirestore()}");
       await docRef.update(log.toFirestore()).timeout(Duration(seconds: 5));
 
