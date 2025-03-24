@@ -1193,7 +1193,7 @@ class _MyActivityScreenState extends State<MyActivityScreen> {
 
               // Today's average and See More button
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.only(left: 120, right: 15, top: 0, bottom: 5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
