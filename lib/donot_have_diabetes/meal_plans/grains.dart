@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'total_screen.dart'; // Add this line
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -23,6 +28,43 @@ class MyApp extends StatelessWidget {
 class GrainsScreen extends StatelessWidget {
   const GrainsScreen({Key? key}) : super(key: key);
 
+  // Function to add calorie to Firestore
+  void _addCalorieToFirebase(String name, int calories) async {
+    final userId = 'user123'; // Replace with actual user ID
+    final userRef = FirebaseFirestore.instance.collection('users').doc(userId);
+
+    try {
+      // Get the current total calorie count for the user
+      final userDoc = await userRef.get();
+      int totalCalories = 0;
+
+      if (userDoc.exists) {
+        // If user document exists, fetch total calories (or set to 0 if not present)
+        totalCalories = userDoc.data()?['total_calories'] ?? 0;
+      }
+
+      // Update the total calorie count by adding the vegetable's calories
+      totalCalories += calories;
+
+      // Save the updated total calorie count back to Firestore
+      await userRef.set({
+        'total_calories': totalCalories,
+      }, SetOptions(merge: true));
+
+      // Optionally: You can also add a document in a subcollection for individual vegetables
+      await userRef.collection('grain_calories').add({
+        'name': name,
+        'calories': calories,
+        'timestamp': FieldValue.serverTimestamp(), // Adds a timestamp for the entry
+      });
+
+      print("Calories added successfully!");
+    } catch (e) {
+      print("Error adding calories: $e");
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,14 +78,13 @@ class GrainsScreen extends StatelessWidget {
                 children: [
                   // Back Button
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {Navigator.pop(context);},
                     child: const Icon(
                       Icons.arrow_back,
                       size: 30,
                       color: Colors.black,
                     ),
                   ),
-                  const Spacer(),
                 ],
               ),
             ),
@@ -132,8 +173,10 @@ class GrainsScreen extends StatelessWidget {
                             child: GrainCard(
                               name: 'Oats (Cooked)',
                               calories: 71,
-                              imagePath: 'assets/oats.png',
-                              onAdd: () {},
+                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/oat.png',
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -141,8 +184,10 @@ class GrainsScreen extends StatelessWidget {
                             child: GrainCard(
                               name: 'Quinoa (Cooked)',
                               calories: 120,
-                              imagePath: 'assets/quinoa.png',
-                              onAdd: () {},
+                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/quinoa.png',
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -151,7 +196,9 @@ class GrainsScreen extends StatelessWidget {
                               name: 'Brown Rice (Cooked)',
                               calories: 111,
                               imagePath: 'assets/brown_rice.png',
-                              onAdd: () {},
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
                           ),
                         ],
@@ -188,7 +235,9 @@ class GrainsScreen extends StatelessWidget {
                               name: 'White Rice (Cooked)',
                               calories: 130,
                               imagePath: 'assets/white_rice.png',
-                              onAdd: () {},
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -197,7 +246,9 @@ class GrainsScreen extends StatelessWidget {
                               name: 'Couscous (Cooked)',
                               calories: 112,
                               imagePath: 'assets/couscous.png',
-                              onAdd: () {},
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -206,7 +257,9 @@ class GrainsScreen extends StatelessWidget {
                               name: 'Cornmeal (Dry)',
                               calories: 362,
                               imagePath: 'assets/cornmeal.png',
-                              onAdd: () {},
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
                           ),
                         ],
@@ -243,7 +296,9 @@ class GrainsScreen extends StatelessWidget {
                               name: 'Wheat Flour (Whole & Refined)',
                               calories: 364,
                               imagePath: 'assets/wheat_flour.png',
-                              onAdd: () {},
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -252,23 +307,37 @@ class GrainsScreen extends StatelessWidget {
                               name: 'Buckwheat (Uncooked)',
                               calories: 343,
                               imagePath: 'assets/buckwheat.png',
-                              onAdd: () {},
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
-                          ),
-                          const SizedBox(width: 12),
-                          // Empty container to maintain grid layout
-                          Expanded(
-                            child: Container(),
                           ),
                         ],
                       ),
-
-                      const SizedBox(height: 24),
+                      // Add View Total Calories Button
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        child: Center(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const TotalScreen(category: 'Grains')), // Navigate to TotalScreen
+                              );
+                            },
+                            child: const Text(
+                              'View Total Calories',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ),
             ),
+
 
             // Bottom Navigation Bar
             Container(
@@ -320,7 +389,7 @@ class GrainCard extends StatelessWidget {
   final String name;
   final int calories;
   final String imagePath;
-  final VoidCallback onAdd;
+  final Function(String, int) onAdd;
 
   const GrainCard({
     Key? key,
@@ -393,7 +462,18 @@ class GrainCard extends StatelessWidget {
                 ),
 
                 GestureDetector(
-                  onTap: onAdd,
+                  onTap: () {
+                    onAdd(name, calories);  // Trigger the onAdd callback with proper parameters
+
+                    // Show a snackbar to confirm addition
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Added $name ($calories kcal)'),
+                        duration: const Duration(seconds: 1),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  },
                   child: Container(
                     width: 28,
                     height: 28,

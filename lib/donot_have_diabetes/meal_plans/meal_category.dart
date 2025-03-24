@@ -5,6 +5,8 @@ import 'fruits.dart';
 import 'bakery.dart';
 import 'grains.dart';
 import 'Animal.dart';
+import 'dairy.dart';
+import 'beverages.dart';
 
 
 void main() {
@@ -140,6 +142,10 @@ class FoodCategoryScreen extends StatelessWidget {
                           title: 'Dairy Products',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/milk.png',
                           onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const  DairyProductsScreen()),
+                            );
 
                           },
                         ),
@@ -158,6 +164,10 @@ class FoodCategoryScreen extends StatelessWidget {
                           title: 'Beverages',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/wine.png',
                           onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const BeveragesScreen()),
+                            );
 
                           },
                         ),
@@ -290,7 +300,7 @@ class FoodCategoryScreen extends StatelessWidget {
 
                   // Lunch Recipes Horizontal Scroller
                   SizedBox(
-                    height: 180,
+                    height: 280,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: [
@@ -376,7 +386,7 @@ class FoodCategoryScreen extends StatelessWidget {
 
                   // Dinner Recipes Horizontal Scroller
                   SizedBox(
-                    height: 180,
+                    height: 280,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: [
@@ -460,7 +470,7 @@ class FoodCategoryScreen extends StatelessWidget {
 
                   // Snacks Recipes Horizontal Scroller
                   SizedBox(
-                    height: 180,
+                    height: 280,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: [
