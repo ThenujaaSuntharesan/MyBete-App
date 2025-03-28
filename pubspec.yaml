@@ -63,17 +63,16 @@ dependencies:
   path: ^1.8.3
   google_fonts: ^6.2.1
 
-  syncfusion_flutter_charts: ^29.1.33
+  syncfusion_flutter_charts: ^28.2.12
 
   provider: ^6.0.5
   path_provider: ^2.1.1
   permission_handler: ^11.0.1
   cross_file: ^0.3.3+4
 
-  csv: ^6.0.0
+  csv: ^5.0.2
   pdf: ^3.10.4
   open_file: ^3.3.2
-
 
 dependency_overrides:
   shared_preferences_android: 2.4.8
@@ -90,12 +89,6 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
   build_runner: ^2.3.3
-  test: ^1.22.0
-  mockito: ^5.4.5
-  shared_preferences: ^2.5.2
-  flutter_driver:
-    sdk: flutter
-  metrics_center: ^1.0.13
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -114,7 +107,6 @@ flutter:
     - assets/images/
     - lib/donot_have_diabetes/meal_plans/meal_images/
     - lib/donot_have_diabetes/mind_relax/mind images/
-    - lib/not_sure/symptom_levels/3_polyphagia_check/Images/
   #    - assets/images/onboard_img_1.svg
 
   #   - images/a_dot_ham.jpeg
