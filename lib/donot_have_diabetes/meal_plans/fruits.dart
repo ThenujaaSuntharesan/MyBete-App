@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'total_screen.dart'; // Add this line
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -23,6 +28,42 @@ class MyApp extends StatelessWidget {
 class FruitsScreen extends StatelessWidget {
   const FruitsScreen({Key? key}) : super(key: key);
 
+  // Function to add calorie to Firestore
+  void _addCalorieToFirebase(String name, int calories) async {
+    final userId = 'user123'; // Replace with actual user ID
+    final userRef = FirebaseFirestore.instance.collection('users').doc(userId);
+
+    try {
+      // Get the current total calorie count for the user
+      final userDoc = await userRef.get();
+      int totalCalories = 0;
+
+      if (userDoc.exists) {
+        // If user document exists, fetch total calories (or set to 0 if not present)
+        totalCalories = userDoc.data()?['total_calories'] ?? 0;
+      }
+
+      // Update the total calorie count by adding the vegetable's calories
+      totalCalories += calories;
+
+      // Save the updated total calorie count back to Firestore
+      await userRef.set({
+        'total_calories': totalCalories,
+      }, SetOptions(merge: true));
+
+      // Optionally: You can also add a document in a subcollection for individual vegetables
+      await userRef.collection('fruit_calories').add({
+        'name': name,
+        'calories': calories,
+        'timestamp': FieldValue.serverTimestamp(), // Adds a timestamp for the entry
+      });
+
+      print("Calories added successfully!");
+    } catch (e) {
+      print("Error adding calories: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,14 +77,15 @@ class FruitsScreen extends StatelessWidget {
                 children: [
                   // Back Button
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
                     child: const Icon(
                       Icons.arrow_back,
                       size: 30,
                       color: Colors.black,
                     ),
                   ),
-                  const Spacer(),
                 ],
               ),
             ),
@@ -64,7 +106,7 @@ class FruitsScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 36,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+
                         ),
                       ),
 
@@ -110,7 +152,7 @@ class FruitsScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+
                         ),
                       ),
 
@@ -119,43 +161,123 @@ class FruitsScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+
                         ),
                       ),
 
                       const SizedBox(height: 16),
 
                       // Low-Calorie Fruits Grid
-                      Row(
+                  SizedBox(
+                    height: 200, // Set a fixed height for the horizontal scroll area
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
                         children: [
-                          Expanded(
-                            child: FruitCard(
-                              name: 'Watermelon',
-                              calories: 30,
-                              imagePath: 'assets/watermelon.png',
-                              onAdd: () {},
-                            ),
+                          FruitCard(
+                            name: 'Watermelon',
+                            calories: 30,
+                            imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/watermelon.png',
+                            onAdd: (name, calories) {
+                              _addCalorieToFirebase(name, calories);
+                            },
                           ),
                           const SizedBox(width: 12),
-                          Expanded(
-                            child: FruitCard(
-                              name: 'Strawberry',
-                              calories: 32,
-                              imagePath: 'assets/strawberry.png',
-                              onAdd: () {},
-                            ),
+                          FruitCard(
+                            name: 'Strawberry',
+                            calories: 32,
+                            imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/strawberry.png',
+                            onAdd: (name, calories) {
+                              _addCalorieToFirebase(name, calories);
+                            },
+                          ),
+
+                          const SizedBox(width: 12),
+                          FruitCard(
+                            name: 'Cantaloupe',
+                            calories: 34,
+                            imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/cantaloupe.png',
+                            onAdd: (name, calories) {
+                              _addCalorieToFirebase(name, calories);
+                            },
+                          ),
+
+                          const SizedBox(width: 12),
+                          FruitCard(
+                            name: 'Peach',
+                            calories: 39,
+                            imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/peach.png',
+                            onAdd: (name, calories) {
+                              _addCalorieToFirebase(name, calories);
+                            },
                           ),
                           const SizedBox(width: 12),
-                          Expanded(
-                            child: FruitCard(
-                              name: 'Cantaloupe',
-                              calories: 34,
-                              imagePath: 'assets/cantaloupe.png',
-                              onAdd: () {},
-                            ),
+                          FruitCard(
+                            name: 'Plum',
+                            calories: 46,
+                            imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/plum.png',
+                            onAdd: (name, calories) {
+                              _addCalorieToFirebase(name, calories);
+                            },
+                          ),
+                          const SizedBox(width: 12),
+                          FruitCard(
+                            name: 'Grapefruit',
+                            calories: 42,
+                            imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/grapefruit.png',
+                            onAdd: (name, calories) {
+                              _addCalorieToFirebase(name, calories);
+                            },
+                          ),
+                          const SizedBox(width: 12),
+                          FruitCard(
+                            name: 'Papaya',
+                            calories: 43,
+                            imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/papaya.png',
+                            onAdd: (name, calories) {
+                              _addCalorieToFirebase(name, calories);
+                            },
+                          ),
+                          const SizedBox(width: 12),
+                          FruitCard(
+                            name: 'Blackberry',
+                            calories: 43,
+                            imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/blackberry.png',
+                            onAdd: (name, calories) {
+                              _addCalorieToFirebase(name, calories);
+                            },
+                          ),
+                          const SizedBox(width: 12),
+                          FruitCard(
+                            name: 'Raspberry',
+                            calories: 52,
+                            imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/raspberry.png',
+                            onAdd: (name, calories) {
+                              _addCalorieToFirebase(name, calories);
+                            },
+                          ),
+                          const SizedBox(width: 12),
+                          FruitCard(
+                            name: 'Orange',
+                            calories: 47,
+                            imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/orange.png',
+                            onAdd: (name, calories) {
+                              _addCalorieToFirebase(name, calories);
+                            },
+                          ),
+                          const SizedBox(width: 12),
+                          FruitCard(
+                            name: 'Tangerine',
+                            calories: 53,
+                            imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/tangerine.png',
+                            onAdd: (name, calories) {
+                              _addCalorieToFirebase(name, calories);
+                            },
                           ),
                         ],
                       ),
+                    ),
+                  ),
 
                       const SizedBox(height: 24),
 
@@ -181,36 +303,98 @@ class FruitsScreen extends StatelessWidget {
                       const SizedBox(height: 16),
 
                       // Moderate-Calorie Fruits Grid
-                      Row(
+                  SizedBox(
+                    height: 200, // Set a fixed height for the horizontal scroll area
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
                         children: [
-                          Expanded(
-                            child: FruitCard(
+                          FruitCard(
                               name: 'Apple',
                               calories: 52,
-                              imagePath: 'assets/apple.png',
-                              onAdd: () {},
+                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/apple.png',
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
-                          ),
+
                           const SizedBox(width: 12),
-                          Expanded(
-                            child: FruitCard(
+                          FruitCard(
                               name: 'Pear',
                               calories: 57,
-                              imagePath: 'assets/pear.png',
-                              onAdd: () {},
+                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/pear.png',
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
-                          ),
+
                           const SizedBox(width: 12),
-                          Expanded(
-                            child: FruitCard(
+                          FruitCard(
                               name: 'Mango',
                               calories: 60,
-                              imagePath: 'assets/mango.png',
-                              onAdd: () {},
-                            ),
+                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/mango.png',
+                            onAdd: (name, calories) {
+                              _addCalorieToFirebase(name, calories);
+                            },
+                          ),
+                          const SizedBox(width: 12),
+                          FruitCard(
+                            name: 'Kiwi',
+                            calories: 61,
+                            imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/kiwi.png',
+                            onAdd: (name, calories) {
+                              _addCalorieToFirebase(name, calories);
+                            },
+                          ),
+                          const SizedBox(width: 12),
+                          FruitCard(
+                            name: 'Pineapple',
+                            calories: 50,
+                            imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/pineapple.png',
+                            onAdd: (name, calories) {
+                              _addCalorieToFirebase(name, calories);
+                            },
+                          ),
+                          const SizedBox(width: 12),
+                          FruitCard(
+                            name: 'Pomegranate',
+                            calories: 83,
+                            imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/pomegranate.png',
+                            onAdd: (name, calories) {
+                              _addCalorieToFirebase(name, calories);
+                            },
+                          ),
+                          const SizedBox(width: 12),
+                          FruitCard(
+                            name: 'Grapes',
+                            calories: 69,
+                            imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/grape.png',
+                            onAdd: (name, calories) {
+                              _addCalorieToFirebase(name, calories);
+                            },
+                          ),
+                          const SizedBox(width: 12),
+                          FruitCard(
+                            name: 'Banana',
+                            calories: 89,
+                            imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/banana.png',
+                            onAdd: (name, calories) {
+                              _addCalorieToFirebase(name, calories);
+                            },
+                          ),
+                          const SizedBox(width: 12),
+                          FruitCard(
+                            name: 'Cherry',
+                            calories: 63,
+                            imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/cherry.png',
+                            onAdd: (name, calories) {
+                              _addCalorieToFirebase(name, calories);
+                            },
                           ),
                         ],
                       ),
+                    ),
+                  ),
 
                       const SizedBox(height: 24),
 
@@ -235,44 +419,78 @@ class FruitsScreen extends StatelessWidget {
 
                       const SizedBox(height: 16),
 
-                      // High-Calorie Fruits Grid
-                      Row(
+                  SizedBox(
+                    height: 200, // Set a fixed height for the horizontal scroll area
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
                         children: [
-                          Expanded(
-                            child: FruitCard(
+                        FruitCard(
                               name: 'Avocado',
                               calories: 160,
-                              imagePath: 'assets/avocado.png',
-                              onAdd: () {},
+                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/avacado.png',
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
-                          ),
+
                           const SizedBox(width: 12),
-                          Expanded(
-                            child: FruitCard(
+                          FruitCard(
                               name: 'Dates(dried)',
                               calories: 282,
-                              imagePath: 'assets/dates.png',
-                              onAdd: () {},
+                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/dates.png',
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
-                          ),
+
                           const SizedBox(width: 12),
-                          Expanded(
-                            child: FruitCard(
+                          FruitCard(
                               name: 'Figs(dried)',
                               calories: 249,
-                              imagePath: 'assets/figs.png',
-                              onAdd: () {},
+                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/figs.png',
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
+                          const SizedBox(width: 12),
+                          FruitCard(
+                            name: 'Raisins',
+                            calories: 299,
+                            imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/raisins.png',
+                            onAdd: (name, calories) {
+                              _addCalorieToFirebase(name, calories);
+                            },
                           ),
                         ],
                       ),
-
+                    ),
+                  ),
                       const SizedBox(height: 24),
+                      // Add View Total Calories Button
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        child: Center(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const TotalScreen(category: 'Fruits')), // Navigate to TotalScreen
+                              );
+                            },
+                            child: const Text(
+                              'View Total Calories',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ),
             ),
+
 
             // Bottom Navigation Bar
             Container(
@@ -324,7 +542,7 @@ class FruitCard extends StatelessWidget {
   final String name;
   final int calories;
   final String imagePath;
-  final VoidCallback onAdd;
+  final Function(String, int) onAdd;
 
   const FruitCard({
     Key? key,
@@ -354,7 +572,7 @@ class FruitCard extends StatelessWidget {
           children: [
             // Fruit Image
             SizedBox(
-              height: 80,
+              height: 100,
               child: Image.asset(
                 imagePath,
                 fit: BoxFit.contain,
@@ -372,7 +590,7 @@ class FruitCard extends StatelessWidget {
             Text(
               name,
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
@@ -395,7 +613,18 @@ class FruitCard extends StatelessWidget {
                 ),
 
                 GestureDetector(
-                  onTap: onAdd,
+                  onTap: () {
+                    onAdd(name, calories);  // Trigger the onAdd callback with proper parameters
+
+                    // Show a snackbar to confirm addition
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Added $name ($calories kcal)'),
+                        duration: const Duration(seconds: 1),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  },
                   child: Container(
                     width: 28,
                     height: 28,
@@ -418,6 +647,7 @@ class FruitCard extends StatelessWidget {
     );
   }
 }
+
 
 class NavBarItem extends StatelessWidget {
   final IconData icon;
