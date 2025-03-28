@@ -65,10 +65,11 @@ dependencies:
 
   syncfusion_flutter_charts: ^28.2.12
 
-  provider: ^6.0.5
+  provider: ^6.1.1
   path_provider: ^2.1.1
   permission_handler: ^11.0.1
   cross_file: ^0.3.3+4
+
 
   csv: ^5.0.2
   pdf: ^3.10.4
