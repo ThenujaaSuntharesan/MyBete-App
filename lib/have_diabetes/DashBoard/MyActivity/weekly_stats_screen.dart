@@ -14,7 +14,7 @@ class WeeklyStatsScreen extends StatefulWidget {
   final Color tealColor;
   final Color textColor;
 
-  const WeeklyStatsScreen({
+  const WeeklyStatsScreen ( {
     Key? key,
     required this.logEntries,
     required this.primaryColor,
@@ -23,7 +23,9 @@ class WeeklyStatsScreen extends StatefulWidget {
     required this.veryLightColor,
     required this.tealColor,
     required this.textColor,
-  }) : super(key: key);
+  } ) : super(key: key);
+
+
 
   @override
   State<WeeklyStatsScreen> createState() => _WeeklyStatsScreenState();
