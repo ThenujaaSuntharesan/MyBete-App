@@ -246,7 +246,7 @@ class _RemindersScreenState extends State<RemindersScreen> {
       ),
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation:
-      UILocalNotificationDateInterpretation.absoluteTime,
+      UILocalNotificationDateInterpretation.absoluteTime, androidScheduleMode: null,
     );
   }
 
