@@ -10,12 +10,12 @@ class _ExtremeHungerCheckerState extends State<Symptom3Screen> {
   List<Map<String, dynamic>> _hungerLogs = [];
 
   final List<Map<String, dynamic>> _foodItems = [
-    {'name': 'Apple', 'calories': 95, 'image': 'assets/images/apple.png'},
-    {'name': 'Burger', 'calories': 354, 'image': 'assets/images/burger.png'},
-    {'name': 'Pizza Slice', 'calories': 285, 'image': 'assets/images/pizza.png'},
-    {'name': 'Salad', 'calories': 150, 'image': 'assets/images/salad.png'},
-    {'name': 'Fries', 'calories': 365, 'image': 'assets/images/fries.png'},
-    {'name': 'Ice Cream', 'calories': 207, 'image': 'assets/images/ice_cream.png'},
+    {'name': 'Carbohydrates', 'calories': 300, 'image': 'lib/not_sure/symptom_levels/3_polyphagia_check/Images/Carbohydrate.jpeg'},
+    {'name': 'Proteins', 'calories': 200, 'image': 'lib/not_sure/symptom_levels/3_polyphagia_check/Images/Protein.jpg'},
+    {'name': 'Fats', 'calories': 200, 'image': 'lib/not_sure/symptom_levels/3_polyphagia_check/Images/Lipides.jpg'},
+    {'name': 'Dairy & Alternatives', 'calories': 100, 'image': 'lib/not_sure/symptom_levels/3_polyphagia_check/Images/Dairy foods.png'},
+    {'name': 'Fruits & Vegetables', 'calories': 100, 'image': 'lib/not_sure/symptom_levels/3_polyphagia_check/Images/Fruits.jpg'},
+    {'name': 'Processed Foods & Beverages', 'calories': 200, 'image': 'lib/not_sure/symptom_levels/3_polyphagia_check/Images/Beverages & Processed Foods.jpg'},
   ];
 
   void _addCalories(int calories) {
