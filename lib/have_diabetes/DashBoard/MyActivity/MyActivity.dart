@@ -6,8 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'dart:math';
 
-
-
 import '../Reminder/Reminder_screen.dart';
 import '../Report/report_screen.dart';
 import 'LogDetails/LogInterface.dart';
@@ -1190,7 +1188,7 @@ class _MyActivityScreenState extends State<MyActivityScreen> {
 
               // Today's average and See More button
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.only(left: 120, right: 15, top: 0, bottom: 5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

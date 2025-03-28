@@ -144,15 +144,23 @@ class LogProvider with ChangeNotifier {
         _setLoading(false);
         return;
       }
-
+      print(">> fetchLogs 1");
       final snapshot = await _logsCollection
           .where('userId', isEqualTo: currentUserId)
           .orderBy('date', descending: true)
           .get();
 
+      print(">> fetchLogs 2");
       _logs = snapshot.docs.map((doc) => LogEntry.fromFirestore(doc)).toList();
       _error = null;
+      print(">> _logs ${_logs.length}");
     } catch (e) {
+      _setLoading(false);
+      if (e is FirebaseException) {
+        print(">> Firebase Error: ${e.message}");
+      } else {
+        print(">> Update Error: $e");
+      }
       _error = e.toString();
     } finally {
       _setLoading(false);
@@ -184,6 +192,12 @@ class LogProvider with ChangeNotifier {
       _logs.sort((a, b) => b.date.compareTo(a.date));
       _error = null;
     } catch (e) {
+      _setLoading(false);
+      if (e is FirebaseException) {
+        print(">> Firebase Error: ${e.message}");
+      } else {
+        print(">> Update Error: $e");
+      }
       _error = e.toString();
     } finally {
       _setLoading(false);
@@ -193,20 +207,17 @@ class LogProvider with ChangeNotifier {
   // Update an existing log
   Future<void> updateLog(LogEntry log) async {
     _setLoading(true);
-
     try {
       print(">> log id: ${log.id}");
       if (log.id == null) {
         throw Exception('Log entry ID is required for update');
       }
-
       final docRef = _logsCollection.doc(log.id);
       final docSnap = await docRef.get();
 
       if (!docSnap.exists) {
         throw Exception("Log entry with ID ${log.id} does not exist.");
       }
-
       print(">> Preparing to update: ${log.toFirestore()}");
       await docRef.update(log.toFirestore()).timeout(Duration(seconds: 5));
 
@@ -240,7 +251,12 @@ class LogProvider with ChangeNotifier {
       _logs.removeWhere((log) => log.id == id);
       _error = null;
     } catch (e) {
-      _error = e.toString();
+      _setLoading(false);
+      if (e is FirebaseException) {
+        print(">> Firebase Error: ${e.message}");
+      } else {
+        print(">> Update Error: $e");
+      }
     } finally {
       _setLoading(false);
     }
