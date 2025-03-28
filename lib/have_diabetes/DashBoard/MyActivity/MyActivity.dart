@@ -7,9 +7,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'dart:math';
 
 
-import '../LogDetails/LogInterface.dart';
-import '../Reminder/Reminder.dart';
-import '../Report/Reports.dart';
 
 import '../Reminder/Reminder_screen.dart';
 import '../Report/report_screen.dart';
