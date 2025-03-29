@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'total_screen.dart'; // Add this line
+import 'total_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -63,7 +63,6 @@ class GrainsScreen extends StatelessWidget {
       print("Error adding calories: $e");
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -167,41 +166,63 @@ class GrainsScreen extends StatelessWidget {
                       const SizedBox(height: 16),
 
                       // Low-Calorie Grains Grid
-                      Row(
-                        children: [
-                          Expanded(
-                            child: GrainCard(
-                              name: 'Oats (Cooked)',
-                              calories: 71,
-                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/oat.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                            ),
+                      SizedBox(
+                        height: 200, // Set a fixed height for the horizontal scroll area
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              GrainCard(
+                                name: 'Oats (Cooked)',
+                                calories: 71,
+                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/oat.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              GrainCard(
+                                name: 'Quinoa (Cooked)',
+                                calories: 120,
+                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/quinoa.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              GrainCard(
+                                name: 'Brown Rice (Cooked)',
+                                calories: 111,
+                                imagePath: 'assets/brown_rice.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              GrainCard(
+                                name: 'Barley (Cooked)',
+                                calories: 96,
+                                imagePath: 'assets/brown_rice.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              GrainCard(
+                                name: 'Bulgur (Cooked)',
+                                calories: 83,
+                                imagePath: 'assets/brown_rice.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: GrainCard(
-                              name: 'Quinoa (Cooked)',
-                              calories: 120,
-                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/quinoa.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: GrainCard(
-                              name: 'Brown Rice (Cooked)',
-                              calories: 111,
-                              imagePath: 'assets/brown_rice.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
 
                       const SizedBox(height: 24),
@@ -228,41 +249,61 @@ class GrainsScreen extends StatelessWidget {
                       const SizedBox(height: 16),
 
                       // Moderate-Calorie Grains Grid
-                      Row(
-                        children: [
-                          Expanded(
-                            child: GrainCard(
-                              name: 'White Rice (Cooked)',
-                              calories: 130,
-                              imagePath: 'assets/white_rice.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                            ),
+                      SizedBox(
+                        height: 200, // Set a fixed height for the horizontal scroll area
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              GrainCard(
+                                name: 'White Rice (Cooked)',
+                                calories: 130,
+                                imagePath: 'assets/white_rice.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              GrainCard(
+                                name: 'Couscous (Cooked)',
+                                calories: 112,
+                                imagePath: 'assets/couscous.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              GrainCard(
+                                name: 'Cornmeal (Dry)',
+                                calories: 362,
+                                imagePath: 'assets/cornmeal.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                              const SizedBox(width: 12),
+                              GrainCard(
+                                name: 'Rye Flour',
+                                calories: 325,
+                                imagePath: 'assets/cornmeal.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                              const SizedBox(width: 12),
+                              GrainCard(
+                                name: 'Millet (Cooked)',
+                                calories: 119,
+                                imagePath: 'assets/cornmeal.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: GrainCard(
-                              name: 'Couscous (Cooked)',
-                              calories: 112,
-                              imagePath: 'assets/couscous.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: GrainCard(
-                              name: 'Cornmeal (Dry)',
-                              calories: 362,
-                              imagePath: 'assets/cornmeal.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
 
                       const SizedBox(height: 24),
@@ -289,31 +330,35 @@ class GrainsScreen extends StatelessWidget {
                       const SizedBox(height: 16),
 
                       // High-Calorie Grains Grid
-                      Row(
-                        children: [
-                          Expanded(
-                            child: GrainCard(
-                              name: 'Wheat Flour (Whole & Refined)',
-                              calories: 364,
-                              imagePath: 'assets/wheat_flour.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                            ),
+                      SizedBox(
+                        height: 200, // Set a fixed height for the horizontal scroll area
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              GrainCard(
+                                name: 'Wheat Flour (Whole & Refined)',
+                                calories: 364,
+                                imagePath: 'assets/wheat_flour.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              GrainCard(
+                                name: 'Buckwheat (Uncooked)',
+                                calories: 343,
+                                imagePath: 'assets/buckwheat.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: GrainCard(
-                              name: 'Buckwheat (Uncooked)',
-                              calories: 343,
-                              imagePath: 'assets/buckwheat.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
+
                       // Add View Total Calories Button
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -322,7 +367,7 @@ class GrainsScreen extends StatelessWidget {
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const TotalScreen(category: 'Grains')), // Navigate to TotalScreen
+                                MaterialPageRoute(builder: (context) => const TotalScreen(category: 'Grains')),
                               );
                             },
                             child: const Text(
@@ -337,7 +382,6 @@ class GrainsScreen extends StatelessWidget {
                 ),
               ),
             ),
-
 
             // Bottom Navigation Bar
             Container(
@@ -389,7 +433,8 @@ class GrainCard extends StatelessWidget {
   final String name;
   final int calories;
   final String imagePath;
-  final Function(String, int) onAdd;
+  final void Function(String, int) onAdd;
+
 
   const GrainCard({
     Key? key,
@@ -419,19 +464,19 @@ class GrainCard extends StatelessWidget {
           children: [
             // Grain Image
             SizedBox(
-              height: 80,
+              height: 100,
               child: Image.asset(
                 imagePath,
                 fit: BoxFit.contain,
                 errorBuilder: (context, error, stackTrace) => Container(
                   height: 80,
                   color: Colors.grey.shade200,
-                  child: const Icon(Icons.image, size: 40),
+                  child: const Icon(Icons.image, size: 80),
                 ),
               ),
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: 15),
 
             // Grain Name
             Text(
