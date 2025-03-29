@@ -18,7 +18,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
   bool _recipeSaved = false;
 
   // Recipe data
-  final String recipeName = 'Oatmeal with Nuts & Fruits';
+  final String recipeName = 'Banana Pancakes (No Flour!)';
   final int calories = 300;
   final String category = 'breakfast';
 
@@ -44,21 +44,22 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
         'calories': calories,
         'category': category,
         'ingredients': [
-          '½ cup rolled oats',
-          '1 cup milk or water',
-          '1 tbsp honey or maple syrup',
+          '1 ripe banana',
+          '2 eggs',
           '¼ tsp cinnamon',
-          '¼ cup mixed nuts (almonds, walnuts, cashews)',
-          '½ cup fresh fruits (bananas, berries, or apples)',
+          '½ tsp vanilla extract',
+          '½ tsp baking powder (optional for fluffiness)',
+
         ],
         'instructions': [
-          'In a saucepan, bring milk or water to a boil.',
-          'Add oats and cook for 5 minutes, stirring occasionally.',
-          'Remove from heat, mix in cinnamon and honey.',
-          'Top with nuts and fresh fruits. Serve warm.',
+          'Mash the banana in a bowl.',
+          'Add eggs, cinnamon, vanilla extract, and baking powder. Mix well.',
+          'Heat a non-stick pan over medium heat.',
+          'Pour small amounts of batter onto the pan and cook for 1-2 minutes per side.',
+          'Pour small amounts of batter onto the pan and cook for 1-2 minutes per side.',
         ],
         'savedAt': FieldValue.serverTimestamp(),
-        'imagePath': 'lib/donot_have_diabetes/meal_plans/meal_images/Oatmeal with Toppings.jpeg',
+        'imagePath': 'lib/donot_have_diabetes/meal_plans/meal_images/Banana Pancakes (No Flour!).jpeg',
       };
 
       // Add recipe to user's saved recipes
@@ -134,7 +135,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
         children: [
           // Background Image
           Image.asset(
-            'lib/donot_have_diabetes/meal_plans/meal_images/Oatmeal with Toppings.jpeg',
+            'lib/donot_have_diabetes/meal_plans/meal_images/Banana Pancakes (No Flour!).jpeg',
             height: double.infinity,
             width: double.infinity,
             fit: BoxFit.cover,
@@ -202,7 +203,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                               children: [
                                 // Title
                                 const Text(
-                                  'Oatmeal with Nuts & Fruits',
+                                  'Banana Pancakes (No Flour!)',
                                   style: TextStyle(
                                     fontSize: 32,
                                     fontWeight: FontWeight.bold,
@@ -223,12 +224,12 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                _buildBulletPoint('½ cup rolled oats'),
-                                _buildBulletPoint('1 cup milk or water'),
-                                _buildBulletPoint('1 tbsp honey or maple syrup'),
+                                _buildBulletPoint('1 ripe banana'),
+                                _buildBulletPoint('2 eggs'),
                                 _buildBulletPoint('¼ tsp cinnamon'),
-                                _buildBulletPoint('¼ cup mixed nuts (almonds, walnuts, cashews)'),
-                                _buildBulletPoint('½ cup fresh fruits (bananas, berries, or apples)'),
+                                _buildBulletPoint('½ tsp vanilla extract'),
+                                _buildBulletPoint('½ tsp baking powder (optional for fluffiness)'),
+
 
                                 const SizedBox(height: 24),
 
@@ -242,13 +243,16 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(1, 'In a saucepan, bring milk or water to a boil.'),
+                                _buildNumberedStep(1, 'Mash the banana in a bowl.'),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(2, 'Add oats and cook for 5 minutes, stirring occasionally.'),
+                                _buildNumberedStep(2, 'Add eggs, cinnamon, vanilla extract, and baking powder. Mix well.'),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(3, 'Remove from heat, mix in cinnamon and honey.'),
+                                _buildNumberedStep(3, 'Heat a non-stick pan over medium heat.'),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(4, 'Top with nuts and fresh fruits. Serve warm.'),
+                                _buildNumberedStep(4, 'Pour small amounts of batter onto the pan and cook for 1-2 minutes per side.'),
+                                const SizedBox(height: 8),
+                                _buildNumberedStep(5, 'Serve with honey or berries!'),
+
 
                                 const SizedBox(height: 32),
 

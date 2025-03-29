@@ -1,7 +1,132 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class RecipeDetailScreen extends StatelessWidget {
+class RecipeDetailScreen extends StatefulWidget {
   const RecipeDetailScreen({Key? key}) : super(key: key);
+
+  @override
+  _RecipeDetailScreenState createState() => _RecipeDetailScreenState();
+}
+
+class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  bool _isSaving = false;
+  bool _isAddingCalories = false;
+  bool _recipeSaved = false;
+
+  // Recipe data
+  final String recipeName = 'Scrambled Eggs with Veggies';
+  final int calories = 250;
+  final String category = 'breakfast';
+
+  // Get current user ID
+  String? get currentUserId => _auth.currentUser?.uid;
+
+  // Save recipe to user's saved recipes collection
+  Future<void> _saveRecipe() async {
+    if (_recipeSaved || _isSaving) return;
+
+    setState(() {
+      _isSaving = true;
+    });
+
+    try {
+      if (currentUserId == null) {
+        throw Exception('User not authenticated');
+      }
+
+      // Create recipe data
+      Map<String, dynamic> recipeData = {
+        'name': recipeName,
+        'calories': calories,
+        'category': category,
+        'ingredients': [
+          '2 eggs',
+          '¼ cup chopped spinach',
+          '¼ cup cherry tomatoes (halved)',
+          '1 tbsp olive oil',
+          'Salt & pepper to taste',
+
+        ],
+        'instructions': [
+          'Heat olive oil in a pan over medium heat.',
+          'Add bell peppers and cook for 2 minutes.',
+          'Add spinach and cherry tomatoes, stir for 1 minute.',
+          'Beat the eggs in a bowl, season with salt and pepper, and pour into the pan.',
+          'Stir continuously until eggs are fully cooked. Serve warm!',
+        ],
+        'savedAt': FieldValue.serverTimestamp(),
+        'imagePath': 'lib/donot_have_diabetes/meal_plans/meal_images/Scrambled Eggs with Veggies.jpeg',
+      };
+
+      // Add recipe to user's saved recipes
+      await _firestore
+          .collection('users')
+          .doc(currentUserId)
+          .collection('saved_recipes')
+          .add(recipeData);
+
+      setState(() {
+        _recipeSaved = true;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Recipe saved successfully!')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error saving recipe: $e')),
+      );
+    } finally {
+      setState(() {
+        _isSaving = false;
+      });
+    }
+  }
+
+  // Add calories to user's daily intake
+  Future<void> _addCaloriesToDailyIntake() async {
+    if (_isAddingCalories) return;
+
+    setState(() {
+      _isAddingCalories = true;
+    });
+
+    try {
+      if (currentUserId == null) {
+        throw Exception('User not authenticated');
+      }
+
+      // Get today's date
+      final now = DateTime.now();
+
+      // Add to appropriate category collection
+      await _firestore
+          .collection('users')
+          .doc(currentUserId)
+          .collection('${category}_calories')
+          .add({
+        'name': recipeName,
+        'calories': calories,
+        'timestamp': Timestamp.fromDate(now),
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Calories added to your daily intake!')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error adding calories: $e')),
+      );
+    } finally {
+      setState(() {
+        _isAddingCalories = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +135,7 @@ class RecipeDetailScreen extends StatelessWidget {
         children: [
           // Background Image
           Image.asset(
-            'lib/donot_have_diabetes/meal_plans/meal_images/scramble.png',
+            'lib/donot_have_diabetes/meal_plans/meal_images/Scrambled Eggs with Veggies.jpeg',
             height: double.infinity,
             width: double.infinity,
             fit: BoxFit.cover,
@@ -48,7 +173,7 @@ class RecipeDetailScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: const Icon(
                         Icons.arrow_back,
-
+                        color: Colors.white,
                         size: 24,
                       ),
                     ),
@@ -78,7 +203,7 @@ class RecipeDetailScreen extends StatelessWidget {
                               children: [
                                 // Title
                                 const Text(
-                                  'Scrambled Eggs with vegies',
+                                  'Scrambled Eggs with Veggies',
                                   style: TextStyle(
                                     fontSize: 32,
                                     fontWeight: FontWeight.bold,
@@ -128,6 +253,7 @@ class RecipeDetailScreen extends StatelessWidget {
                                 const SizedBox(height: 8),
                                 _buildNumberedStep(5, 'Stir continuously until eggs are fully cooked. Serve warm!'),
 
+
                                 const SizedBox(height: 32),
 
                                 // Bottom buttons
@@ -135,35 +261,61 @@ class RecipeDetailScreen extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     // Calories button
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFF2E8B00),
-                                        borderRadius: BorderRadius.circular(30),
-                                      ),
-                                      child: const Text(
-                                        '250 kcal',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
+                                    GestureDetector(
+                                      onTap: _addCaloriesToDailyIntake,
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFF2E8B00),
+                                          borderRadius: BorderRadius.circular(30),
+                                        ),
+                                        child: _isAddingCalories
+                                            ? const SizedBox(
+                                          width: 20,
+                                          height: 20,
+                                          child: CircularProgressIndicator(
+                                            color: Colors.white,
+                                            strokeWidth: 2,
+                                          ),
+                                        )
+                                            : const Text(
+                                          '250 kcal',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
                                     ),
 
                                     // Save button
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFF4A90E2),
-                                        borderRadius: BorderRadius.circular(30),
-                                      ),
-                                      child: const Text(
-                                        'Save Recipe',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
+                                    GestureDetector(
+                                      onTap: _saveRecipe,
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                        decoration: BoxDecoration(
+                                          color: _recipeSaved
+                                              ? Colors.grey
+                                              : const Color(0xFF4A90E2),
+                                          borderRadius: BorderRadius.circular(30),
+                                        ),
+                                        child: _isSaving
+                                            ? const SizedBox(
+                                          width: 20,
+                                          height: 20,
+                                          child: CircularProgressIndicator(
+                                            color: Colors.white,
+                                            strokeWidth: 2,
+                                          ),
+                                        )
+                                            : Text(
+                                          _recipeSaved ? 'Saved' : 'Save Recipe',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -233,26 +385,6 @@ class RecipeDetailScreen extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-// Example of how to use this screen in your app
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: 'SF Pro Display',
-      ),
-      home: const RecipeDetailScreen(),
     );
   }
 }
