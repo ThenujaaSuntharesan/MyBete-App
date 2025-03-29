@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'total_screen.dart'; // Add this line
+import 'total_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -175,34 +174,34 @@ class AnimalProteinsScreen extends StatelessWidget {
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             children: [
-                            ProtienCard(
-                              name: 'Egg Whites',
-                              calories: 52,
-                              imagePath: 'assets/egg_whites.png',
-                              onAdd: (name, calories) {
-                              _addCalorieToFirebase(name, calories);
-                            },
-                          ),
+                              ProteinCard(
+                                name: 'Egg Whites',
+                                calories: 52,
+                                imagePath: 'assets/egg_whites.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
 
-                          const SizedBox(width: 12),
-                          ProteinCard(
-                              name: 'Shrimp',
-                              calories: 85,
-                              imagePath: 'assets/shrimp.png',
-                            onAdd: (name, calories) {
-                              _addCalorieToFirebase(name, calories);
-                            },
-                            ),
+                              const SizedBox(width: 12),
+                              ProteinCard(
+                                name: 'Shrimp',
+                                calories: 85,
+                                imagePath: 'assets/shrimp.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
 
-                          const SizedBox(width: 12),
-                          ProteinCard(
-                              name: 'Crab',
-                              calories: 82,
-                              imagePath: 'assets/crab.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                            ),
+                              const SizedBox(width: 12),
+                              ProteinCard(
+                                name: 'Crab',
+                                calories: 82,
+                                imagePath: 'assets/crab.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
 
                               const SizedBox(width: 12),
                               ProteinCard(
@@ -272,94 +271,94 @@ class AnimalProteinsScreen extends StatelessWidget {
                       const SizedBox(height: 16),
 
                       // Moderate-Calorie Animal Proteins Grid
-                          SizedBox(
-                            height: 200, // Set a fixed height for the horizontal scroll area
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: [
-                                  ProteinCard(
-                              name: 'Chicken Breast (Skinless, Cooked)',
-                              calories: 165,
-                              imagePath: 'assets/chicken_breast.png',
+                      SizedBox(
+                        height: 200, // Set a fixed height for the horizontal scroll area
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              ProteinCard(
+                                name: 'Chicken Breast (Skinless, Cooked)',
+                                calories: 165,
+                                imagePath: 'assets/chicken_breast.png',
                                 onAdd: (name, calories) {
                                   _addCalorieToFirebase(name, calories);
                                 },
-                            ),
-
-                          const SizedBox(width: 12),
-                          ProteinCard(
-                              name: 'Turkey Breast (Cooked)',
-                              calories: 135,
-                              imagePath: 'assets/turkey_breast.png',
-                              onAdd: (name, calories) {
-                              _addCalorieToFirebase(name, calories);
-                              },
-                            ),
-
-                          const SizedBox(width: 12),
-                          ProteinCard(
-                              name: 'Lean Beef (Sirloin, Cooked)',
-                              calories: 250,
-                              imagePath: 'assets/lean_beef.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                          ),
-
-                                  const SizedBox(width: 12),
-                                  ProteinCard(
-                                    name: 'Pork Tenderloin',
-                                    calories: 143,
-                                    imagePath: 'assets/lean_beef.png',
-                                    onAdd: (name, calories) {
-                                      _addCalorieToFirebase(name, calories);
-                                    },
-                                  ),
-
-                                  const SizedBox(width: 12),
-                                  ProteinCard(
-                                    name: 'Salmon(Cooked)',
-                                    calories: 206,
-                                    imagePath: 'assets/lean_beef.png',
-                                    onAdd: (name, calories) {
-                                      _addCalorieToFirebase(name, calories);
-                                    },
-                                  ),
-
-                                  const SizedBox(width: 12),
-                                  ProteinCard(
-                                    name: 'Tuna (Canned in water, drained)',
-                                    calories: 116,
-                                    imagePath: 'assets/lean_beef.png',
-                                    onAdd: (name, calories) {
-                                      _addCalorieToFirebase(name, calories);
-                                    },
-                                  ),
-
-                                  const SizedBox(width: 12),
-                                  ProteinCard(
-                                    name: 'Lamb (Cooked, lean Cuts)',
-                                    calories: 294,
-                                    imagePath: 'assets/lean_beef.png',
-                                    onAdd: (name, calories) {
-                                      _addCalorieToFirebase(name, calories);
-                                    },
-                                  ),
-
-                                  const SizedBox(width: 12),
-                                  ProteinCard(
-                                    name: 'Duck (Without Skin, Cooked)',
-                                    calories: 250,
-                                    imagePath: 'assets/lean_beef.png',
-                                    onAdd: (name, calories) {
-                                      _addCalorieToFirebase(name, calories);
-                                    },
-                                  ),
-                                ],
                               ),
-                            ),
+
+                              const SizedBox(width: 12),
+                              ProteinCard(
+                                name: 'Turkey Breast (Cooked)',
+                                calories: 135,
+                                imagePath: 'assets/turkey_breast.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              ProteinCard(
+                                name: 'Lean Beef (Sirloin, Cooked)',
+                                calories: 250,
+                                imagePath: 'assets/lean_beef.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              ProteinCard(
+                                name: 'Pork Tenderloin',
+                                calories: 143,
+                                imagePath: 'assets/lean_beef.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              ProteinCard(
+                                name: 'Salmon(Cooked)',
+                                calories: 206,
+                                imagePath: 'assets/lean_beef.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              ProteinCard(
+                                name: 'Tuna (Canned in water, drained)',
+                                calories: 116,
+                                imagePath: 'assets/lean_beef.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              ProteinCard(
+                                name: 'Lamb (Cooked, lean Cuts)',
+                                calories: 294,
+                                imagePath: 'assets/lean_beef.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              ProteinCard(
+                                name: 'Duck (Without Skin, Cooked)',
+                                calories: 250,
+                                imagePath: 'assets/lean_beef.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                            ],
                           ),
+                        ),
+                      ),
 
                       const SizedBox(height: 24),
 
@@ -392,33 +391,33 @@ class AnimalProteinsScreen extends StatelessWidget {
                           child: Row(
                             children: [
                               ProteinCard(
-                              name: 'Bacon',
-                              calories: 541,
-                              imagePath: 'assets/bacon.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                            ),
+                                name: 'Bacon',
+                                calories: 541,
+                                imagePath: 'assets/bacon.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
 
-                          const SizedBox(width: 12),
-                          ProteinCard(
-                              name: 'Salami',
-                              calories: 425,
-                              imagePath: 'assets/salami.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                            ),
+                              const SizedBox(width: 12),
+                              ProteinCard(
+                                name: 'Salami',
+                                calories: 425,
+                                imagePath: 'assets/salami.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
 
-                          const SizedBox(width: 12),
-                          ProteinCard(
-                              name: 'Pepperoni',
-                              calories: 494,
-                              imagePath: 'assets/pepperoni.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                            ),
+                              const SizedBox(width: 12),
+                              ProteinCard(
+                                name: 'Pepperoni',
+                                calories: 494,
+                                imagePath: 'assets/pepperoni.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
 
                               const SizedBox(width: 12),
                               ProteinCard(
@@ -431,8 +430,8 @@ class AnimalProteinsScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          ),
                         ),
+                      ),
                       // Add View Total Calories Button
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -508,7 +507,8 @@ class ProteinCard extends StatelessWidget {
   final String name;
   final int calories;
   final String imagePath;
-  final VoidCallback onAdd;
+  final void Function(String, int) onAdd;
+
 
   const ProteinCard({
     Key? key,

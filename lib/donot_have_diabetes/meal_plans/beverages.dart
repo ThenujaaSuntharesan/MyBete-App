@@ -77,7 +77,9 @@ class BeveragesScreen extends StatelessWidget {
                 children: [
                   // Back Button
                   GestureDetector(
-                    onTap: () {Navigator.pop(context);},
+                    onTap: () {
+                      Navigator.pop(context); // Navigates back to the previous screen
+                    },
                     child: const Icon(
                       Icons.arrow_back,
                       size: 30,
@@ -515,7 +517,8 @@ class BeverageCard extends StatelessWidget {
   final String name;
   final int calories;
   final String imagePath;
-  final Function(String, int) onAdd;
+  final void Function(String, int) onAdd;
+
 
   const BeverageCard({
     Key? key,
@@ -550,7 +553,11 @@ class BeverageCard extends StatelessWidget {
               child: Image.asset(
                 imagePath,
                 fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) => _getBeverageIcon(name),
+                errorBuilder: (context, error, stackTrace) => Container(
+                  height: 80,
+                  color: Colors.grey.shade200,
+                  child: const Icon(Icons.local_drink, size: 60),
+                ),
               ),
             ),
 

@@ -433,7 +433,8 @@ class GrainCard extends StatelessWidget {
   final String name;
   final int calories;
   final String imagePath;
-  final Function(String, int) onAdd;
+  final void Function(String, int) onAdd;
+
 
   const GrainCard({
     Key? key,
