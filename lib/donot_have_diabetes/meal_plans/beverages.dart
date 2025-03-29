@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'total_screen.dart'; // Add this line
+import 'total_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -29,33 +28,59 @@ class MyApp extends StatelessWidget {
 class BeveragesScreen extends StatelessWidget {
   const BeveragesScreen({Key? key}) : super(key: key);
 
+  // Function to add calorie to Firestore
+  void _addCalorieToFirebase(String name, int calories) async {
+    final userId = 'user123'; // Replace with actual user ID
+    final userRef = FirebaseFirestore.instance.collection('users').doc(userId);
+
+    try {
+      // Get the current total calorie count for the user
+      final userDoc = await userRef.get();
+      int totalCalories = 0;
+
+      if (userDoc.exists) {
+        // If user document exists, fetch total calories (or set to 0 if not present)
+        totalCalories = userDoc.data()?['total_calories'] ?? 0;
+      }
+
+      // Update the total calorie count by adding the beverage's calories
+      totalCalories += calories;
+
+      // Save the updated total calorie count back to Firestore
+      await userRef.set({
+        'total_calories': totalCalories,
+      }, SetOptions(merge: true));
+
+      // Add a document in a subcollection for individual beverages
+      await userRef.collection('beverage_calories').add({
+        'name': name,
+        'calories': calories,
+        'timestamp': FieldValue.serverTimestamp(), // Adds a timestamp for the entry
+      });
+
+      print("Calories added successfully!");
+    } catch (e) {
+      print("Error adding calories: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
-            // Header
+            // Status Bar and Back Button
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding: const EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0),
               child: Row(
                 children: [
+                  // Back Button
                   GestureDetector(
-                    onTap: () {
-                      // Handle back button press
-                    },
+                    onTap: () {Navigator.pop(context);},
                     child: const Icon(
                       Icons.arrow_back,
-                      size: 28,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  const Text(
-                    'Beverages',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
+                      size: 30,
                       color: Colors.black,
                     ),
                   ),
@@ -63,140 +88,376 @@ class BeveragesScreen extends StatelessWidget {
               ),
             ),
 
-            // Search Icon
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Icon(
-                  Icons.search,
-                  size: 28,
-                  color: Colors.black.withOpacity(0.6),
-                ),
-              ),
-            ),
-
-            // Scrollable Content
+            // Main Content
             Expanded(
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Low-Calorie Section
+                      const SizedBox(height: 8),
+
+                      // Beverages Title
                       const Text(
-                        'Low-Calorie Beverages (Below 10 kcal per 100ml)',
+                        'Beverages',
+                        style: TextStyle(
+                          fontSize: 36,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // Search Bar
+                      Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF3EDF7),
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            children: const [
+                              Icon(
+                                Icons.search,
+                                color: Colors.grey,
+                              ),
+                              SizedBox(width: 8),
+                              Expanded(
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                    hintText: 'Search beverages',
+                                    border: InputBorder.none,
+                                    hintStyle: TextStyle(
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // Low-Calorie Beverages Section
+                      const Text(
+                        'Low-Calorie Beverages',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+
+                      const Text(
+                        '(Below 10 kcal per 100ml)',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
                       ),
+
                       const SizedBox(height: 16),
 
                       // Low-Calorie Beverages Grid
-                      Row(
-                        children: [
-                          _buildBeverageCard(
-                            'Water',
-                            '0 kcal',
-                            'assets/images/water.png',
-                                () => _showBeverageDetails(context, 'Water'),
+                      SizedBox(
+                        height: 200, // Set a fixed height for the horizontal scroll area
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              BeverageCard(
+                                name: 'Water',
+                                calories: 0,
+                                imagePath: 'assets/water.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              BeverageCard(
+                                name: 'Black Coffee (Unsweetened)',
+                                calories: 2,
+                                imagePath: 'assets/black_coffee.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              BeverageCard(
+                                name: 'Black Tea (Unsweetened)',
+                                calories: 1,
+                                imagePath: 'assets/black_tea.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              BeverageCard(
+                                name: 'Green Tea (Unsweetened)',
+                                calories: 1,
+                                imagePath: 'assets/green_tea.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              BeverageCard(
+                                name: 'Herbal Tea (Unsweetened)',
+                                calories: 2,
+                                imagePath: 'assets/herbal_tea.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              BeverageCard(
+                                name: 'Diet Soda (Artificially Sweetened)',
+                                calories: 5,
+                                imagePath: 'assets/herbal_tea.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 12),
-                          _buildBeverageCard(
-                            'Black Coffee (Unsweetened)',
-                            '2 kcal',
-                            'assets/images/black_coffee.png',
-                                () => _showBeverageDetails(context, 'Black Coffee'),
-                          ),
-                          const SizedBox(width: 12),
-                          _buildBeverageCard(
-                            'Black Tea (Unsweetened)',
-                            '1 kcal',
-                            'assets/images/black_tea.png',
-                                () => _showBeverageDetails(context, 'Black Tea'),
-                          ),
-                        ],
+                        ),
                       ),
 
                       const SizedBox(height: 24),
 
-                      // Moderate-Calorie Section
+                      // Moderate-Calorie Beverages Section
                       const Text(
-                        'Moderate-Calorie Beverages (10-50 kcal per 100ml)',
+                        'Moderate-Calorie Beverages',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+
+                      const Text(
+                        '(10-50 kcal per 100ml)',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
                       ),
+
                       const SizedBox(height: 16),
 
                       // Moderate-Calorie Beverages Grid
-                      Row(
-                        children: [
-                          _buildBeverageCard(
-                            'Coconut Water (Unsweetened)',
-                            '19 kcal',
-                            'assets/images/coconut_water.png',
-                                () => _showBeverageDetails(context, 'Coconut Water'),
+                      SizedBox(
+                        height: 200, // Set a fixed height for the horizontal scroll area
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              BeverageCard(
+                                name: 'Coconut Water (Unsweetened)',
+                                calories: 19,
+                                imagePath: 'assets/coconut_water.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              BeverageCard(
+                                name: 'Soy Milk (Unsweetened)',
+                                calories: 33,
+                                imagePath: 'assets/soy_milk.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              BeverageCard(
+                                name: 'Almond Milk (Unsweetened)',
+                                calories: 15,
+                                imagePath: 'assets/almond_milk.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              BeverageCard(
+                                name: 'Orange Juice (Fresh)',
+                                calories: 45,
+                                imagePath: 'assets/orange_juice.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 12),
-                          _buildBeverageCard(
-                            'Soy Milk (Unsweetened)',
-                            '33 kcal',
-                            'assets/images/soy_milk.png',
-                                () => _showBeverageDetails(context, 'Soy Milk'),
-                          ),
-                          const SizedBox(width: 12),
-                          _buildBeverageCard(
-                            'Almond Milk (Unsweetened)',
-                            '15 kcal',
-                            'assets/images/almond_milk.png',
-                                () => _showBeverageDetails(context, 'Almond Milk'),
-                          ),
-                        ],
+                        ),
                       ),
 
                       const SizedBox(height: 24),
 
-                      // High-Calorie Section
+                      // High-Calorie Beverages Section
                       const Text(
-                        'High-Calorie Beverages (Above 50 kcal per 100ml)',
+                        'High-Calorie Beverages',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+
+                      const Text(
+                        '(Above 50 kcal per 100ml)',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
                       ),
+
                       const SizedBox(height: 16),
 
                       // High-Calorie Beverages Grid
-                      Row(
-                        children: [
-                          _buildBeverageCard(
-                            'Papaya Fruit Juice (Sweetened)',
-                            '70 kcal',
-                            'assets/images/papaya_juice.png',
-                                () => _showBeverageDetails(context, 'Papaya Juice'),
+                      SizedBox(
+                        height: 200, // Set a fixed height for the horizontal scroll area
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              BeverageCard(
+                                name: 'Papaya Fruit Juice (Sweetened)',
+                                calories: 70,
+                                imagePath: 'assets/papaya_juice.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              BeverageCard(
+                                name: 'Chocolate Milk',
+                                calories: 85,
+                                imagePath: 'assets/chocolate_milk.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              BeverageCard(
+                                name: 'Strawberry Milkshake',
+                                calories: 150,
+                                imagePath: 'assets/strawberry_milkshake.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              BeverageCard(
+                                name: 'Banana Smoothie',
+                                calories: 120,
+                                imagePath: 'assets/mango_smoothie.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              BeverageCard(
+                                name: 'Mango Lassi',
+                                calories: 150,
+                                imagePath: 'assets/whole_milk.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              BeverageCard(
+                                name: 'Beer',
+                                calories: 43,
+                                imagePath: 'assets/whole_milk.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              BeverageCard(
+                                name: 'Wine (Red/White)',
+                                calories: 85,
+                                imagePath: 'assets/whole_milk.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              BeverageCard(
+                                name: 'Whiskey',
+                                calories: 231,
+                                imagePath: 'assets/whole_milk.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              BeverageCard(
+                                name: 'Vodka',
+                                calories: 231,
+                                imagePath: 'assets/whole_milk.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              BeverageCard(
+                                name: 'Margarita',
+                                calories: 250,
+                                imagePath: 'assets/whole_milk.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 12),
-                          _buildBeverageCard(
-                            'Chocolate Milk',
-                            '85 kcal',
-                            'assets/images/chocolate_milk.png',
-                                () => _showBeverageDetails(context, 'Chocolate Milk'),
+                        ),
+                      ),
+
+                      // Add View Total Calories Button
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        child: Center(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const TotalScreen(category: 'Beverages')),
+                              );
+                            },
+                            child: const Text(
+                              'View Total Calories',
+                              style: TextStyle(fontSize: 18),
+                            ),
                           ),
-                          const SizedBox(width: 12),
-                          _buildBeverageCard(
-                            'Strawberry Milkshake',
-                            '150 kcal',
-                            'assets/images/strawberry_milkshake.png',
-                                () => _showBeverageDetails(context, 'Strawberry Milkshake'),
-                          ),
-                        ],
+                        ),
                       ),
                     ],
                   ),
@@ -220,10 +481,26 @@ class BeveragesScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildNavBarItem(Icons.book, true),
-                  _buildNavBarItem(Icons.favorite, false),
-                  _buildNavBarItem(Icons.fitness_center, false),
-                  _buildNavBarItem(Icons.person, false),
+                  NavBarItem(
+                    icon: Icons.menu_book,
+                    color: Colors.blue,
+                    isSelected: true,
+                  ),
+                  NavBarItem(
+                    icon: Icons.favorite,
+                    color: Colors.black,
+                    isSelected: false,
+                  ),
+                  NavBarItem(
+                    icon: Icons.fitness_center,
+                    color: Colors.black,
+                    isSelected: false,
+                  ),
+                  NavBarItem(
+                    icon: Icons.person,
+                    color: Colors.black,
+                    isSelected: false,
+                  ),
                 ],
               ),
             ),
@@ -232,26 +509,54 @@ class BeveragesScreen extends StatelessWidget {
       ),
     );
   }
+}
 
-  // Helper method to build beverage cards
-  Widget _buildBeverageCard(String name, String calories, String imagePath, VoidCallback onTap) {
-    return Expanded(
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        padding: const EdgeInsets.all(12),
+class BeverageCard extends StatelessWidget {
+  final String name;
+  final int calories;
+  final String imagePath;
+  final Function(String, int) onAdd;
+
+  const BeverageCard({
+    Key? key,
+    required this.name,
+    required this.calories,
+    required this.imagePath,
+    required this.onAdd,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 160,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 5,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Placeholder for beverage image
-            Container(
-              height: 80,
-              alignment: Alignment.center,
-              child: _getBeverageImage(name),
+            // Beverage Image
+            SizedBox(
+              height: 100,
+              child: Image.asset(
+                imagePath,
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) => _getBeverageIcon(name),
+              ),
             ),
-            const SizedBox(height: 8),
+
+            const SizedBox(height: 15),
+
+            // Beverage Name
             Text(
               name,
               style: const TextStyle(
@@ -259,32 +564,51 @@ class BeveragesScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
+              textAlign: TextAlign.center,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
+
             const SizedBox(height: 4),
+
+            // Calorie Info and Add Button
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  calories,
+                  '$calories kcal',
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.green,
+                    color: Color(0xFF00C853),
                   ),
                 ),
-                Container(
-                  width: 28,
-                  height: 28,
-                  decoration: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: const Icon(
-                    Icons.add,
-                    color: Colors.white,
-                    size: 20,
+
+                GestureDetector(
+                  onTap: () {
+                    onAdd(name, calories);  // Trigger the onAdd callback with proper parameters
+
+                    // Show a snackbar to confirm addition
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Added $name ($calories kcal)'),
+                        duration: const Duration(seconds: 1),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  },
+                  child: Container(
+                    width: 28,
+                    height: 28,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF00FF62),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: const Icon(
+                      Icons.add,
+                      color: Colors.white,
+                      size: 20,
+                    ),
                   ),
                 ),
               ],
@@ -294,63 +618,28 @@ class BeveragesScreen extends StatelessWidget {
       ),
     );
   }
+}
 
-  // Helper method to get beverage image based on name
-  Widget _getBeverageImage(String name) {
-    // In a real app, you would use actual image assets
-    // For this example, we'll use simple icons based on the beverage name
-    IconData iconData;
-    Color iconColor;
+class NavBarItem extends StatelessWidget {
+  final IconData icon;
+  final Color color;
+  final bool isSelected;
 
-    if (name.contains('Water')) {
-      iconData = Icons.water_drop;
-      iconColor = Colors.blue;
-    } else if (name.contains('Coffee')) {
-      iconData = Icons.coffee;
-      iconColor = Colors.brown;
-    } else if (name.contains('Tea')) {
-      iconData = Icons.emoji_food_beverage;
-      iconColor = Colors.pink;
-    } else if (name.contains('Coconut')) {
-      iconData = Icons.beach_access;
-      iconColor = Colors.green;
-    } else if (name.contains('Milk')) {
-      iconData = Icons.opacity;
-      iconColor = Colors.amber;
-    } else if (name.contains('Juice')) {
-      iconData = Icons.local_drink;
-      iconColor = Colors.orange;
-    } else if (name.contains('Milkshake')) {
-      iconData = Icons.local_cafe;
-      iconColor = Colors.red;
-    } else {
-      iconData = Icons.local_drink;
-      iconColor = Colors.purple;
-    }
+  const NavBarItem({
+    Key? key,
+    required this.icon,
+    required this.color,
+    required this.isSelected,
+  }) : super(key: key);
 
-    return Icon(
-      iconData,
-      size: 48,
-      color: iconColor,
-    );
-  }
-
-  // Helper method to build bottom navigation bar items
-  Widget _buildNavBarItem(IconData icon, bool isSelected) {
-    return Icon(
-      icon,
-      size: 28,
-      color: isSelected ? Colors.blue : Colors.black54,
-    );
-  }
-
-  // Helper method to show beverage details
-  void _showBeverageDetails(BuildContext context, String beverageName) {
-    // In a real app, this would navigate to a details page
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('$beverageName details'),
-        duration: const Duration(seconds: 1),
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Icon(
+        icon,
+        size: 28,
+        color: color,
       ),
     );
   }
