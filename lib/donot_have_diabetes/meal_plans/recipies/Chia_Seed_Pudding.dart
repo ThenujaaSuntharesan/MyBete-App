@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class RecipeDetailScreen extends StatefulWidget {
-  const RecipeDetailScreen({Key? key}) : super(key: key);
+class B4RecipeDetailScreen extends StatefulWidget {
+  const B4RecipeDetailScreen({Key? key}) : super(key: key);
 
   @override
-  _RecipeDetailScreenState createState() => _RecipeDetailScreenState();
+  _B4RecipeDetailScreenState createState() => _B4RecipeDetailScreenState();
 }
 
-class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
+class _B4RecipeDetailScreenState extends State<B4RecipeDetailScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -18,8 +18,8 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
   bool _recipeSaved = false;
 
   // Recipe data
-  final String recipeName = 'Scrambled Eggs with Veggies';
-  final int calories = 250;
+  final String recipeName = 'Chia Seed Pudding';
+  final int calories = 220;
   final String category = 'breakfast';
 
   // Get current user ID
@@ -44,22 +44,21 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
         'calories': calories,
         'category': category,
         'ingredients': [
-          '2 eggs',
-          '¼ cup chopped spinach',
-          '¼ cup cherry tomatoes (halved)',
-          '1 tbsp olive oil',
-          'Salt & pepper to taste',
+          '2 tbsp chia seeds',
+          '½ cup milk (or coconut milk)',
+          '1 tsp honey',
+          '¼ tsp vanilla extract',
+          'Fresh fruits for topping',
 
         ],
         'instructions': [
-          'Heat olive oil in a pan over medium heat.',
-          'Add bell peppers and cook for 2 minutes.',
-          'Add spinach and cherry tomatoes, stir for 1 minute.',
-          'Beat the eggs in a bowl, season with salt and pepper, and pour into the pan.',
-          'Stir continuously until eggs are fully cooked. Serve warm!',
+          'In a bowl or jar, mix chia seeds, milk, honey, and vanilla extract.',
+          'Stir well and let sit for 5 minutes, then stir again.',
+          'Cover and refrigerate for at least 4 hours (or overnight).',
+          'Top with fresh fruits and enjoy!',
         ],
         'savedAt': FieldValue.serverTimestamp(),
-        'imagePath': 'lib/donot_have_diabetes/meal_plans/meal_images/Scrambled Eggs with Veggies.jpeg',
+        'imagePath': 'lib/donot_have_diabetes/meal_plans/meal_images/Chia Seed Pudding Recipe - Belly Full.jpeg',
       };
 
       // Add recipe to user's saved recipes
@@ -135,7 +134,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
         children: [
           // Background Image
           Image.asset(
-            'lib/donot_have_diabetes/meal_plans/meal_images/Scrambled Eggs with Veggies.jpeg',
+            'lib/donot_have_diabetes/meal_plans/meal_images/Chia Seed Pudding Recipe - Belly Full.jpeg',
             height: double.infinity,
             width: double.infinity,
             fit: BoxFit.cover,
@@ -203,7 +202,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                               children: [
                                 // Title
                                 const Text(
-                                  'Scrambled Eggs with Veggies',
+                                  'Chia Seed Pudding',
                                   style: TextStyle(
                                     fontSize: 32,
                                     fontWeight: FontWeight.bold,
@@ -224,12 +223,12 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                _buildBulletPoint('2 eggs'),
-                                _buildBulletPoint('¼ cup chopped spinach'),
-                                _buildBulletPoint('¼ cup chopped bell peppers'),
-                                _buildBulletPoint('¼ cup cherry tomatoes (halved)'),
-                                _buildBulletPoint('1 tbsp olive oil'),
-                                _buildBulletPoint('Salt & pepper to taste'),
+                                _buildBulletPoint('2 tbsp chia seeds'),
+                                _buildBulletPoint('½ cup milk (or coconut milk)'),
+                                _buildBulletPoint('1 tsp honey'),
+                                _buildBulletPoint('¼ tsp vanilla extract'),
+                                _buildBulletPoint('Fresh fruits for topping'),
+
 
                                 const SizedBox(height: 24),
 
@@ -243,16 +242,13 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(1, 'Heat olive oil in a pan over medium heat.'),
+                                _buildNumberedStep(1, 'In a bowl or jar, mix chia seeds, milk, honey, and vanilla extract.'),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(2, 'Add bell peppers and cook for 2 minutes.'),
+                                _buildNumberedStep(2, 'Stir well and let sit for 5 minutes, then stir again.'),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(3, 'Add spinach and cherry tomatoes, stir for 1 minute.'),
+                                _buildNumberedStep(3, 'Cover and refrigerate for at least 4 hours (or overnight).'),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(4, 'Beat the eggs in a bowl, season with salt and pepper, and pour into the pan.'),
-                                const SizedBox(height: 8),
-                                _buildNumberedStep(5, 'Stir continuously until eggs are fully cooked. Serve warm!'),
-
+                                _buildNumberedStep(4, 'Top with fresh fruits and enjoy!'),
 
                                 const SizedBox(height: 32),
 
@@ -279,7 +275,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                           ),
                                         )
                                             : const Text(
-                                          '250 kcal',
+                                          '220 kcal',
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 20,
@@ -349,6 +345,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
+              color: Colors.black,
             ),
           ),
           Expanded(
@@ -356,6 +353,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
               text,
               style: const TextStyle(
                 fontSize: 18,
+                color: Colors.black,
               ),
             ),
           ),
@@ -374,6 +372,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
+            color: Colors.black,
           ),
         ),
         Expanded(
@@ -381,6 +380,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
             text,
             style: const TextStyle(
               fontSize: 18,
+              color: Colors.black,
             ),
           ),
         ),

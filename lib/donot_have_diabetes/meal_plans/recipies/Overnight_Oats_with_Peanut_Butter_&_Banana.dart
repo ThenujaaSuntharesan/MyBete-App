@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class RecipeDetailScreen extends StatefulWidget {
-  const RecipeDetailScreen({Key? key}) : super(key: key);
+class B3RecipeDetailScreen extends StatefulWidget {
+  const B3RecipeDetailScreen({Key? key}) : super(key: key);
 
   @override
-  _RecipeDetailScreenState createState() => _RecipeDetailScreenState();
+  _B3RecipeDetailScreenState createState() => _B3RecipeDetailScreenState();
 }
 
-class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
+class _B3RecipeDetailScreenState extends State<B3RecipeDetailScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -18,8 +18,8 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
   bool _recipeSaved = false;
 
   // Recipe data
-  final String recipeName = 'Banana Pancakes (No Flour!)';
-  final int calories = 300;
+  final String recipeName = 'Overnight Oats with Peanut Butter & Banana';
+  final int calories = 450;
   final String category = 'breakfast';
 
   // Get current user ID
@@ -44,22 +44,21 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
         'calories': calories,
         'category': category,
         'ingredients': [
-          '1 ripe banana',
-          '2 eggs',
-          '¼ tsp cinnamon',
-          '½ tsp vanilla extract',
-          '½ tsp baking powder (optional for fluffiness)',
-
+          '½ cup rolled oats',
+          '½ cup milk (or almond milk)',
+          '1 tbsp chia seeds',
+          '1 tbsp peanut butter',
+          '½ banana (sliced)',
+          '1 tsp honey',
         ],
         'instructions': [
-          'Mash the banana in a bowl.',
-          'Add eggs, cinnamon, vanilla extract, and baking powder. Mix well.',
-          'Heat a non-stick pan over medium heat.',
-          'Pour small amounts of batter onto the pan and cook for 1-2 minutes per side.',
-          'Pour small amounts of batter onto the pan and cook for 1-2 minutes per side.',
+          'In a jar, mix oats, milk, chia seeds, and honey.',
+          'Stir well, cover, and refrigerate overnight.',
+          'In the morning, top with banana slices and peanut butter.',
+          'Enjoy cold or warm it up slightly!',
         ],
         'savedAt': FieldValue.serverTimestamp(),
-        'imagePath': 'lib/donot_have_diabetes/meal_plans/meal_images/Banana Pancakes (No Flour!).jpeg',
+        'imagePath': 'lib/donot_have_diabetes/meal_plans/meal_images/oats.png',
       };
 
       // Add recipe to user's saved recipes
@@ -135,7 +134,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
         children: [
           // Background Image
           Image.asset(
-            'lib/donot_have_diabetes/meal_plans/meal_images/Banana Pancakes (No Flour!).jpeg',
+            'lib/donot_have_diabetes/meal_plans/meal_images/oats.png',
             height: double.infinity,
             width: double.infinity,
             fit: BoxFit.cover,
@@ -203,7 +202,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                               children: [
                                 // Title
                                 const Text(
-                                  'Banana Pancakes (No Flour!)',
+                                  'Overnight Oats with Peanut Butter & Banana',
                                   style: TextStyle(
                                     fontSize: 32,
                                     fontWeight: FontWeight.bold,
@@ -221,15 +220,16 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black,
+
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                _buildBulletPoint('1 ripe banana'),
-                                _buildBulletPoint('2 eggs'),
-                                _buildBulletPoint('¼ tsp cinnamon'),
-                                _buildBulletPoint('½ tsp vanilla extract'),
-                                _buildBulletPoint('½ tsp baking powder (optional for fluffiness)'),
-
+                                _buildBulletPoint('½ cup rolled oats'),
+                                _buildBulletPoint('½ cup milk (or almond milk)'),
+                                _buildBulletPoint('1 tbsp chia seeds'),
+                                _buildBulletPoint('1 tbsp peanut butter'),
+                                _buildBulletPoint('½ banana (sliced)'),
+                                _buildBulletPoint('1 tsp honey'),
 
                                 const SizedBox(height: 24),
 
@@ -240,19 +240,17 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black,
+
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(1, 'Mash the banana in a bowl.'),
+                                _buildNumberedStep(1, 'In a jar, mix oats, milk, chia seeds, and honey.'),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(2, 'Add eggs, cinnamon, vanilla extract, and baking powder. Mix well.'),
+                                _buildNumberedStep(2, 'Stir well, cover, and refrigerate overnight.'),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(3, 'Heat a non-stick pan over medium heat.'),
+                                _buildNumberedStep(3, 'In the morning, top with banana slices and peanut butter.'),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(4, 'Pour small amounts of batter onto the pan and cook for 1-2 minutes per side.'),
-                                const SizedBox(height: 8),
-                                _buildNumberedStep(5, 'Serve with honey or berries!'),
-
+                                _buildNumberedStep(4, 'Enjoy cold or warm it up slightly!'),
 
                                 const SizedBox(height: 32),
 
@@ -279,7 +277,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                           ),
                                         )
                                             : const Text(
-                                          '300 kcal',
+                                          '450 kcal',
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 20,
@@ -349,6 +347,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
+              color: Colors.black,
             ),
           ),
           Expanded(
@@ -356,6 +355,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
               text,
               style: const TextStyle(
                 fontSize: 18,
+                color: Colors.black,
               ),
             ),
           ),
@@ -374,6 +374,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
+            color: Colors.black,
           ),
         ),
         Expanded(
@@ -381,6 +382,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
             text,
             style: const TextStyle(
               fontSize: 18,
+              color: Colors.black,
             ),
           ),
         ),

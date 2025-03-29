@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class RecipeDetailScreen extends StatefulWidget {
-  const RecipeDetailScreen({Key? key}) : super(key: key);
+class B10RecipeDetailScreen extends StatefulWidget {
+  const B10RecipeDetailScreen({Key? key}) : super(key: key);
 
   @override
-  _RecipeDetailScreenState createState() => _RecipeDetailScreenState();
+  _B10RecipeDetailScreenState createState() => _B10RecipeDetailScreenState();
 }
 
-class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
+class _B10RecipeDetailScreenState extends State<B10RecipeDetailScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -18,7 +18,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
   bool _recipeSaved = false;
 
   // Recipe data
-  final String recipeName = 'Quinoa Breakfast Bowl';
+  final String recipeName = 'Banana Smoothie Bowl';
   final int calories = 350;
   final String category = 'breakfast';
 
@@ -44,21 +44,21 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
         'calories': calories,
         'category': category,
         'ingredients': [
-          '½ cup cooked quinoa',
+          '1 frozen banana',
+          '½ cup frozen berries',
+          '½ cup Greek yogurt',
           '½ cup almond milk',
-          '1 tbsp honey or maple syrup',
-          '¼ tsp cinnamon',
-          '¼ cup mixed nuts (almonds, walnuts, pecans)',
-          '¼ cup fresh berries',
+          '1 tbsp chia seeds',
+          '¼ cup granola for topping',
         ],
         'instructions': [
-          'In a bowl, mix cooked quinoa with almond milk, honey, and cinnamon.',
-          'Top with mixed nuts and berries.',
-          'Serve warm or cold!',
+          'Blend banana, berries, Greek yogurt, almond milk, and chia seeds until smooth.',
+          'Pour into a bowl and top with granola, nuts, or extra fruit.',
+          'Enjoy with a spoon!',
 
         ],
         'savedAt': FieldValue.serverTimestamp(),
-        'imagePath': 'lib/donot_have_diabetes/meal_plans/meal_images/Quinoa Breakfast Bowl.jpeg',
+        'imagePath': 'lib/donot_have_diabetes/meal_plans/meal_images/Banana Smoothie Bowl.jpeg',
       };
 
       // Add recipe to user's saved recipes
@@ -134,7 +134,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
         children: [
           // Background Image
           Image.asset(
-            'lib/donot_have_diabetes/meal_plans/meal_images/Quinoa Breakfast Bowl.jpeg',
+            'lib/donot_have_diabetes/meal_plans/meal_images/Banana Smoothie Bowl.jpeg',
             height: double.infinity,
             width: double.infinity,
             fit: BoxFit.cover,
@@ -202,7 +202,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                               children: [
                                 // Title
                                 const Text(
-                                  'Quinoa Breakfast Bowl',
+                                  'Banana Smoothie Bowl',
                                   style: TextStyle(
                                     fontSize: 32,
                                     fontWeight: FontWeight.bold,
@@ -223,12 +223,12 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                _buildBulletPoint('½ cup cooked quinoa'),
+                                _buildBulletPoint('1 frozen banana'),
+                                _buildBulletPoint('½ cup frozen berries'),
+                                _buildBulletPoint('½ cup Greek yogurt'),
                                 _buildBulletPoint('½ cup almond milk'),
-                                _buildBulletPoint('1 tbsp honey or maple syrup'),
-                                _buildBulletPoint('¼ tsp cinnamon'),
-                                _buildBulletPoint('¼ cup mixed nuts (almonds, walnuts, pecans)'),
-                                _buildBulletPoint('¼ cup fresh berries'),
+                                _buildBulletPoint('1 tbsp chia seeds'),
+                                _buildBulletPoint('¼ cup granola for topping'),
 
                                 const SizedBox(height: 24),
 
@@ -242,11 +242,12 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(1, 'In a bowl, mix cooked quinoa with almond milk, honey, and cinnamon.'),
+                                _buildNumberedStep(1, 'Blend banana, berries, Greek yogurt, almond milk, and chia seeds until smooth.'),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(2, 'Top with mixed nuts and berries.'),
+                                _buildNumberedStep(2, 'Pour into a bowl and top with granola, nuts, or extra fruit.'),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(3, 'Serve warm or cold!'),
+                                _buildNumberedStep(3, 'Enjoy with a spoon!'),
+
 
                                 const SizedBox(height: 32),
 
@@ -273,7 +274,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                           ),
                                         )
                                             : const Text(
-                                          '350 kcal',
+                                          '300 kcal',
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 20,
@@ -343,6 +344,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
+              color: Colors.black,
             ),
           ),
           Expanded(
@@ -350,6 +352,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
               text,
               style: const TextStyle(
                 fontSize: 18,
+                color: Colors.black,
               ),
             ),
           ),
@@ -368,6 +371,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
+            color: Colors.black,
           ),
         ),
         Expanded(
@@ -375,6 +379,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
             text,
             style: const TextStyle(
               fontSize: 18,
+              color: Colors.black,
             ),
           ),
         ),

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class RecipeDetailScreen extends StatefulWidget {
-  const RecipeDetailScreen({Key? key}) : super(key: key);
+class B6RecipeDetailScreen extends StatefulWidget {
+  const B6RecipeDetailScreen({Key? key}) : super(key: key);
 
   @override
-  _RecipeDetailScreenState createState() => _RecipeDetailScreenState();
+  _B6RecipeDetailScreenState createState() => _B6RecipeDetailScreenState();
 }
 
-class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
+class _B6RecipeDetailScreenState extends State<B6RecipeDetailScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -58,7 +58,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
           'TTop with a poached or boiled egg if desired.',
         ],
         'savedAt': FieldValue.serverTimestamp(),
-        'imagePath': 'lib/donot_have_diabetes/meal_plans/meal_images/Whole Grain Avocado Toast.jpeg',
+        'imagePath': 'lib/donot_have_diabetes/meal_plans/meal_images/Creamy Avocado Toast with a Twist.jpeg',
       };
 
       // Add recipe to user's saved recipes
@@ -134,7 +134,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
         children: [
           // Background Image
           Image.asset(
-            'lib/donot_have_diabetes/meal_plans/meal_images/Whole Grain Avocado Toast.jpeg',
+            'lib/donot_have_diabetes/meal_plans/meal_images/Creamy Avocado Toast with a Twist.jpeg',
             height: double.infinity,
             width: double.infinity,
             fit: BoxFit.cover,
@@ -345,6 +345,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
+              color: Colors.black,
             ),
           ),
           Expanded(
@@ -352,6 +353,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
               text,
               style: const TextStyle(
                 fontSize: 18,
+                color: Colors.black,
               ),
             ),
           ),
@@ -370,6 +372,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
+            color: Colors.black,
           ),
         ),
         Expanded(
@@ -377,6 +380,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
             text,
             style: const TextStyle(
               fontSize: 18,
+              color: Colors.black,
             ),
           ),
         ),
