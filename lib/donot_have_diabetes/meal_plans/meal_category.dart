@@ -4,7 +4,7 @@ import 'vegetables.dart';
 import 'fruits.dart';
 import 'bakery.dart';
 import 'grains.dart';
-import 'Animal.dart';
+import 'protein.dart';
 import 'dairy.dart';
 import 'beverages.dart';
 

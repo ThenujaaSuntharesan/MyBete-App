@@ -536,7 +536,8 @@ class BakeryItemCard extends StatelessWidget {
   final String name;
   final int calories;
   final String imagePath;
-  final VoidCallback onAdd;
+  final void Function(String, int) onAdd;
+
 
   const BakeryItemCard({
     Key? key,
@@ -549,6 +550,7 @@ class BakeryItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 160, // Added width constraint for consistency
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -609,7 +611,19 @@ class BakeryItemCard extends StatelessWidget {
                 ),
 
                 GestureDetector(
-                  onTap: onAdd,
+                  onTap: () {
+                    // Call onAdd with the required parameters
+                    onAdd(name, calories);
+
+                    // Show a snackbar to confirm addition
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Added $name ($calories kcal)'),
+                        duration: const Duration(seconds: 1),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  },
                   child: Container(
                     width: 28,
                     height: 28,
