@@ -1,250 +1,305 @@
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(const music());
 }
 
 class music extends StatelessWidget {
-  const music({super.key});
+  const music({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
+    
     return MaterialApp(
-      title: 'Relax Your Mind',
       debugShowCheckedModeBanner: false,
+      title: 'Relax Your Mind',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: Colors.white,
-        fontFamily: 'SF Pro Display',
+        scaffoldBackgroundColor: const Color(0xFFF7F7F7),
       ),
       home: const RelaxApp(),
     );
   }
 }
 
-class RelaxApp extends StatelessWidget {
-  const RelaxApp({super.key});
+class RelaxApp extends StatefulWidget {
+  const RelaxApp({Key? key}) : super(key: key);
+
+  @override
+  State<RelaxApp> createState() => _RelaxAppState();
+}
+
+class _RelaxAppState extends State<RelaxApp> {
+  final AudioPlayer audioPlayer = AudioPlayer();
+  String? currentlyPlaying;
+  bool isPlaying = false;
+  int selectedIndex = 0;
+  
+  final List<SoundCategory> categories = [
+    SoundCategory(
+      name: 'Rain',
+      image: 'assets/images/rain.jpg',
+      audioPath: 'assets/audio/rain.mp3',
+    ),
+    SoundCategory(
+      name: 'Forest',
+      image: 'assets/images/forest.jpg',
+      audioPath: 'assets/audio/forest.mp3',
+    ),
+    SoundCategory(
+      name: 'Night',
+      image: 'assets/images/night.jpg',
+      audioPath: 'assets/audio/night.mp3',
+    ),
+    SoundCategory(
+      name: 'Ambient',
+      image: 'assets/images/ambient.jpg',
+      audioPath: 'assets/audio/ambient.mp3',
+    ),
+    SoundCategory(
+      name: 'Jazz',
+      image: 'assets/images/jazz.jpg',
+      audioPath: 'assets/audio/jazz.mp3',
+    ),
+  ];
+
+  final List<RecentPlay> recentPlays = [
+    RecentPlay(
+      image: 'assets/images/rain_large.jpg',
+      audioPath: 'assets/audio/rain.mp3',
+    ),
+    RecentPlay(
+      image: 'assets/images/forest_large.jpg',
+      audioPath: 'assets/audio/forest.mp3',
+    ),
+  ];
+
+  @override
+  void dispose() {
+    audioPlayer.dispose();
+    super.dispose();
+  }
+
+  Future<void> playSound(String audioPath) async {
+    if (isPlaying && currentlyPlaying == audioPath) {
+      await audioPlayer.pause();
+      setState(() {
+        isPlaying = false;
+      });
+    } else {
+      await audioPlayer.stop();
+      await audioPlayer.play(AssetSource(audioPath));
+      setState(() {
+        isPlaying = true;
+        currentlyPlaying = audioPath;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Search Bar
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-                child: Container(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 16),
+                // Search Bar
+                Container(
+                  height: 50,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFE6DBFF),
+                    color: const Color(0xFFE8DEF8).withOpacity(0.5),
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
                   child: const Row(
                     children: [
-                      Icon(Icons.search, color: Colors.black54),
+                      SizedBox(width: 16),
+                      Icon(Icons.search, color: Color(0xFF49454F)),
                       SizedBox(width: 8),
                     ],
                   ),
                 ),
-              ),
-              
-              // Relax Your Mind Title
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-                child: Text(
+                
+                const SizedBox(height: 32),
+                
+                // Relax Your Mind Title
+                const Text(
                   'Relax Your Mind',
                   style: TextStyle(
-                    fontSize: 28,
+                    fontSize: 32,
                     fontWeight: FontWeight.bold,
+                    color: Color(0xFF050505),
                   ),
                 ),
-              ),
-              
-              // Sound Categories
-              SizedBox(
-                height: 120,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  children: const [
-                    SoundCategory(title: 'Rain', imagePath: 'images/rain.png'),
-                    SoundCategory(title: 'Forest', imagePath: 'assets/forest.jpg'),
-                    SoundCategory(title: 'Night', imagePath: 'assets/night.jpg'),
-                    SoundCategory(title: 'Ambient', imagePath: 'assets/ambient.jpg'),
-                    SoundCategory(title: 'Jazz', imagePath: 'assets/jazz.jpg'),
-                  ],
+                
+                const SizedBox(height: 32),
+                
+                // Categories
+                SizedBox(
+                  height: 120,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: categories.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          playSound(categories[index].audioPath);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 16.0),
+                          child: Column(
+                            children: [
+                              Container(
+                                width: 80,
+                                height: 80,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                    image: AssetImage(categories[index].image),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                categories[index].name,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              ),
-              
-              const SizedBox(height: 24),
-              
-              // Recent Plays
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: Text(
+                
+                const SizedBox(height: 32),
+                
+                // Recent Plays
+                const Text(
                   'Recent Plays',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
+                    color: Color(0xFF050505),
                   ),
                 ),
-              ),
-              
-              // Recent Plays Grid
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: Image.asset(
-                          'assets/rain_leaves.jpg',
-                          height: 200,
-                          fit: BoxFit.cover,
+                
+                const SizedBox(height: 16),
+                
+                // Recent Plays Cards
+                SizedBox(
+                  height: 200,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: recentPlays.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          playSound(recentPlays[index].audioPath);
+                        },
+                        child: Container(
+                          width: 150,
+                          margin: const EdgeInsets.only(right: 16),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            image: DecorationImage(
+                              image: AssetImage(recentPlays[index].image),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          child: Stack(
+                            alignment: Alignment.bottomRight,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Container(
+                                  width: 40,
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFF61C1C9).withOpacity(0.7),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(
+                                    currentlyPlaying == recentPlays[index].audioPath && isPlaying
+                                        ? Icons.pause
+                                        : Icons.play_arrow,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: Image.asset(
-                          'assets/forest_path.jpg',
-                          height: 200,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  ],
+                      );
+                    },
+                  ),
                 ),
-              ),
-              
-              const SizedBox(height: 24),
-              
-              // Favorites
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: Text(
+                
+                const SizedBox(height: 32),
+                
+                // Favorites
+                const Text(
                   'Favorite',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
+                    color: Color(0xFF050505),
                   ),
                 ),
-              ),
-              
-              // Favorites Row
-              SizedBox(
-                height: 120,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  children: [
-                    Container(
-                      width: 100,
-                      margin: const EdgeInsets.only(right: 12),
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                    ),
-                    Container(
-                      width: 100,
-                      margin: const EdgeInsets.only(right: 12),
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                    ),
-                    Container(
-                      width: 100,
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              
-              const SizedBox(height: 24),
-              
-              // Rain and Storm Sounds
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Rain and Storm Sounds',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFE6FFF6),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Text(
-                        '24 sessions',
-                        style: TextStyle(
-                          color: Color(0xFF1DAC92),
-                          fontWeight: FontWeight.w500,
+                
+                const SizedBox(height: 16),
+                
+                // Favorite Cards
+                SizedBox(
+                  height: 200,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 3,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        width: 150,
+                        margin: const EdgeInsets.only(right: 16),
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(16),
                         ),
-                      ),
-                    ),
-                  ],
+                      );
+                    },
+                  ),
                 ),
-              ),
-              
-              // Sound Sessions
-              SizedBox(
-                height: 180,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  children: const [
-                    SoundSession(
-                      title: 'Gentle Rain',
-                      duration: '25 min',
-                      isGuided: false,
-                      imagePath: 'assets/gentle_rain.jpg',
-                    ),
-                    SoundSession(
-                      title: 'Heavy Rain',
-                      duration: '25 min',
-                      isGuided: false,
-                      imagePath: 'assets/heavy_rain.jpg',
-                    ),
-                    SoundSession(
-                      title: 'Thunder',
-                      duration: '25 min',
-                      isGuided: false,
-                      imagePath: 'assets/thunder.jpg',
-                    ),
-                  ],
-                ),
-              ),
-              
-              const SizedBox(height: 80), // Space for bottom navigation
-            ],
+                
+                const SizedBox(height: 80),
+              ],
+            ),
           ),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        currentIndex: selectedIndex,
+        onTap: (index) {
+          setState(() {
+            selectedIndex = index;
+          });
+        },
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.black,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.menu_book),
+            icon: Icon(Icons.book),
             label: '',
           ),
           BottomNavigationBarItem(
@@ -252,7 +307,7 @@ class RelaxApp extends StatelessWidget {
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.nightlight_round),
+            icon: Icon(Icons.headphones),
             label: '',
           ),
           BottomNavigationBarItem(
@@ -265,133 +320,24 @@ class RelaxApp extends StatelessWidget {
   }
 }
 
-class SoundCategory extends StatelessWidget {
-  final String title;
-  final String imagePath;
-  
-  const SoundCategory({
-    super.key,
-    required this.title,
-    required this.imagePath,
-  });
+class SoundCategory {
+  final String name;
+  final String image;
+  final String audioPath;
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 80,
-      margin: const EdgeInsets.only(right: 16),
-      child: Column(
-        children: [
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                image: AssetImage(imagePath),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-  }
+  SoundCategory({
+    required this.name,
+    required this.image,
+    required this.audioPath,
+  });
 }
 
-class SoundSession extends StatelessWidget {
-  final String title;
-  final String duration;
-  final bool isGuided;
-  final String imagePath;
-  
-  const SoundSession({
-    super.key,
-    required this.title,
-    required this.duration,
-    required this.isGuided,
-    required this.imagePath,
-  });
+class RecentPlay {
+  final String image;
+  final String audioPath;
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 160,
-      margin: const EdgeInsets.only(right: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: Stack(
-              children: [
-                Image.asset(
-                  imagePath,
-                  height: 120,
-                  width: 160,
-                  fit: BoxFit.cover,
-                ),
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Colors.transparent, Colors.black54],
-                      ),
-                    ),
-                    child: Text(
-                      title,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              const Icon(Icons.headphones, size: 16, color: Colors.grey),
-              const SizedBox(width: 4),
-              Text(
-                isGuided ? 'Guided' : 'Unguided',
-                style: const TextStyle(
-                  color: Colors.grey,
-                  fontSize: 12,
-                ),
-              ),
-              const SizedBox(width: 8),
-              const Icon(Icons.access_time, size: 16, color: Colors.grey),
-              const SizedBox(width: 4),
-              Text(
-                duration,
-                style: const TextStyle(
-                  color: Colors.grey,
-                  fontSize: 12,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+  RecentPlay({
+    required this.image,
+    required this.audioPath,
+  });
 }
