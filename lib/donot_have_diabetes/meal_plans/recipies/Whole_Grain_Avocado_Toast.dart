@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class RecipeDetailScreen extends StatefulWidget {
-  const RecipeDetailScreen({Key? key}) : super(key: key);
+class B6RecipeDetailScreen extends StatefulWidget {
+  const B6RecipeDetailScreen({Key? key}) : super(key: key);
 
   @override
-  _RecipeDetailScreenState createState() => _RecipeDetailScreenState();
+  _B6RecipeDetailScreenState createState() => _B6RecipeDetailScreenState();
 }
 
-class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
+class _B6RecipeDetailScreenState extends State<B6RecipeDetailScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -18,8 +18,8 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
   bool _recipeSaved = false;
 
   // Recipe data
-  final String recipeName = 'Oatmeal with Nuts & Fruits';
-  final int calories = 300;
+  final String recipeName = 'Whole Grain Avocado Toast';
+  final int calories = 280;
   final String category = 'breakfast';
 
   // Get current user ID
@@ -44,21 +44,21 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
         'calories': calories,
         'category': category,
         'ingredients': [
-          '½ cup rolled oats',
-          '1 cup milk or water',
-          '1 tbsp honey or maple syrup',
-          '¼ tsp cinnamon',
-          '¼ cup mixed nuts (almonds, walnuts, cashews)',
-          '½ cup fresh fruits (bananas, berries, or apples)',
+          '1 slice whole grain bread',
+          '½ avocado, mashed',
+          '1½ tsp lemon juice',
+          '¼ tsp black pepper',
+          '¼ tsp chili flakes (optional)',
+          '1 poached or boiled egg (optional)',
         ],
         'instructions': [
-          'In a saucepan, bring milk or water to a boil.',
-          'Add oats and cook for 5 minutes, stirring occasionally.',
-          'Remove from heat, mix in cinnamon and honey.',
-          'Top with nuts and fresh fruits. Serve warm.',
+          'Toast the whole grain bread until crispy.',
+          'Mash the avocado and mix with lemon juice, black pepper, and chili flakes.',
+          'Spread the avocado mixture over the toast.',
+          'TTop with a poached or boiled egg if desired.',
         ],
         'savedAt': FieldValue.serverTimestamp(),
-        'imagePath': 'lib/donot_have_diabetes/meal_plans/meal_images/Oatmeal with Toppings.jpeg',
+        'imagePath': 'lib/donot_have_diabetes/meal_plans/meal_images/Creamy Avocado Toast with a Twist.jpeg',
       };
 
       // Add recipe to user's saved recipes
@@ -134,7 +134,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
         children: [
           // Background Image
           Image.asset(
-            'lib/donot_have_diabetes/meal_plans/meal_images/Oatmeal with Toppings.jpeg',
+            'lib/donot_have_diabetes/meal_plans/meal_images/Creamy Avocado Toast with a Twist.jpeg',
             height: double.infinity,
             width: double.infinity,
             fit: BoxFit.cover,
@@ -202,7 +202,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                               children: [
                                 // Title
                                 const Text(
-                                  'Oatmeal with Nuts & Fruits',
+                                  'Whole Grain Avocado Toast',
                                   style: TextStyle(
                                     fontSize: 32,
                                     fontWeight: FontWeight.bold,
@@ -219,16 +219,16 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                   style: TextStyle(
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold,
-
+                                    color: Colors.black,
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                _buildBulletPoint('½ cup rolled oats'),
-                                _buildBulletPoint('1 cup milk or water'),
-                                _buildBulletPoint('1 tbsp honey or maple syrup'),
-                                _buildBulletPoint('¼ tsp cinnamon'),
-                                _buildBulletPoint('¼ cup mixed nuts (almonds, walnuts, cashews)'),
-                                _buildBulletPoint('½ cup fresh fruits (bananas, berries, or apples)'),
+                                _buildBulletPoint('1 slice whole grain bread'),
+                                _buildBulletPoint('½ avocado, mashed'),
+                                _buildBulletPoint('½ tsp lemon juice'),
+                                _buildBulletPoint('¼ tsp black pepper'),
+                                _buildBulletPoint('¼ tsp chili flakes (optional)'),
+                                _buildBulletPoint('1 poached or boiled egg (optional)'),
 
                                 const SizedBox(height: 24),
 
@@ -238,17 +238,17 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                   style: TextStyle(
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold,
-
+                                    color: Colors.black,
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(1, 'In a saucepan, bring milk or water to a boil.'),
+                                _buildNumberedStep(1, 'Toast the whole grain bread until crispy.'),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(2, 'Add oats and cook for 5 minutes, stirring occasionally.'),
+                                _buildNumberedStep(2, 'Mash the avocado and mix with lemon juice, black pepper, and chili flakes.'),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(3, 'Remove from heat, mix in cinnamon and honey.'),
+                                _buildNumberedStep(3, 'Spread the avocado mixture over the toast.'),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(4, 'Top with nuts and fresh fruits. Serve warm.'),
+                                _buildNumberedStep(4, 'Top with a poached or boiled egg if desired.'),
 
                                 const SizedBox(height: 32),
 
@@ -275,7 +275,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                           ),
                                         )
                                             : const Text(
-                                          '300 kcal',
+                                          '280 kcal',
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 20,
@@ -345,6 +345,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
+              color: Colors.black,
             ),
           ),
           Expanded(
@@ -352,6 +353,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
               text,
               style: const TextStyle(
                 fontSize: 18,
+                color: Colors.black,
               ),
             ),
           ),
@@ -370,6 +372,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
+            color: Colors.black,
           ),
         ),
         Expanded(
@@ -377,6 +380,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
             text,
             style: const TextStyle(
               fontSize: 18,
+              color: Colors.black,
             ),
           ),
         ),
