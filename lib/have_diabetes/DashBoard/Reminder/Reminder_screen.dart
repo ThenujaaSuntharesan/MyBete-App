@@ -244,9 +244,7 @@ class _RemindersScreenState extends State<RemindersScreen> {
         ),
         iOS: DarwinNotificationDetails(),
       ),
-      androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation:
-      UILocalNotificationDateInterpretation.absoluteTime,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
   }
 
@@ -307,9 +305,7 @@ class _RemindersScreenState extends State<RemindersScreen> {
         ),
         iOS: DarwinNotificationDetails(),
       ),
-      androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation:
-      UILocalNotificationDateInterpretation.absoluteTime,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       matchDateTimeComponents: DateTimeComponents.time,
     );
   }
@@ -377,7 +373,7 @@ class _RemindersScreenState extends State<RemindersScreen> {
                 searchController.clear();
               });
             } else {
-              // Handle back navigation
+              Navigator.pop(context);
             }
           },
         ),
@@ -1140,5 +1136,6 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
     );
   }
 }
+
 
 

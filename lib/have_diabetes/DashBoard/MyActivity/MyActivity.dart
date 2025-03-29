@@ -13,6 +13,7 @@ import 'log_provider.dart';
 
 import 'weekly_stats_screen.dart';
 
+
 class MyActivityScreen extends StatefulWidget {
   const MyActivityScreen({Key? key}) : super(key: key);
 
