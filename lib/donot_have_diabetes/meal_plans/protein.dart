@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'total_screen.dart'; // Add this line
+import 'total_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,15 +18,15 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'SF Pro Display',
-        scaffoldBackgroundColor: const Color(0xFFE3F2FD),
+        scaffoldBackgroundColor: const Color(0xFFFCE4EC),
       ),
-      home: const DairyProductsScreen(),
+      home: const AnimalProteinsScreen(),
     );
   }
 }
 
-class DairyProductsScreen extends StatelessWidget {
-  const DairyProductsScreen({Key? key}) : super(key: key);
+class AnimalProteinsScreen extends StatelessWidget {
+  const AnimalProteinsScreen({Key? key}) : super(key: key);
 
   // Function to add calorie to Firestore
   void _addCalorieToFirebase(String name, int calories) async {
@@ -52,7 +52,7 @@ class DairyProductsScreen extends StatelessWidget {
       }, SetOptions(merge: true));
 
       // Optionally: You can also add a document in a subcollection for individual vegetables
-      await userRef.collection('dairy_calories').add({
+      await userRef.collection('vegetable_calories').add({
         'name': name,
         'calories': calories,
         'timestamp': FieldValue.serverTimestamp(), // Adds a timestamp for the entry
@@ -100,13 +100,13 @@ class DairyProductsScreen extends StatelessWidget {
                     children: [
                       const SizedBox(height: 8),
 
-                      // Dairy Products Title
+                      // Animal Proteins Title
                       const Text(
-                        'Dairy Products',
+                        'Animal Proteins',
                         style: TextStyle(
                           fontSize: 36,
                           fontWeight: FontWeight.bold,
-                          color: Colors.blue,
+                          color: Colors.black,
                         ),
                       ),
 
@@ -131,7 +131,7 @@ class DairyProductsScreen extends StatelessWidget {
                               Expanded(
                                 child: TextField(
                                   decoration: InputDecoration(
-                                    hintText: 'Search dairy products',
+                                    hintText: 'Search animal proteins',
                                     border: InputBorder.none,
                                     hintStyle: TextStyle(
                                       color: Colors.grey,
@@ -146,12 +146,13 @@ class DairyProductsScreen extends StatelessWidget {
 
                       const SizedBox(height: 24),
 
-                      // Low-Calorie Dairy Items Section
+                      // Low-Calorie Animal Proteins Section
                       const Text(
-                        'Low-Calorie Dairy Items',
+                        'Low-Calorie Animal Proteins',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
+                          color: Colors.black,
                         ),
                       ),
 
@@ -160,90 +161,101 @@ class DairyProductsScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
+                          color: Colors.black,
                         ),
                       ),
 
                       const SizedBox(height: 16),
 
-                      // Low-Calorie Dairy Items Grid
+                      // Low-Calorie Animal Proteins Grid
                       SizedBox(
                         height: 200, // Set a fixed height for the horizontal scroll area
                         child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             children: [
-                            DairyItemCard(
-                              name: 'Skim Milk',
-                              calories: 34,
-                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/milk-carton.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                            ),
-
-                          const SizedBox(width: 12),
-                          DairyItemCard(
-                              name: 'Low-fat Milk(1%)',
-                              calories: 42,
-                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/milk.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                            ),
-
-                          const SizedBox(width: 12),
-                          DairyItemCard(
-                              name: 'Buttermilk',
-                              calories: 40,
-                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/milk (1).png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                            ),
-
-                              const SizedBox(width: 12),
-                              DairyItemCard(
-                                name: 'Plain Greek Yogurt (Non fat)',
-                                calories: 59,
-                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/milk.png',
+                              ProteinCard(
+                                name: 'Egg Whites',
+                                calories: 52,
+                                imagePath: 'assets/egg_whites.png',
                                 onAdd: (name, calories) {
                                   _addCalorieToFirebase(name, calories);
                                 },
                               ),
 
                               const SizedBox(width: 12),
-                              DairyItemCard(
-                                name: 'Cottage Cheese(Low fat 1%)',
-                                calories: 72,
-                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/milk.png',
+                              ProteinCard(
+                                name: 'Shrimp',
+                                calories: 85,
+                                imagePath: 'assets/shrimp.png',
                                 onAdd: (name, calories) {
                                   _addCalorieToFirebase(name, calories);
                                 },
                               ),
 
                               const SizedBox(width: 12),
-                              DairyItemCard(
-                                name: 'Plain Yorgurt(non fat)',
-                                calories: 58,
-                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/milk.png',
+                              ProteinCard(
+                                name: 'Crab',
+                                calories: 82,
+                                imagePath: 'assets/crab.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              ProteinCard(
+                                name: 'Cod',
+                                calories: 82,
+                                imagePath: 'assets/crab.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              ProteinCard(
+                                name: 'Tilapia',
+                                calories: 96,
+                                imagePath: 'assets/crab.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              ProteinCard(
+                                name: 'Scallops',
+                                calories: 69,
+                                imagePath: 'assets/crab.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              ProteinCard(
+                                name: 'Clams',
+                                calories: 79,
+                                imagePath: 'assets/crab.png',
                                 onAdd: (name, calories) {
                                   _addCalorieToFirebase(name, calories);
                                 },
                               ),
                             ],
                           ),
-                          ),
                         ),
+                      ),
 
                       const SizedBox(height: 24),
 
-                      // Moderate-Calorie Dairy Items Section
+                      // Moderate-Calorie Animal Proteins Section
                       const Text(
-                        'Moderate-Calorie Dairy Items',
+                        'Moderate-Calorie Animal Proteins',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-
+                          color: Colors.black,
                         ),
                       ),
 
@@ -252,93 +264,93 @@ class DairyProductsScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-
+                          color: Colors.black,
                         ),
                       ),
 
                       const SizedBox(height: 16),
 
-                      // Moderate-Calorie Dairy Items Grid
+                      // Moderate-Calorie Animal Proteins Grid
                       SizedBox(
                         height: 200, // Set a fixed height for the horizontal scroll area
                         child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             children: [
-                            DairyItemCard(
-                              name: 'Whole Milk',
-                              calories: 61,
-                              imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/milk-box.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                            ),
-
-                          const SizedBox(width: 12),
-                          DairyItemCard(
-                              name: 'Plain Yogurt (Whole Milk)',
-                              calories: 61,
-                              imagePath: 'assets/plain_yogurt.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                            ),
-
-                          const SizedBox(width: 12),
-                          DairyItemCard(
-                              name: 'Greek Yogurt (Whole Milk)',
-                              calories: 97,
-                              imagePath: 'assets/greek_yogurt.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                          ),
-
-                              const SizedBox(width: 12),
-                              DairyItemCard(
-                                name: 'Cottage Cheese (Full Fat)',
-                                calories: 98,
-                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/milk.png',
+                              ProteinCard(
+                                name: 'Chicken Breast (Skinless, Cooked)',
+                                calories: 165,
+                                imagePath: 'assets/chicken_breast.png',
                                 onAdd: (name, calories) {
                                   _addCalorieToFirebase(name, calories);
                                 },
                               ),
 
                               const SizedBox(width: 12),
-                              DairyItemCard(
-                                name: 'Cream Cheese (Low Fat)',
-                                calories: 180,
-                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/milk.png',
+                              ProteinCard(
+                                name: 'Turkey Breast (Cooked)',
+                                calories: 135,
+                                imagePath: 'assets/turkey_breast.png',
                                 onAdd: (name, calories) {
                                   _addCalorieToFirebase(name, calories);
                                 },
                               ),
 
                               const SizedBox(width: 12),
-                              DairyItemCard(
-                                name: 'Low-fat Milk(1%)',
-                                calories: 42,
-                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/milk.png',
+                              ProteinCard(
+                                name: 'Lean Beef (Sirloin, Cooked)',
+                                calories: 250,
+                                imagePath: 'assets/lean_beef.png',
                                 onAdd: (name, calories) {
                                   _addCalorieToFirebase(name, calories);
                                 },
                               ),
 
                               const SizedBox(width: 12),
-                              DairyItemCard(
-                                name: 'Mozzarella Cheese (Part-Skim)',
-                                calories: 280,
-                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/milk.png',
+                              ProteinCard(
+                                name: 'Pork Tenderloin',
+                                calories: 143,
+                                imagePath: 'assets/lean_beef.png',
                                 onAdd: (name, calories) {
                                   _addCalorieToFirebase(name, calories);
                                 },
                               ),
 
                               const SizedBox(width: 12),
-                              DairyItemCard(
-                                name: 'Parmesan Cheese (Grated)',
-                                calories: 321,
-                                imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/milk.png',
+                              ProteinCard(
+                                name: 'Salmon(Cooked)',
+                                calories: 206,
+                                imagePath: 'assets/lean_beef.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              ProteinCard(
+                                name: 'Tuna (Canned in water, drained)',
+                                calories: 116,
+                                imagePath: 'assets/lean_beef.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              ProteinCard(
+                                name: 'Lamb (Cooked, lean Cuts)',
+                                calories: 294,
+                                imagePath: 'assets/lean_beef.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              ProteinCard(
+                                name: 'Duck (Without Skin, Cooked)',
+                                calories: 250,
+                                imagePath: 'assets/lean_beef.png',
                                 onAdd: (name, calories) {
                                   _addCalorieToFirebase(name, calories);
                                 },
@@ -348,15 +360,15 @@ class DairyProductsScreen extends StatelessWidget {
                         ),
                       ),
 
-
                       const SizedBox(height: 24),
 
-                      // High-Calorie Dairy Items Section
+                      // High-Calorie Animal Proteins Section
                       const Text(
-                        'High-Calorie Dairy Items',
+                        'High-Calorie Animal Proteins',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
+                          color: Colors.black,
                         ),
                       ),
 
@@ -365,74 +377,61 @@ class DairyProductsScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
+                          color: Colors.black,
                         ),
                       ),
 
                       const SizedBox(height: 16),
 
-                      // High-Calorie Dairy Items Grid
+                      // High-Calorie Animal Proteins Grid
                       SizedBox(
                         height: 200, // Reduced height for consistency with other sections
                         child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             children: [
-                            DairyItemCard(
-                              name: 'Butter',
-                              calories: 717,
-                              imagePath: 'assets/butter.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                            ),
-
-                          const SizedBox(width: 12),
-                          DairyItemCard(
-                              name: 'Heavy Cream',
-                              calories: 340,
-                              imagePath: 'assets/heavy_cream.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                            ),
-
-                          const SizedBox(width: 12),
-                          DairyItemCard(
-                              name: 'Cheddar Cheese',
-                              calories: 403,
-                              imagePath: 'assets/cheddar_cheese.png',
-                              onAdd: (name, calories) {
-                                _addCalorieToFirebase(name, calories);
-                              },
-                          ),
-
-                              const SizedBox(width: 12),
-                              DairyItemCard(
-                                name: 'Swiss Cheese',
-                                calories: 393,
-                                imagePath: 'assets/cheddar_cheese.png',
+                              ProteinCard(
+                                name: 'Bacon',
+                                calories: 541,
+                                imagePath: 'assets/bacon.png',
                                 onAdd: (name, calories) {
                                   _addCalorieToFirebase(name, calories);
                                 },
                               ),
 
                               const SizedBox(width: 12),
-                              DairyItemCard(
-                                name: 'Cream Cheese (Full Fat)',
-                                calories: 340,
-                                imagePath: 'assets/cheddar_cheese.png',
+                              ProteinCard(
+                                name: 'Salami',
+                                calories: 425,
+                                imagePath: 'assets/salami.png',
                                 onAdd: (name, calories) {
                                   _addCalorieToFirebase(name, calories);
                                 },
                               ),
 
+                              const SizedBox(width: 12),
+                              ProteinCard(
+                                name: 'Pepperoni',
+                                calories: 494,
+                                imagePath: 'assets/pepperoni.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
 
+                              const SizedBox(width: 12),
+                              ProteinCard(
+                                name: 'Pork Belly',
+                                calories: 518,
+                                imagePath: 'assets/pepperoni.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
                             ],
                           ),
                         ),
                       ),
-
-
                       // Add View Total Calories Button
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -441,7 +440,7 @@ class DairyProductsScreen extends StatelessWidget {
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const TotalScreen(category: 'Dairy')), // Navigate to TotalScreen
+                                MaterialPageRoute(builder: (context) => const TotalScreen(category: 'Vegetables')), // Navigate to TotalScreen
                               );
                             },
                             child: const Text(
@@ -456,6 +455,7 @@ class DairyProductsScreen extends StatelessWidget {
                 ),
               ),
             ),
+
 
             // Bottom Navigation Bar
             Container(
@@ -503,13 +503,14 @@ class DairyProductsScreen extends StatelessWidget {
   }
 }
 
-class DairyItemCard extends StatelessWidget {
+class ProteinCard extends StatelessWidget {
   final String name;
   final int calories;
   final String imagePath;
-  final Function(String, int) onAdd;
+  final void Function(String, int) onAdd;
 
-  const DairyItemCard({
+
+  const ProteinCard({
     Key? key,
     required this.name,
     required this.calories,
@@ -520,6 +521,7 @@ class DairyItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 140, // Set a fixed width for each card in horizontal scroll
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -535,7 +537,7 @@ class DairyItemCard extends StatelessWidget {
         padding: const EdgeInsets.all(12.0),
         child: Column(
           children: [
-            // Dairy Item Image
+            // Vegetable Image
             SizedBox(
               height: 100,
               child: Image.asset(
@@ -551,7 +553,7 @@ class DairyItemCard extends StatelessWidget {
 
             const SizedBox(height: 15),
 
-            // Dairy Item Name
+            // Vegetable Name
             Text(
               name,
               style: const TextStyle(
@@ -573,7 +575,7 @@ class DairyItemCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF00C853),
+                    color: Color(0xFF009439),
                   ),
                 ),
 
