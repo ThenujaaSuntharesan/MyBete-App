@@ -76,6 +76,8 @@ dependencies:
   open_file: ^3.3.2
 
   audioplayers: ^5.2.1
+  just_audio: ^0.9.36
+  just_audio_background: ^0.0.1-beta.10
 
 dependency_overrides:
   shared_preferences_android: 2.4.8
@@ -117,7 +119,7 @@ flutter:
     - lib/donot_have_diabetes/meal_plans/meal_images/
     - lib/donot_have_diabetes/mind_relax/mind images/
     - lib/not_sure/symptom_levels/3_polyphagia_check/Images/
-    - assets/audio/
+    
     - lib/donot_have_diabetes/mind_relax/audio/ambient/
     - lib/donot_have_diabetes/mind_relax/audio/forest/
     - lib/donot_have_diabetes/mind_relax/audio/jazz/
