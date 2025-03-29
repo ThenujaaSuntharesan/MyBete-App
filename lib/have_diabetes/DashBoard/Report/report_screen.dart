@@ -1037,6 +1037,7 @@ class _ReportScreenState extends State<ReportScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: bgColor,
+
       appBar: AppBar(
         backgroundColor: lightBlue2,
         elevation: 0,
@@ -1105,40 +1106,40 @@ class _ReportScreenState extends State<ReportScreen> {
                   SizedBox(height: 30),
 
                   // Date range selector
-                  Text(
-                    "Date Range",
-                    style: GoogleFonts.poppins(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.grey[300]!),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "All Time",
-                          style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        Icon(
-                          Icons.arrow_drop_down,
-                          color: Colors.grey[600],
-                        ),
-                      ],
-                    ),
-                  ),
+                  // Text(
+                  //   "Date Range",
+                  //   style: GoogleFonts.poppins(
+                  //     fontSize: 16,
+                  //     fontWeight: FontWeight.w500,
+                  //     color: Colors.black87,
+                  //   ),
+                  // ),
+                  // SizedBox(height: 8),
+                  // Container(
+                  //   width: double.infinity,
+                  //   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.white,
+                  //     borderRadius: BorderRadius.circular(8),
+                  //     border: Border.all(color: Colors.grey[300]!),
+                  //   ),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     children: [
+                  //       Text(
+                  //         "All Time",
+                  //         style: GoogleFonts.poppins(
+                  //           fontSize: 16,
+                  //           color: Colors.black87,
+                  //         ),
+                  //       ),
+                  //       Icon(
+                  //         Icons.arrow_drop_down,
+                  //         color: Colors.grey[600],
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
 
                   SizedBox(height: 30),
 

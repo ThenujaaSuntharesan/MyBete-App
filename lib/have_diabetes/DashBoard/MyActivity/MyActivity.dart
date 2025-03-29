@@ -5,11 +5,14 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'dart:math';
+
 import '../Reminder/Reminder_screen.dart';
 import '../Report/report_screen.dart';
 import 'LogDetails/LogInterface.dart';
 import 'log_provider.dart';
+
 import 'weekly_stats_screen.dart';
+
 
 class MyActivityScreen extends StatefulWidget {
   const MyActivityScreen({Key? key}) : super(key: key);
@@ -1186,7 +1189,7 @@ class _MyActivityScreenState extends State<MyActivityScreen> {
 
               // Today's average and See More button
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.only(left: 120, right: 15, top: 0, bottom: 5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

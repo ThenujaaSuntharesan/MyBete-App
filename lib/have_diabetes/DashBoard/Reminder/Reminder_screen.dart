@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mybete_app/have_diabetes/DashBoard/Reminder/Reminder_screen.dart';
-import 'package:mybete_app/have_diabetes/DashBoard/Reminder/reminder_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +7,6 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz_init;
 import 'dart:convert';
 
-import 'Reminder_screen.dart';
 
 // Global notifications plugin that can be initialized in main.dart
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -247,9 +244,7 @@ class _RemindersScreenState extends State<RemindersScreen> {
         ),
         iOS: DarwinNotificationDetails(),
       ),
-      androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation:
-      UILocalNotificationDateInterpretation.absoluteTime,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
   }
 
@@ -310,9 +305,7 @@ class _RemindersScreenState extends State<RemindersScreen> {
         ),
         iOS: DarwinNotificationDetails(),
       ),
-      androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation:
-      UILocalNotificationDateInterpretation.absoluteTime,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       matchDateTimeComponents: DateTimeComponents.time,
     );
   }
@@ -380,7 +373,7 @@ class _RemindersScreenState extends State<RemindersScreen> {
                 searchController.clear();
               });
             } else {
-              // Handle back navigation
+              Navigator.pop(context);
             }
           },
         ),
@@ -423,8 +416,8 @@ class _RemindersScreenState extends State<RemindersScreen> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white, // Using primaryColor from your MyActivity
-                foregroundColor: Color(0xFF5FB8DD),
+                backgroundColor: Color(0xFF5FB8DD), // Using primaryColor from your MyActivity
+                foregroundColor: Colors.white,
               ),
             ),
           ),
@@ -1143,5 +1136,6 @@ class _ReminderSetupScreenState extends State<ReminderSetupScreen> {
     );
   }
 }
+
 
 

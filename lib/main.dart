@@ -15,15 +15,26 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'firebase_options.dart';
 
 
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await Firebase.initializeApp();
+//
+//   // Enable offline persistence
+//   FirebaseFirestore.instance.settings = Settings(persistenceEnabled: true);
+//
+//   runApp(MyApp());
+// }
+
+
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  WidgetsFlutterBinding.ensureInitialized(); // Ensures plugin binding
 
-  // Enable offline persistence
-  FirebaseFirestore.instance.settings = Settings(persistenceEnabled: true);
-
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MyApp());
 }
+
 
 
 
