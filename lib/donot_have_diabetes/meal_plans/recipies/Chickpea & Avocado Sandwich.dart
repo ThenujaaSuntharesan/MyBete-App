@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class RecipeDetailScreen extends StatefulWidget {
-  const RecipeDetailScreen({Key? key}) : super(key: key);
+class L3RecipeDetailScreen extends StatefulWidget {
+  const L3RecipeDetailScreen({Key? key}) : super(key: key);
 
   @override
-  _RecipeDetailScreenState createState() => _RecipeDetailScreenState();
+  _L3RecipeDetailScreenState createState() => _L3RecipeDetailScreenState();
 }
 
-class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
+class _L3RecipeDetailScreenState extends State<L3RecipeDetailScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -18,9 +18,9 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
   bool _recipeSaved = false;
 
   // Recipe data
-  final String recipeName = 'Oatmeal with Nuts & Fruits';
-  final int calories = 300;
-  final String category = 'breakfast';
+  final String recipeName = 'Grilled Chicken & Quinoa Salad';
+  final int calories = 450;
+  final String category = 'lunch';
 
   // Get current user ID
   String? get currentUserId => _auth.currentUser?.uid;
@@ -44,21 +44,24 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
         'calories': calories,
         'category': category,
         'ingredients': [
-          '½ cup rolled oats',
-          '1 cup milk or water',
-          '1 tbsp honey or maple syrup',
-          '¼ tsp cinnamon',
-          '¼ cup mixed nuts (almonds, walnuts, cashews)',
-          '½ cup fresh fruits (bananas, berries, or apples)',
+          '½ cup canned chickpeas (mashed)',
+          '½ avocado (mashed)',
+          '¼ tsp black pepper',
+          '¼ tsp garlic powder',
+          '2 slices whole wheat bread',
+          '½ cup spinach leaves',
+          '2 tomato slices',
+
         ],
         'instructions': [
-          'In a saucepan, bring milk or water to a boil.',
-          'Add oats and cook for 5 minutes, stirring occasionally.',
-          'Remove from heat, mix in cinnamon and honey.',
-          'Top with nuts and fresh fruits. Serve warm.',
+          'In a bowl, mash chickpeas and avocado together.',
+          'Add black pepper and garlic powder, mix well.',
+          'Spread the mixture onto one slice of whole wheat bread.',
+          'Add spinach and tomato slices.',
+          'Cover with the second slice, cut in half, and enjoy!',
         ],
         'savedAt': FieldValue.serverTimestamp(),
-        'imagePath': 'lib/donot_have_diabetes/meal_plans/meal_images/Oatmeal with Toppings.jpeg',
+        'imagePath': 'lib/donot_have_diabetes/meal_plans/meal_images/chickpea_sandwich.png',
       };
 
       // Add recipe to user's saved recipes
@@ -134,7 +137,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
         children: [
           // Background Image
           Image.asset(
-            'lib/donot_have_diabetes/meal_plans/meal_images/Oatmeal with Toppings.jpeg',
+            'lib/donot_have_diabetes/meal_plans/meal_images/chickpea_sandwich.png',
             height: double.infinity,
             width: double.infinity,
             fit: BoxFit.cover,
@@ -202,7 +205,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                               children: [
                                 // Title
                                 const Text(
-                                  'Oatmeal with Nuts & Fruits',
+                                  'Grilled Chicken & Quinoa Salad',
                                   style: TextStyle(
                                     fontSize: 32,
                                     fontWeight: FontWeight.bold,
@@ -224,12 +227,14 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                _buildBulletPoint('½ cup rolled oats'),
-                                _buildBulletPoint('1 cup milk or water'),
-                                _buildBulletPoint('1 tbsp honey or maple syrup'),
-                                _buildBulletPoint('¼ tsp cinnamon'),
-                                _buildBulletPoint('¼ cup mixed nuts (almonds, walnuts, cashews)'),
-                                _buildBulletPoint('½ cup fresh fruits (bananas, berries, or apples)'),
+                                _buildBulletPoint('½ cup canned chickpeas (mashed)'),
+                                _buildBulletPoint('½ avocado (mashed)'),
+                                _buildBulletPoint('¼ tsp black pepper'),
+                                _buildBulletPoint('¼ tsp garlic powder'),
+                                _buildBulletPoint('2 slices whole wheat bread'),
+                                _buildBulletPoint('½ cup spinach leaves'),
+                                _buildBulletPoint('2 tomato slices'),
+
 
                                 const SizedBox(height: 24),
 
@@ -244,13 +249,15 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(1, 'In a saucepan, bring milk or water to a boil.'),
+                                _buildNumberedStep(1, 'In a bowl, mash chickpeas and avocado together.'),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(2, 'Add oats and cook for 5 minutes, stirring occasionally.'),
+                                _buildNumberedStep(2, 'Add black pepper and garlic powder, mix well.'),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(3, 'Remove from heat, mix in cinnamon and honey.'),
+                                _buildNumberedStep(3, 'Spread the mixture onto one slice of whole wheat bread.'),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(4, 'Top with nuts and fresh fruits. Serve warm.'),
+                                _buildNumberedStep(4, 'Add spinach and tomato slices.'),
+                                const SizedBox(height: 8),
+                                _buildNumberedStep(5, 'Cover with the second slice, cut in half, and enjoy!'),
 
                                 const SizedBox(height: 32),
 
@@ -277,7 +284,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                           ),
                                         )
                                             : const Text(
-                                          '300 kcal',
+                                          '450 kcal',
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 20,

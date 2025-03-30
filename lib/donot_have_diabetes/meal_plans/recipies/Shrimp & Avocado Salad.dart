@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class RecipeDetailScreen extends StatefulWidget {
-  const RecipeDetailScreen({Key? key}) : super(key: key);
+class L9RecipeDetailScreen extends StatefulWidget {
+  const L9RecipeDetailScreen({Key? key}) : super(key: key);
 
   @override
-  _RecipeDetailScreenState createState() => _RecipeDetailScreenState();
+  _L9RecipeDetailScreenState createState() => _L9RecipeDetailScreenState();
 }
 
-class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
+class _L9RecipeDetailScreenState extends State<L9RecipeDetailScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -18,9 +18,9 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
   bool _recipeSaved = false;
 
   // Recipe data
-  final String recipeName = 'Oatmeal with Nuts & Fruits';
-  final int calories = 300;
-  final String category = 'breakfast';
+  final String recipeName = 'Shrimp & Avocado Salad';
+  final int calories = 400;
+  final String category = 'lunch';
 
   // Get current user ID
   String? get currentUserId => _auth.currentUser?.uid;
@@ -44,21 +44,22 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
         'calories': calories,
         'category': category,
         'ingredients': [
-          '½ cup rolled oats',
-          '1 cup milk or water',
-          '1 tbsp honey or maple syrup',
-          '¼ tsp cinnamon',
-          '¼ cup mixed nuts (almonds, walnuts, cashews)',
-          '½ cup fresh fruits (bananas, berries, or apples)',
+          '½ cup cooked shrimp',
+          '½ avocado (sliced)',
+          '1 cup mixed greens',
+          '½ cup cherry tomatoes (halved)',
+          '1 tbsp olive oil',
+          '1 tbsp lemon juice',
+          'Salt & pepper to taste',
+
         ],
         'instructions': [
-          'In a saucepan, bring milk or water to a boil.',
-          'Add oats and cook for 5 minutes, stirring occasionally.',
-          'Remove from heat, mix in cinnamon and honey.',
-          'Top with nuts and fresh fruits. Serve warm.',
+          'In a bowl, mix greens, shrimp, avocado, and cherry tomatoes.',
+          'Drizzle with olive oil and lemon juice.',
+          'Season with salt and pepper and enjoy!',
         ],
         'savedAt': FieldValue.serverTimestamp(),
-        'imagePath': 'lib/donot_have_diabetes/meal_plans/meal_images/Oatmeal with Toppings.jpeg',
+        'imagePath': 'lib/donot_have_diabetes/meal_plans/meal_images/Shrimp & Avocado Salad.png',
       };
 
       // Add recipe to user's saved recipes
@@ -134,7 +135,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
         children: [
           // Background Image
           Image.asset(
-            'lib/donot_have_diabetes/meal_plans/meal_images/Oatmeal with Toppings.jpeg',
+            'lib/donot_have_diabetes/meal_plans/meal_images/Shrimp & Avocado Salad.png',
             height: double.infinity,
             width: double.infinity,
             fit: BoxFit.cover,
@@ -202,7 +203,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                               children: [
                                 // Title
                                 const Text(
-                                  'Oatmeal with Nuts & Fruits',
+                                  'Shrimp & Avocado Salad',
                                   style: TextStyle(
                                     fontSize: 32,
                                     fontWeight: FontWeight.bold,
@@ -224,12 +225,13 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                _buildBulletPoint('½ cup rolled oats'),
-                                _buildBulletPoint('1 cup milk or water'),
-                                _buildBulletPoint('1 tbsp honey or maple syrup'),
-                                _buildBulletPoint('¼ tsp cinnamon'),
-                                _buildBulletPoint('¼ cup mixed nuts (almonds, walnuts, cashews)'),
-                                _buildBulletPoint('½ cup fresh fruits (bananas, berries, or apples)'),
+                                _buildBulletPoint('½ cup cooked shrimp'),
+                                _buildBulletPoint('½ avocado (sliced)'),
+                                _buildBulletPoint('1 cup mixed greens'),
+                                _buildBulletPoint('1 tbsp olive oil'),
+                                _buildBulletPoint('1 tbsp lemon juice'),
+                                _buildBulletPoint('Salt & pepper to taste'),
+
 
                                 const SizedBox(height: 24),
 
@@ -244,13 +246,12 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(1, 'In a saucepan, bring milk or water to a boil.'),
+                                _buildNumberedStep(1, 'In a bowl, mix greens, shrimp, avocado, and cherry tomatoes.'),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(2, 'Add oats and cook for 5 minutes, stirring occasionally.'),
+                                _buildNumberedStep(2, 'Drizzle with olive oil and lemon juice.'),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(3, 'Remove from heat, mix in cinnamon and honey.'),
-                                const SizedBox(height: 8),
-                                _buildNumberedStep(4, 'Top with nuts and fresh fruits. Serve warm.'),
+                                _buildNumberedStep(3, 'Season with salt and pepper and enjoy!'),
+
 
                                 const SizedBox(height: 32),
 
@@ -277,7 +278,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                           ),
                                         )
                                             : const Text(
-                                          '300 kcal',
+                                          '400 kcal',
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 20,

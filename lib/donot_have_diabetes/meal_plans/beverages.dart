@@ -556,7 +556,7 @@ class BeverageCard extends StatelessWidget {
                 errorBuilder: (context, error, stackTrace) => Container(
                   height: 80,
                   color: Colors.grey.shade200,
-                  child: const Icon(Icons.local_drink, size: 60),
+                  child: const Icon(Icons.image, size: 80),
                 ),
               ),
             ),

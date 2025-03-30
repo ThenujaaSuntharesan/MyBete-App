@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class RecipeDetailScreen extends StatefulWidget {
-  const RecipeDetailScreen({Key? key}) : super(key: key);
+class L5RecipeDetailScreen extends StatefulWidget {
+  const L5RecipeDetailScreen({Key? key}) : super(key: key);
 
   @override
-  _RecipeDetailScreenState createState() => _RecipeDetailScreenState();
+  _L5RecipeDetailScreenState createState() => _L5RecipeDetailScreenState();
 }
 
-class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
+class _L5RecipeDetailScreenState extends State<L5RecipeDetailScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -18,9 +18,9 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
   bool _recipeSaved = false;
 
   // Recipe data
-  final String recipeName = 'Oatmeal with Nuts & Fruits';
-  final int calories = 300;
-  final String category = 'breakfast';
+  final String recipeName = 'Veggie Stir-Fry with Brown Rice';
+  final int calories = 350;
+  final String category = 'lunch';
 
   // Get current user ID
   String? get currentUserId => _auth.currentUser?.uid;
@@ -44,21 +44,26 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
         'calories': calories,
         'category': category,
         'ingredients': [
-          '½ cup rolled oats',
-          '1 cup milk or water',
-          '1 tbsp honey or maple syrup',
-          '¼ tsp cinnamon',
-          '¼ cup mixed nuts (almonds, walnuts, cashews)',
-          '½ cup fresh fruits (bananas, berries, or apples)',
+          '1 cup cooked brown rice',
+          '½ cup bell peppers (sliced)',
+          '½ cup broccoli florets',
+          '½ cup carrots (julienned)',
+          '1 garlic clove (minced)',
+          '1 tbsp soy sauce (low sodium)',
+          '1 tsp sesame oil',
+          '½ tsp ginger (grated)',
+          '1 tsp sesame seeds (optional)',
+
         ],
         'instructions': [
-          'In a saucepan, bring milk or water to a boil.',
-          'Add oats and cook for 5 minutes, stirring occasionally.',
-          'Remove from heat, mix in cinnamon and honey.',
-          'Top with nuts and fresh fruits. Serve warm.',
+          'Heat sesame oil in a pan over medium heat.',
+          'Add garlic and ginger, sauté for 1 minute.',
+          'Add bell peppers, broccoli, and carrots. Stir-fry for 4-5 minutes.',
+          'Add cooked brown rice and soy sauce, stir well.',
+          'Sprinkle with sesame seeds and serve!',
         ],
         'savedAt': FieldValue.serverTimestamp(),
-        'imagePath': 'lib/donot_have_diabetes/meal_plans/meal_images/Oatmeal with Toppings.jpeg',
+        'imagePath': 'lib/donot_have_diabetes/meal_plans/meal_images/Quick and easy veggie stir-fry with brown rice for a healthy 30-minute lunch.jpeg',
       };
 
       // Add recipe to user's saved recipes
@@ -134,7 +139,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
         children: [
           // Background Image
           Image.asset(
-            'lib/donot_have_diabetes/meal_plans/meal_images/Oatmeal with Toppings.jpeg',
+            'lib/donot_have_diabetes/meal_plans/meal_images/Quick and easy veggie stir-fry with brown rice for a healthy 30-minute lunch.jpeg',
             height: double.infinity,
             width: double.infinity,
             fit: BoxFit.cover,
@@ -202,7 +207,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                               children: [
                                 // Title
                                 const Text(
-                                  'Oatmeal with Nuts & Fruits',
+                                  'Veggie Stir-Fry with Brown Rice',
                                   style: TextStyle(
                                     fontSize: 32,
                                     fontWeight: FontWeight.bold,
@@ -224,12 +229,16 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                _buildBulletPoint('½ cup rolled oats'),
-                                _buildBulletPoint('1 cup milk or water'),
-                                _buildBulletPoint('1 tbsp honey or maple syrup'),
-                                _buildBulletPoint('¼ tsp cinnamon'),
-                                _buildBulletPoint('¼ cup mixed nuts (almonds, walnuts, cashews)'),
-                                _buildBulletPoint('½ cup fresh fruits (bananas, berries, or apples)'),
+                                _buildBulletPoint('1 cup cooked brown rice'),
+                                _buildBulletPoint('½ cup bell peppers (sliced)'),
+                                _buildBulletPoint('½ cup broccoli florets'),
+                                _buildBulletPoint('½ cup carrots (julienned)'),
+                                _buildBulletPoint('1 garlic clove (minced)'),
+                                _buildBulletPoint('1 tbsp soy sauce (low sodium)'),
+                                _buildBulletPoint('1 tsp sesame oil'),
+                                _buildBulletPoint('½ tsp ginger (grated)'),
+                                _buildBulletPoint('1 tsp sesame seeds (optional)'),
+
 
                                 const SizedBox(height: 24),
 
@@ -244,13 +253,16 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(1, 'In a saucepan, bring milk or water to a boil.'),
+                                _buildNumberedStep(1, 'Heat sesame oil in a pan over medium heat.'),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(2, 'Add oats and cook for 5 minutes, stirring occasionally.'),
+                                _buildNumberedStep(2, 'Add garlic and ginger, sauté for 1 minute.'),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(3, 'Remove from heat, mix in cinnamon and honey.'),
+                                _buildNumberedStep(3, 'Add bell peppers, broccoli, and carrots. Stir-fry for 4-5 minutes.'),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(4, 'Top with nuts and fresh fruits. Serve warm.'),
+                                _buildNumberedStep(4, 'Add cooked brown rice and soy sauce, stir well.'),
+                                const SizedBox(height: 8),
+                                _buildNumberedStep(5, 'Sprinkle with sesame seeds and serve!'),
+
 
                                 const SizedBox(height: 32),
 
@@ -277,7 +289,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                           ),
                                         )
                                             : const Text(
-                                          '300 kcal',
+                                          '350 kcal',
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 20,
