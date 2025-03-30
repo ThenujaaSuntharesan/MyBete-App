@@ -220,6 +220,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black,
+
                                   ),
                                 ),
                                 const SizedBox(height: 8),
@@ -239,6 +240,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black,
+
                                   ),
                                 ),
                                 const SizedBox(height: 8),
@@ -345,6 +347,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
+              color: Colors.black,
             ),
           ),
           Expanded(
@@ -352,6 +355,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
               text,
               style: const TextStyle(
                 fontSize: 18,
+                color: Colors.black,
               ),
             ),
           ),
@@ -370,6 +374,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
+            color: Colors.black,
           ),
         ),
         Expanded(
@@ -377,6 +382,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
             text,
             style: const TextStyle(
               fontSize: 18,
+              color: Colors.black,
             ),
           ),
         ),

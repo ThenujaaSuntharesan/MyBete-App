@@ -1,5 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/oatmeal.dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/scrambled_eggs.dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/Overnight_Oats_with_Peanut_Butter_&_Banana.dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/Quinoa_Breakfast_Bowl.dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/Chia_Seed_Pudding.dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/Green_Smoothie.dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/Whole_Grain_Avocado_Toast.dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/Banana_Pancakes_(No Flour!).dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/Tofu_Scramble _Vegan Egg Alternative).dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/Banana_Smoothie_Bowl.dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/Grilled Chicken & Quinoa Salad.dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/Lentil & Vegetable Soup.dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/Chickpea & Avocado Sandwich.dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/Baked Salmon with Steamed Vegetables.dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/Veggie Stir-Fry with Brown Rice.dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/Tuna & Avocado Salad.dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/Mediterranean Chickpea Salad.dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/Baked Sweet Potato with Black Beans.dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/Shrimp & Avocado Salad.dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/Spaghetti Squash with Tomato Sauce.dart';
 import 'vegetables.dart';
 import 'fruits.dart';
 import 'bakery.dart';
@@ -230,55 +249,100 @@ class FoodCategoryScreen extends StatelessWidget {
                           title: 'Scrambled Eggs with Veggies',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/scramble.png',
                           isFavorite: false,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const B2RecipeDetailScreen()),
+                            );
+                          },
                         ),
                         RecipeCard(
                           title: 'Overnight Oats with Peanut Butter & Banana',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/oats.png',
                           isFavorite: false,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const B3RecipeDetailScreen()),
+                            );
+                          },
                         ),
                         RecipeCard(
                           title: 'Chia Seed Pudding',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/Chia Seed Pudding Recipe - Belly Full.jpeg',
                           isFavorite: false,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const B4RecipeDetailScreen()),
+                            );
+                          },
                         ),
                         RecipeCard(
                           title: 'Green Smoothie',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/Spinach Smoothie.jpeg',
                           isFavorite: false,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const B5RecipeDetailScreen()),
+                            );
+                          },
                         ),
                         RecipeCard(
                           title: 'Whole Grain Avocado Toast',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/Creamy Avocado Toast with a Twist.jpeg',
                           isFavorite: false,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const B6RecipeDetailScreen()),
+                            );
+                          },
                         ),
                         RecipeCard(
                           title: 'Quinoa Breakfast Bowl',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/Summer Quinoa Breakfast Bowls.jpeg',
                           isFavorite: false,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const B7RecipeDetailScreen()),
+                            );
+                          },
                         ),
                         RecipeCard(
                           title: 'Banana Pancakes (No Flour!)',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/banana_pancake.png',
                           isFavorite: false,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const B8RecipeDetailScreen()),
+                            );
+                          },
                         ),
                         RecipeCard(
                           title: 'Tofu Scramble(Vegan Egg Alternative)',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/Tofu Scramble.jpeg',
                           isFavorite: false,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const B9RecipeDetailScreen()),
+                            );
+                          },
                         ),
                         RecipeCard(
                           title: 'Banana Smoothie Bowl',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/Banana Smoothie Bowl.jpeg',
                           isFavorite: false,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const B10RecipeDetailScreen()),
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -308,62 +372,112 @@ class FoodCategoryScreen extends StatelessWidget {
                           title: 'Grilled Chicken & Quinoa Salad',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/chicken_salad.jpg',
                           isFavorite: false,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const L1RecipeDetailScreen()),
+                            );
+                          },
                         ),
                         RecipeCard(
                           title: 'Lentil & Vegetable Soup',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/lentil_soup.png',
                           isFavorite: false,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const L2RecipeDetailScreen()),
+                            );
+                          },
                         ),
                         RecipeCard(
                           title: 'Chickpea & Avocado Sandwich',
-                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/chickpea_sandwich.jpg',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/chickpea_sandwich.png',
                           isFavorite: false,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const L3RecipeDetailScreen()),
+                            );
+                          },
                         ),
                         RecipeCard(
                           title: 'Baked Salmon with Steamed Vegetables',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/baked_salmon_vege.png',
                           isFavorite: false,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const L4RecipeDetailScreen()),
+                            );
+                          },
                         ),
                         RecipeCard(
                           title: 'Veggie Stir-Fry with Brown Rice',
-                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/brown_rice.png',
+                          imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/Quick and easy veggie stir-fry with brown rice for a healthy 30-minute lunch.jpeg',
                           isFavorite: false,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const L5RecipeDetailScreen()),
+                            );
+                          },
                         ),
                         RecipeCard(
                           title: 'Tuna & Avocado Salad',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/Chicago-Style Tuna Salad.jpeg',
                           isFavorite: false,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const L6RecipeDetailScreen()),
+                            );
+                          },
                         ),
                         RecipeCard(
                           title: ' Mediterranean Chickpea Salad',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/Mediterranean Chickpea Salad (15 minute recipe!) _ Choosing Chia.jpeg',
                           isFavorite: false,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const L7RecipeDetailScreen()),
+                            );
+                          },
                         ),
                         RecipeCard(
                           title: 'Baked Sweet Potato with Black Beans',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/Baked Sweet Potato with Black Beans.png',
                           isFavorite: false,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const L8RecipeDetailScreen()),
+                            );
+                          },
                         ),
 
                         RecipeCard(
                           title: 'Shrimp & Avocado Salad',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/Shrimp & Avocado Salad.png',
                           isFavorite: false,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const L9RecipeDetailScreen()),
+                            );
+                          },
                         ),
                         RecipeCard(
                           title: 'Spaghetti Squash with Tomato Sauce',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/Spaghetti Squash Primavera_ Healthy Pasta Recipe Idea.jpeg',
                           isFavorite: false,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const L10RecipeDetailScreen()),
+                            );
+                          },
                         ),
 
                       ],
