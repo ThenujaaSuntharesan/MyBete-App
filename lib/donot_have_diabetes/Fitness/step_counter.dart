@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+void main() {
+  runApp(const StepCounterPage());
+}
+
 class StepCounterPage extends StatefulWidget {
   const StepCounterPage({super.key});
 
@@ -63,7 +67,7 @@ class _StepCounterPageState extends State<StepCounterPage>
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,  // Adjusted to space elements evenly
           children: [
             Column(
               children: [
@@ -100,8 +104,7 @@ class _StepCounterPageState extends State<StepCounterPage>
           value: _steps / _dailyGoal,
           strokeWidth: 12,
           backgroundColor: Colors.grey[200],
-          valueColor: AlwaysStoppedAnimation<Color>(
-              Theme.of(context).primaryColor),
+          valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
           semanticsLabel: 'Step progress',
           semanticsValue: '${(_steps / _dailyGoal * 100).toStringAsFixed(1)}%',
         );
@@ -171,4 +174,3 @@ class _StepCounterPageState extends State<StepCounterPage>
     );
   }
 }
-

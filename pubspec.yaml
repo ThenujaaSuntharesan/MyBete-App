@@ -1,4 +1,3 @@
-
 name: mybete_app
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
@@ -307,4 +306,3 @@ flutter_native_splash:
   #info_plist_files:
   #  - 'ios/Runner/Info-Debug.plist'
   #  - 'ios/Runner/Info-Release.plist'
-
