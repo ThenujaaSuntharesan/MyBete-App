@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/oatmeal.dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/scrambled_eggs.dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/Overnight_Oats_with_Peanut_Butter_&_Banana.dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/Quinoa_Breakfast_Bowl.dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/Chia_Seed_Pudding.dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/Green_Smoothie.dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/Whole_Grain_Avocado_Toast.dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/Banana_Pancakes_(No Flour!).dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/Tofu_Scramble _Vegan Egg Alternative).dart';
+import 'package:mybete_app/donot_have_diabetes/meal_plans/recipies/Banana_Smoothie_Bowl.dart';
 import 'vegetables.dart';
 import 'fruits.dart';
 import 'bakery.dart';
 import 'grains.dart';
-import 'Animal.dart';
+import 'protein.dart';
+import 'dairy.dart';
+import 'beverages.dart';
 
 
 void main() {
@@ -140,6 +151,10 @@ class FoodCategoryScreen extends StatelessWidget {
                           title: 'Dairy Products',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/milk.png',
                           onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const  DairyProductsScreen()),
+                            );
 
                           },
                         ),
@@ -158,6 +173,10 @@ class FoodCategoryScreen extends StatelessWidget {
                           title: 'Beverages',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/wine.png',
                           onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const BeveragesScreen()),
+                            );
 
                           },
                         ),
@@ -220,55 +239,100 @@ class FoodCategoryScreen extends StatelessWidget {
                           title: 'Scrambled Eggs with Veggies',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/scramble.png',
                           isFavorite: false,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const B2RecipeDetailScreen()),
+                            );
+                          },
                         ),
                         RecipeCard(
                           title: 'Overnight Oats with Peanut Butter & Banana',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/oats.png',
                           isFavorite: false,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const B3RecipeDetailScreen()),
+                            );
+                          },
                         ),
                         RecipeCard(
                           title: 'Chia Seed Pudding',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/Chia Seed Pudding Recipe - Belly Full.jpeg',
                           isFavorite: false,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const B4RecipeDetailScreen()),
+                            );
+                          },
                         ),
                         RecipeCard(
                           title: 'Green Smoothie',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/Spinach Smoothie.jpeg',
                           isFavorite: false,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const B5RecipeDetailScreen()),
+                            );
+                          },
                         ),
                         RecipeCard(
                           title: 'Whole Grain Avocado Toast',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/Creamy Avocado Toast with a Twist.jpeg',
                           isFavorite: false,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const B6RecipeDetailScreen()),
+                            );
+                          },
                         ),
                         RecipeCard(
                           title: 'Quinoa Breakfast Bowl',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/Summer Quinoa Breakfast Bowls.jpeg',
                           isFavorite: false,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const B7RecipeDetailScreen()),
+                            );
+                          },
                         ),
                         RecipeCard(
                           title: 'Banana Pancakes (No Flour!)',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/banana_pancake.png',
                           isFavorite: false,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const B8RecipeDetailScreen()),
+                            );
+                          },
                         ),
                         RecipeCard(
                           title: 'Tofu Scramble(Vegan Egg Alternative)',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/Tofu Scramble.jpeg',
                           isFavorite: false,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const B9RecipeDetailScreen()),
+                            );
+                          },
                         ),
                         RecipeCard(
                           title: 'Banana Smoothie Bowl',
                           imagePath: 'lib/donot_have_diabetes/meal_plans/meal_images/Banana Smoothie Bowl.jpeg',
                           isFavorite: false,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const B10RecipeDetailScreen()),
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -290,7 +354,7 @@ class FoodCategoryScreen extends StatelessWidget {
 
                   // Lunch Recipes Horizontal Scroller
                   SizedBox(
-                    height: 180,
+                    height: 280,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: [
@@ -376,7 +440,7 @@ class FoodCategoryScreen extends StatelessWidget {
 
                   // Dinner Recipes Horizontal Scroller
                   SizedBox(
-                    height: 180,
+                    height: 280,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: [
@@ -460,7 +524,7 @@ class FoodCategoryScreen extends StatelessWidget {
 
                   // Snacks Recipes Horizontal Scroller
                   SizedBox(
-                    height: 180,
+                    height: 280,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: [

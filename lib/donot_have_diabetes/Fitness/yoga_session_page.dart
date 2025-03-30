@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+void main() {
+  runApp(const YogaSessionPage());
+}
+
+
 class YogaSessionPage extends StatefulWidget {
   const YogaSessionPage({super.key});
 

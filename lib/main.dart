@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mybete_app/firebase_options.dart';
 import 'package:timezone/data/latest.dart' as tz_init;
+import 'package:provider/provider.dart';
+import 'have_diabetes/DashBoard/MyActivity/log_provider.dart';
 import 'have_diabetes/DashBoard/Reminder/Reminder_screen.dart';
 import 'sign_up_screen.dart';
 import 'log_in_screen.dart';
@@ -13,36 +15,55 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'firebase_options.dart';
 
 
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await Firebase.initializeApp();
+//
+//   // Enable offline persistence
+//   FirebaseFirestore.instance.settings = Settings(persistenceEnabled: true);
+//
+//   runApp(MyApp());
+// }
+
+
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  // Enable offline persistence
-  FirebaseFirestore.instance.settings = Settings(persistenceEnabled: true);
+  WidgetsFlutterBinding.ensureInitialized(); // Ensures plugin binding
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MyApp());
 }
+
 
 
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-
-      title: 'MyBete',
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
-      themeMode: ThemeMode.system,
-      home: FutureBuilder<bool>(
-        future: _checkLoginStatus(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasData && snapshot.data == true) {
-            return DiabeteOptions();
-          } else {
-            return DiabeteOptions();
-          }
-        },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => LogProvider()..initialize(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'MyBete',
+        theme: ThemeData.light(),
+        darkTheme: ThemeData.dark(),
+        themeMode: ThemeMode.system,
+        home: FutureBuilder<bool>(
+          future: _checkLoginStatus(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasData && snapshot.data == true) {
+              return DiabeteOptions();
+            } else {
+              return DiabeteOptions();
+            }
+          },
+        ),
       ),
     );
   }
