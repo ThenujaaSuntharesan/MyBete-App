@@ -537,7 +537,7 @@ class ProteinCard extends StatelessWidget {
         padding: const EdgeInsets.all(12.0),
         child: Column(
           children: [
-            // Vegetable Image
+            //  Image
             SizedBox(
               height: 100,
               child: Image.asset(
@@ -553,7 +553,7 @@ class ProteinCard extends StatelessWidget {
 
             const SizedBox(height: 15),
 
-            // Vegetable Name
+            //  Name
             Text(
               name,
               style: const TextStyle(

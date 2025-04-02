@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class RecipeDetailScreen extends StatefulWidget {
-  const RecipeDetailScreen({Key? key}) : super(key: key);
+class L6RecipeDetailScreen extends StatefulWidget {
+  const L6RecipeDetailScreen({Key? key}) : super(key: key);
 
   @override
-  _RecipeDetailScreenState createState() => _RecipeDetailScreenState();
+  _L6RecipeDetailScreenState createState() => _L6RecipeDetailScreenState();
 }
 
-class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
+class _L6RecipeDetailScreenState extends State<L6RecipeDetailScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -18,9 +18,9 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
   bool _recipeSaved = false;
 
   // Recipe data
-  final String recipeName = 'Oatmeal with Nuts & Fruits';
-  final int calories = 300;
-  final String category = 'breakfast';
+  final String recipeName = ' Tuna & Avocado Salad';
+  final int calories = 400;
+  final String category = 'lunch';
 
   // Get current user ID
   String? get currentUserId => _auth.currentUser?.uid;
@@ -44,21 +44,25 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
         'calories': calories,
         'category': category,
         'ingredients': [
-          '½ cup rolled oats',
-          '1 cup milk or water',
-          '1 tbsp honey or maple syrup',
-          '¼ tsp cinnamon',
-          '¼ cup mixed nuts (almonds, walnuts, cashews)',
-          '½ cup fresh fruits (bananas, berries, or apples)',
+          '1 can tuna (in water, drained)',
+          '½ avocado (mashed)',
+          '¼ cup cucumber (chopped)',
+          '¼ cup cherry tomatoes (halved)',
+          '1 tbsp lemon juice',
+          '1 tsp olive oil',
+          '1 tsp sesame oil',
+          'Salt & pepper to taste',
+
+
         ],
         'instructions': [
-          'In a saucepan, bring milk or water to a boil.',
-          'Add oats and cook for 5 minutes, stirring occasionally.',
-          'Remove from heat, mix in cinnamon and honey.',
-          'Top with nuts and fresh fruits. Serve warm.',
+          'In a bowl, mix tuna with mashed avocado, lemon juice, olive oil, salt, and pepper.',
+          'Add chopped cucumber and cherry tomatoes.',
+          'Serve on whole wheat toast or lettuce leaves!',
+
         ],
         'savedAt': FieldValue.serverTimestamp(),
-        'imagePath': 'lib/donot_have_diabetes/meal_plans/meal_images/Oatmeal with Toppings.jpeg',
+        'imagePath': 'lib/donot_have_diabetes/meal_plans/meal_images/Chicago-Style Tuna Salad.jpeg',
       };
 
       // Add recipe to user's saved recipes
@@ -134,7 +138,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
         children: [
           // Background Image
           Image.asset(
-            'lib/donot_have_diabetes/meal_plans/meal_images/Oatmeal with Toppings.jpeg',
+            'lib/donot_have_diabetes/meal_plans/meal_images/Chicago-Style Tuna Salad.jpeg',
             height: double.infinity,
             width: double.infinity,
             fit: BoxFit.cover,
@@ -202,7 +206,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                               children: [
                                 // Title
                                 const Text(
-                                  'Oatmeal with Nuts & Fruits',
+                                  'Tuna & Avocado Salad',
                                   style: TextStyle(
                                     fontSize: 32,
                                     fontWeight: FontWeight.bold,
@@ -224,12 +228,14 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                _buildBulletPoint('½ cup rolled oats'),
-                                _buildBulletPoint('1 cup milk or water'),
-                                _buildBulletPoint('1 tbsp honey or maple syrup'),
-                                _buildBulletPoint('¼ tsp cinnamon'),
-                                _buildBulletPoint('¼ cup mixed nuts (almonds, walnuts, cashews)'),
-                                _buildBulletPoint('½ cup fresh fruits (bananas, berries, or apples)'),
+                                _buildBulletPoint('1 can tuna (in water, drained)'),
+                                _buildBulletPoint('½ avocado (mashed)'),
+                                _buildBulletPoint('¼ cup cucumber (chopped)'),
+                                _buildBulletPoint('¼ cup cherry tomatoes (halved)'),
+                                _buildBulletPoint('1 tbsp lemon juice'),
+                                _buildBulletPoint('1 tsp olive oil'),
+                                _buildBulletPoint('Salt & pepper to taste'),
+
 
                                 const SizedBox(height: 24),
 
@@ -244,13 +250,13 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(1, 'In a saucepan, bring milk or water to a boil.'),
+                                _buildNumberedStep(1, 'In a bowl, mix tuna with mashed avocado, lemon juice, olive oil, salt, and pepper.'),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(2, 'Add oats and cook for 5 minutes, stirring occasionally.'),
+                                _buildNumberedStep(2, 'Add chopped cucumber and cherry tomatoes.'),
                                 const SizedBox(height: 8),
-                                _buildNumberedStep(3, 'Remove from heat, mix in cinnamon and honey.'),
-                                const SizedBox(height: 8),
-                                _buildNumberedStep(4, 'Top with nuts and fresh fruits. Serve warm.'),
+                                _buildNumberedStep(3, 'Serve on whole wheat toast or lettuce leaves!'),
+
+
 
                                 const SizedBox(height: 32),
 
@@ -277,7 +283,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                           ),
                                         )
                                             : const Text(
-                                          '300 kcal',
+                                          '400 kcal',
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 20,
