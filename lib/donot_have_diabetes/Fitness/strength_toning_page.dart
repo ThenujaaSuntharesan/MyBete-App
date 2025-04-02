@@ -72,5 +72,3 @@ Widget _buildGuidelineItem(IconData icon, String text) {
   );
 }
 
-
-

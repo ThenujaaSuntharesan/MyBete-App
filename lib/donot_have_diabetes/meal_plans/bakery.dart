@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'total_screen.dart'; // Add this line
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -23,6 +29,43 @@ class MyApp extends StatelessWidget {
 class BakeryItemsScreen extends StatelessWidget {
   const BakeryItemsScreen({Key? key}) : super(key: key);
 
+  // Function to add calorie to Firestore
+  void _addCalorieToFirebase(String name, int calories) async {
+    final userId = 'user123'; // Replace with actual user ID
+    final userRef = FirebaseFirestore.instance.collection('users').doc(userId);
+
+    try {
+      // Get the current total calorie count for the user
+      final userDoc = await userRef.get();
+      int totalCalories = 0;
+
+      if (userDoc.exists) {
+        // If user document exists, fetch total calories (or set to 0 if not present)
+        totalCalories = userDoc.data()?['total_calories'] ?? 0;
+      }
+
+      // Update the total calorie count by adding the vegetable's calories
+      totalCalories += calories;
+
+      // Save the updated total calorie count back to Firestore
+      await userRef.set({
+        'total_calories': totalCalories,
+      }, SetOptions(merge: true));
+
+      // Optionally: You can also add a document in a subcollection for individual vegetables
+      await userRef.collection('vegetable_calories').add({
+        'name': name,
+        'calories': calories,
+        'timestamp': FieldValue.serverTimestamp(), // Adds a timestamp for the entry
+      });
+
+      print("Calories added successfully!");
+    } catch (e) {
+      print("Error adding calories: $e");
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,14 +79,15 @@ class BakeryItemsScreen extends StatelessWidget {
                 children: [
                   // Back Button
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pop(context); // Navigates back to the previous screen
+                    },
                     child: const Icon(
                       Icons.arrow_back,
                       size: 30,
                       color: Colors.black,
                     ),
                   ),
-                  const Spacer(),
                 ],
               ),
             ),
@@ -110,7 +154,6 @@ class BakeryItemsScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
                         ),
                       ),
 
@@ -119,160 +162,328 @@ class BakeryItemsScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
                         ),
                       ),
 
                       const SizedBox(height: 16),
 
                       // Low-Calorie Bakery Items Grid
-                      Row(
-                        children: [
-                          Expanded(
-                            child: BakeryItemCard(
+                      SizedBox(
+                        height: 200, // Set a fixed height for the horizontal scroll area
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                            BakeryItemCard(
                               name: 'White Bread',
                               calories: 265,
                               imagePath: 'assets/white_bread.png',
-                              onAdd: () {},
+                              onAdd: (name, calories) {
+                                _addCalorieToFirebase(name, calories);
+                              },
                             ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: BakeryItemCard(
-                              name: 'Whole Wheat Bread',
-                              calories: 247,
-                              imagePath: 'assets/whole_wheat_bread.png',
-                              onAdd: () {},
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: BakeryItemCard(
-                              name: 'Multigrain Bread',
-                              calories: 250,
-                              imagePath: 'assets/multigrain_bread.png',
-                              onAdd: () {},
-                            ),
-                          ),
-                        ],
-                      ),
 
-                      const SizedBox(height: 24),
+                            const SizedBox(width: 12),
+                            BakeryItemCard(
+                                name: 'Whole Wheat Bread',
+                                calories: 247,
+                                imagePath: 'assets/whole_wheat_bread.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
 
-                      // Moderate-Calorie Bakery Items Section
-                      const Text(
-                        'Moderate-Calorie Bakery Items',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                            const SizedBox(width: 12),
+                            BakeryItemCard(
+                                name: 'Multigrain Bread',
+                                calories: 250,
+                                imagePath: 'assets/multigrain_bread.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                               ),
+
+                              const SizedBox(width: 12),
+                              BakeryItemCard(
+                                name: 'Rye Bread',
+                                calories: 259,
+                                imagePath: 'assets/multigrain_bread.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              BakeryItemCard(
+                                name: 'Baguette',
+                                calories: 270,
+                                imagePath: 'assets/multigrain_bread.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              BakeryItemCard(
+                                name: 'Pita Bread',
+                                calories: 275,
+                                imagePath: 'assets/multigrain_bread.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+
+                              const SizedBox(width: 12),
+                              BakeryItemCard(
+                                name: 'Bagel(Plain)',
+                                calories: 250,
+                                imagePath: 'assets/multigrain_bread.png',
+                                onAdd: (name, calories) {
+                                  _addCalorieToFirebase(name, calories);
+                                },
+                              ),
+                             ],
+                           ),
+                          ),
                         ),
-                      ),
 
-                      const Text(
-                        '(250-450 kcal per 100g)',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
+                            const SizedBox(height: 24),
 
-                      const SizedBox(height: 16),
+                            // Moderate-Calorie Bakery Items Section
+                            const Text(
+                              'Moderate-Calorie Bakery Items',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+
+                            const Text(
+                              '(250-450 kcal per 100g)',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+
+                            const SizedBox(height: 16),
 
                       // Moderate-Calorie Bakery Items Grid
-                      Row(
-                        children: [
-                          Expanded(
-                            child: BakeryItemCard(
-                              name: 'Croissant',
-                              calories: 406,
-                              imagePath: 'assets/croissant.png',
-                              onAdd: () {},
+                          SizedBox(
+                            height: 200, // Set a fixed height for the horizontal scroll area
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  BakeryItemCard(
+                                    name: 'Croissant',
+                                    calories: 406,
+                                    imagePath: 'assets/croissant.png',
+                                    onAdd: (name, calories) {
+                                      _addCalorieToFirebase(name, calories);
+                                    },
+                                   ),
+
+                                  const SizedBox(width: 12),
+                                  BakeryItemCard(
+                                      name: 'Cinnamon roll',
+                                      calories: 450,
+                                      imagePath: 'assets/cinnamon_roll.png',
+                                      onAdd: (name, calories) {
+                                        _addCalorieToFirebase(name, calories);
+                                      },
+                                  ),
+                                  const SizedBox(width: 12),
+                                  BakeryItemCard(
+                                      name: 'Chocolate Cake',
+                                      calories: 371,
+                                      imagePath: 'assets/chocolate_cake.png',
+                                      onAdd: (name, calories) {
+                                        _addCalorieToFirebase(name, calories);
+                                      },
+                                  ),
+
+                                  const SizedBox(width: 12),
+                                  BakeryItemCard(
+                                    name: 'Chocolate Cake',
+                                    calories: 371,
+                                    imagePath: 'assets/chocolate_cake.png',
+                                    onAdd: (name, calories) {
+                                      _addCalorieToFirebase(name, calories);
+                                    },
+                                  ),
+
+                                  const SizedBox(width: 12),
+                                  BakeryItemCard(
+                                    name: 'Cheese Cake',
+                                    calories: 321,
+                                    imagePath: 'assets/chocolate_cake.png',
+                                    onAdd: (name, calories) {
+                                      _addCalorieToFirebase(name, calories);
+                                    },
+                                  ),
+
+                                  const SizedBox(width: 12),
+                                  BakeryItemCard(
+                                    name: 'Banana Bread',
+                                    calories: 326,
+                                    imagePath: 'assets/chocolate_cake.png',
+                                    onAdd: (name, calories) {
+                                      _addCalorieToFirebase(name, calories);
+                                    },
+                                  ),
+
+                                  const SizedBox(width: 12),
+                                  BakeryItemCard(
+                                    name: 'Cheese Bread',
+                                    calories: 330,
+                                    imagePath: 'assets/chocolate_cake.png',
+                                    onAdd: (name, calories) {
+                                      _addCalorieToFirebase(name, calories);
+                                    },
+                                  ),
+
+                                  const SizedBox(width: 12),
+                                  BakeryItemCard(
+                                    name: 'Pretzel',
+                                    calories: 340,
+                                    imagePath: 'assets/chocolate_cake.png',
+                                    onAdd: (name, calories) {
+                                      _addCalorieToFirebase(name, calories);
+                                    },
+                                  ),
+
+                                  const SizedBox(width: 12),
+                                  BakeryItemCard(
+                                    name: 'Garlic Bread',
+                                    calories: 360,
+                                    imagePath: 'assets/chocolate_cake.png',
+                                    onAdd: (name, calories) {
+                                      _addCalorieToFirebase(name, calories);
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: BakeryItemCard(
-                              name: 'Cinnamon roll',
-                              calories: 450,
-                              imagePath: 'assets/cinnamon_roll.png',
-                              onAdd: () {},
+                            const SizedBox(height: 24),
+
+                            // High-Calorie Bakery Items Section
+                            const Text(
+                              'High-Calorie Bakery Items',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+
+                            const Text(
+                              '(Above 450 kcal per 100g)',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+
+                            const SizedBox(height: 16),
+
+                            // High-Calorie Bakery Items Grid
+                              SizedBox(
+                                height: 200, // Set a fixed height for the horizontal scroll area
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: [
+                                      BakeryItemCard(
+                                        name: 'Puff Pastry',
+                                        calories: 558,
+                                        imagePath: 'assets/puff_pastry.png',
+                                        onAdd: (name, calories) {
+                                          _addCalorieToFirebase(name, calories);
+                                        },
+                                      ),
+
+                                    const SizedBox(width: 12),
+                                      BakeryItemCard(
+                                        name: 'Butter Cookies',
+                                        calories: 520,
+                                        imagePath: 'assets/butter_cookies.png',
+                                        onAdd: (name, calories) {
+                                          _addCalorieToFirebase(name, calories);
+                                        },
+                                      ),
+
+                                    const SizedBox(width: 12),
+                                      BakeryItemCard(
+                                        name: 'Oatmeal Cookies',
+                                        calories: 450,
+                                        imagePath: 'assets/oatmeal_cookies.png',
+                                        onAdd: (name, calories) {
+                                        _addCalorieToFirebase(name, calories);
+                                        },
+                                      ),
+
+                                      const SizedBox(width: 12),
+                                      BakeryItemCard(
+                                        name: 'Glazed Donut',
+                                        calories: 452,
+                                        imagePath: 'assets/oatmeal_cookies.png',
+                                        onAdd: (name, calories) {
+                                          _addCalorieToFirebase(name, calories);
+                                        },
+                                      ),
+
+                                      const SizedBox(width: 12),
+                                      BakeryItemCard(
+                                        name: 'Pound Cake',
+                                        calories: 430,
+                                        imagePath: 'assets/oatmeal_cookies.png',
+                                        onAdd: (name, calories) {
+                                          _addCalorieToFirebase(name, calories);
+                                        },
+                                      ),
+
+                                      const SizedBox(width: 12),
+                                      BakeryItemCard(
+                                        name: 'Muffin',
+                                        calories: 400,
+                                        imagePath: 'assets/oatmeal_cookies.png',
+                                        onAdd: (name, calories) {
+                                          _addCalorieToFirebase(name, calories);
+                                        },
+                                      ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+
+                              // Add View Total Calories Button
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                                child: Center(
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => const TotalScreen(category: 'Vegetables')), // Navigate to TotalScreen
+                                      );
+                                    },
+                                    child: const Text(
+                                      'View Total Calories',
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              ],
                             ),
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: BakeryItemCard(
-                              name: 'Chocolate Cake',
-                              calories: 371,
-                              imagePath: 'assets/chocolate_cake.png',
-                              onAdd: () {},
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 24),
-
-                      // High-Calorie Bakery Items Section
-                      const Text(
-                        'High-Calorie Bakery Items',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-
-                      const Text(
-                        '(Above 450 kcal per 100g)',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-
-                      const SizedBox(height: 16),
-
-                      // High-Calorie Bakery Items Grid
-                      Row(
-                        children: [
-                          Expanded(
-                            child: BakeryItemCard(
-                              name: 'Puff Pastry',
-                              calories: 558,
-                              imagePath: 'assets/puff_pastry.png',
-                              onAdd: () {},
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: BakeryItemCard(
-                              name: 'Butter Cookies',
-                              calories: 520,
-                              imagePath: 'assets/butter_cookies.png',
-                              onAdd: () {},
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: BakeryItemCard(
-                              name: 'Oatmeal Cookies',
-                              calories: 450,
-                              imagePath: 'assets/oatmeal_cookies.png',
-                              onAdd: () {},
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 24),
-                    ],
-                  ),
                 ),
               ),
-            ),
 
             // Bottom Navigation Bar
             Container(
@@ -313,18 +524,20 @@ class BakeryItemsScreen extends StatelessWidget {
                 ],
               ),
             ),
-          ],
-        ),
-      ),
+              ],
+            ),
+    ),
     );
   }
 }
+
 
 class BakeryItemCard extends StatelessWidget {
   final String name;
   final int calories;
   final String imagePath;
-  final VoidCallback onAdd;
+  final void Function(String, int) onAdd;
+
 
   const BakeryItemCard({
     Key? key,
@@ -337,6 +550,7 @@ class BakeryItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 160, // Added width constraint for consistency
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -354,19 +568,19 @@ class BakeryItemCard extends StatelessWidget {
           children: [
             // Bakery Item Image
             SizedBox(
-              height: 80,
+              height: 100,
               child: Image.asset(
                 imagePath,
                 fit: BoxFit.contain,
                 errorBuilder: (context, error, stackTrace) => Container(
                   height: 80,
                   color: Colors.grey.shade200,
-                  child: const Icon(Icons.image, size: 40),
+                  child: const Icon(Icons.image, size: 80),
                 ),
               ),
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: 15),
 
             // Bakery Item Name
             Text(
@@ -397,7 +611,19 @@ class BakeryItemCard extends StatelessWidget {
                 ),
 
                 GestureDetector(
-                  onTap: onAdd,
+                  onTap: () {
+                    // Call onAdd with the required parameters
+                    onAdd(name, calories);
+
+                    // Show a snackbar to confirm addition
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Added $name ($calories kcal)'),
+                        duration: const Duration(seconds: 1),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  },
                   child: Container(
                     width: 28,
                     height: 28,
