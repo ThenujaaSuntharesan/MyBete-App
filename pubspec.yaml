@@ -99,6 +99,7 @@ dev_dependencies:
   flutter_driver:
     sdk: flutter
   metrics_center: ^1.0.13
+  mocktail: ^1.0.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -12,7 +12,6 @@ import 'log_in_screen.dart';
 import 'diabete_options.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'firebase_options.dart';
 
 
 // void main() async {
