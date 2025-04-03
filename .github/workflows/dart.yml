@@ -13,43 +13,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
+      # Set up Dart
+      - uses: dart-lang/setup-dart@v1
 
+      # Set up Flutter
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.29.2'
 
+      # Install dependencies
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Install Firebase CLI
-        run: npm install -g firebase-tools
-
-      # ✅ Install Google Cloud SDK
-      - name: Install Google Cloud SDK
-        run: |
-          Invoke-WebRequest -Uri https://dl.google.com/dl/cloudsdk/channels/rapid/GoogleCloudSDKInstaller.exe -OutFile GoogleCloudSDKInstaller.exe
-          Start-Process -Wait -FilePath GoogleCloudSDKInstaller.exe -ArgumentList "/S"
-
-      - name: Authenticate Firebase CLI
-        env:
-          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-        run: |
-          echo "$FIREBASE_SERVICE_ACCOUNT" > $HOME/firebase_service_account.json
-          gcloud auth activate-service-account --key-file=$HOME/firebase_service_account.json
-          firebase use --add mybete-app
-
-      - name: Install FlutterFire CLI
-        run: dart pub global activate flutterfire_cli
-
-      - name: Authenticate Firebase
-        env:
-          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-        run: echo "$FIREBASE_SERVICE_ACCOUNT" > firebase_service_account.json
-
-      - name: Configure FlutterFire
-        run: flutterfire configure --yes --project=mybete-app --out=lib/firebase_options.dart
-
+      # Run Flutter tests
       - name: Run tests
         run: flutter test
