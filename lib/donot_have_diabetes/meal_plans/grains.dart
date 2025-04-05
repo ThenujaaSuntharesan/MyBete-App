@@ -81,7 +81,7 @@ class GrainsScreen extends StatelessWidget {
                     child: const Icon(
                       Icons.arrow_back,
                       size: 30,
-                      color: Colors.black,
+
                     ),
                   ),
                 ],
@@ -104,7 +104,7 @@ class GrainsScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 36,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+
                         ),
                       ),
 
@@ -150,7 +150,7 @@ class GrainsScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+
                         ),
                       ),
 
@@ -159,7 +159,7 @@ class GrainsScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+
                         ),
                       ),
 
@@ -233,7 +233,7 @@ class GrainsScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+
                         ),
                       ),
 
@@ -242,7 +242,7 @@ class GrainsScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+
                         ),
                       ),
 
@@ -314,7 +314,7 @@ class GrainsScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+
                         ),
                       ),
 
@@ -323,7 +323,7 @@ class GrainsScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+
                         ),
                       ),
 
@@ -387,7 +387,6 @@ class GrainsScreen extends StatelessWidget {
             Container(
               height: 60,
               decoration: BoxDecoration(
-                color: Colors.white,
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.05),
@@ -447,6 +446,7 @@ class GrainCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 140, // Set a fixed width for each card in horizontal scroll
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -464,7 +464,7 @@ class GrainCard extends StatelessWidget {
           children: [
             // Grain Image
             SizedBox(
-              height: 100,
+              height: 80,
               child: Image.asset(
                 imagePath,
                 fit: BoxFit.contain,
@@ -487,8 +487,6 @@ class GrainCard extends StatelessWidget {
                 color: Colors.black,
               ),
               textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
             ),
 
             const SizedBox(height: 4),

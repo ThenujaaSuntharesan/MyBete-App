@@ -568,19 +568,19 @@ class BakeryItemCard extends StatelessWidget {
           children: [
             // Bakery Item Image
             SizedBox(
-              height: 80,
+              height: 100,
               child: Image.asset(
                 imagePath,
                 fit: BoxFit.contain,
                 errorBuilder: (context, error, stackTrace) => Container(
                   height: 80,
                   color: Colors.grey.shade200,
-                  child: const Icon(Icons.image, size: 40),
+                  child: const Icon(Icons.image, size: 80),
                 ),
               ),
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: 15),
 
             // Bakery Item Name
             Text(

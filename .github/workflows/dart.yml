@@ -1,0 +1,41 @@
+name: Dart
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Set up Dart
+      - uses: dart-lang/setup-dart@v1
+
+      # Set up Flutter
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.2'
+
+      # Install dependencies
+      - name: Install dependencies
+        run: flutter pub get
+
+      
+      - name: Create dummy firebase_options.dart if missing
+        run: |
+          if (-not (Test-Path "lib/firebase_options.dart")) {
+            "class DefaultFirebaseOptions {" | Out-File -FilePath lib/firebase_options.dart -Encoding utf8
+            "  static final currentPlatform = null;" | Out-File -FilePath lib/firebase_options.dart -Encoding utf8 -Append
+            "}" | Out-File -FilePath lib/firebase_options.dart -Encoding utf8 -Append
+          }
+
+
+      # Run Flutter tests
+      - name: Run tests
+        run: flutter test

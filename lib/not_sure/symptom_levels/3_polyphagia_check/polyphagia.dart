@@ -32,7 +32,7 @@ class _ExtremeHungerCheckerState extends State<Symptom3Screen> {
     try {
       final snapshot = await _firestore
           .collection('saved_calories')
-          .where('userId', isEqualTo: _userId) // Fetch data for the current user
+          .where('userId', isEqualTo: _userId)
           .orderBy('date', descending: true)
           .get();
 
@@ -52,11 +52,11 @@ class _ExtremeHungerCheckerState extends State<Symptom3Screen> {
 
   Future<void> _saveCalorieCount() async {
     try {
-      final today = DateTime.now().toIso8601String().substring(0, 10); // Only the date part
-      final isExtreme = _totalCalories > 2000; // Extreme threshold
+      final today = DateTime.now().toIso8601String().substring(0, 10);
+      final isExtreme = _totalCalories > 2000;
 
       final entry = {
-        'userId': _userId, // Associate with the current user
+        'userId': _userId,
         'date': today,
         'calories': _totalCalories,
         'status': isExtreme ? 'Extreme' : 'Normal',
@@ -65,11 +65,24 @@ class _ExtremeHungerCheckerState extends State<Symptom3Screen> {
       await _firestore.collection('saved_calories').add(entry);
 
       setState(() {
-        _savedCalories.insert(0, entry); // Add the new entry to the top of the list
-        _totalCalories = 0; // Reset total calories after saving
+        _savedCalories.insert(0, entry);
+        _totalCalories = 0;
       });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Calorie count saved successfully!'),
+            backgroundColor: Colors.green,
+          )
+      );
     } catch (e) {
       print('Error saving calorie count: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to save data'),
+            backgroundColor: Colors.red,
+          )
+      );
     }
   }
 
@@ -94,6 +107,7 @@ class _ExtremeHungerCheckerState extends State<Symptom3Screen> {
       "Extreme Days: $extremeDays\n"
           "Healthy Days: $healthyDays\n\n"
           "Final Outcome: $result",
+      extremeDays > healthyDays ? Colors.orange : Colors.green,
     );
   }
 
@@ -101,7 +115,7 @@ class _ExtremeHungerCheckerState extends State<Symptom3Screen> {
     try {
       final snapshot = await _firestore
           .collection('saved_calories')
-          .where('userId', isEqualTo: _userId) // Fetch entries specific to the user
+          .where('userId', isEqualTo: _userId)
           .get();
 
       for (var doc in snapshot.docs) {
@@ -110,118 +124,315 @@ class _ExtremeHungerCheckerState extends State<Symptom3Screen> {
 
       setState(() {
         _savedCalories.clear();
-        _totalCalories = 0; // Reset total calories
+        _totalCalories = 0;
       });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('All data cleared successfully!'),
+            backgroundColor: Colors.green,
+          )
+      );
     } catch (e) {
       print('Error clearing data: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to clear data'),
+            backgroundColor: Colors.red,
+          )
+      );
     }
   }
 
-  void _showDialog(String title, String message) {
+  void _showDialog(String title, String message, Color color) {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text(title),
-        content: Text(message),
+        backgroundColor: Color(0xFFF8F9FA),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Container(
+          padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Center(
+            child: Text(
+              title,
+              style: TextStyle(
+                color: color,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ),
+        content: Text(
+          message,
+          style: TextStyle(fontSize: 16),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('OK'),
+            child: Text(
+              'OK',
+              style: TextStyle(color: color),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Icon _getStatusIcon(String status) {
-    if (status == 'Extreme') {
-      return Icon(Icons.warning, color: Colors.red);
-    } else {
-      return Icon(Icons.check_circle, color: Colors.green);
-    }
+  Widget _getStatusIcon(String status) {
+    return Container(
+      padding: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: status == 'Extreme' ? Colors.red[100] : Colors.green[100],
+        shape: BoxShape.circle,
+      ),
+      child: Icon(
+        status == 'Extreme' ? Icons.warning : Icons.check_circle,
+        color: status == 'Extreme' ? Colors.red : Colors.green,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Extreme Hunger Checker"),
+        title: Text(
+          "Extreme Hunger Checker",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Color(0xFF288994),
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.white),
       ),
-      body: Column(
-        children: [
-          ElevatedButton(
-            onPressed: _saveCalorieCount,
-            child: Text("Save Calorie Count"),
-          ),
-          Expanded(
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
+      body: Container(
+        color: Color(0xFFE6F7FF),
+        child: Column(
+          children: [
+            // Food Selection Grid
+            Expanded(
+              flex: 4,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 15,
+                    mainAxisSpacing: 15,
+                    childAspectRatio: 0.9,
+                  ),
+                  itemCount: _foodItems.length,
+                  itemBuilder: (context, index) {
+                    final food = _foodItems[index];
+                    return Card(
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(15),
+                        onTap: () => _addCalories(food['calories']),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(15),
+                                ),
+                                child: Image.asset(
+                                  food['image'],
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    food['name'],
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    "${food['calories']} calories",
+                                    style: TextStyle(
+                                      color: Colors.grey[700],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
-              itemCount: _foodItems.length,
-              itemBuilder: (context, index) {
-                final food = _foodItems[index];
-                return GestureDetector(
-                  onTap: () => _addCalories(food['calories']),
-                  child: Card(
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: Image.asset(
-                            food['image'],
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        Text(
-                          food['name'],
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text("${food['calories']} cal"),
-                      ],
+            ),
+
+            // Total Calories and Actions
+            Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 10,
+                    offset: Offset(0, -5),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    decoration: BoxDecoration(
+                      color: _totalCalories > 2000 ? Colors.red[100] : Colors.green[100],
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Text(
+                      "Total Calories: $_totalCalories",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: _totalCalories > 2000 ? Colors.red[800] : Colors.green[800],
+                      ),
                     ),
                   ),
-                );
-              },
+                  SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton.icon(
+                        icon: Icon(Icons.save, size: 20),
+                        label: Text("Save"),
+                        onPressed: _saveCalorieCount,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF35B4C9),
+                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                      ),
+                      ElevatedButton.icon(
+                        icon: Icon(Icons.analytics, size: 20),
+                        label: Text("Report"),
+                        onPressed: _checkHungerReport,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF96D8E3),
+                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                      ),
+                      ElevatedButton.icon(
+                        icon: Icon(Icons.delete, size: 20),
+                        label: Text("Clear"),
+                        onPressed: _clearData,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFFE28869),
+                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                Text(
-                  "Total Calories: $_totalCalories",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+
+            // Saved Calories List
+            if (_savedCalories.isNotEmpty)
+              Expanded(
+                flex: 3,
+                child: Container(
+                  padding: EdgeInsets.only(top: 16),
+                  child: Column(
+                    children: [
+                      Text(
+                        "Your History",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF06333B),
+                        ),
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          padding: EdgeInsets.only(top: 8),
+                          itemCount: _savedCalories.length,
+                          itemBuilder: (context, index) {
+                            final entry = _savedCalories[index];
+                            return Card(
+                              margin: EdgeInsets.symmetric(
+                                vertical: 4,
+                                horizontal: 16,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: ListTile(
+                                leading: _getStatusIcon(entry['status']),
+                                title: Text(
+                                  entry['date'],
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                subtitle: Text(
+                                  "${entry['calories']} calories",
+                                  style: TextStyle(color: Colors.grey[700]),
+                                ),
+                                trailing: Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 6,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: entry['status'] == 'Extreme'
+                                        ? Colors.red[50]
+                                        : Colors.green[50],
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Text(
+                                    entry['status'],
+                                    style: TextStyle(
+                                      color: entry['status'] == 'Extreme'
+                                          ? Colors.red
+                                          : Colors.green,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: _checkHungerReport,
-                  child: Text("Check Hunger"),
-                ),
-                SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: _clearData,
-                  child: Text("Clear All Data"),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _savedCalories.length,
-              itemBuilder: (context, index) {
-                final entry = _savedCalories[index];
-                return ListTile(
-                  leading: _getStatusIcon(entry['status']),
-                  title: Text("Date: ${entry['date']}"),
-                  subtitle: Text("Calories: ${entry['calories']}"),
-                  trailing: Text(entry['status']),
-                );
-              },
-            ),
-          ),
-        ],
+              ),
+          ],
+        ),
       ),
     );
   }

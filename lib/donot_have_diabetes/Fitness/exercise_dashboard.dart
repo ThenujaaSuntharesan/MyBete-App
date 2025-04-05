@@ -4,7 +4,11 @@ import 'yoga_session_page.dart'; // Import YogaSessionPage
 import 'strength_toning_page.dart'; // Import StrengthToningPage
 import 'cardio_workout_page.dart'; // Import CardioWorkoutPage
 
+
+
 class ExerciseDashboard extends StatelessWidget {
+  
+
   final List<ExerciseCategory> categories = [
     ExerciseCategory(
       title: 'Step Counter',
@@ -28,6 +32,7 @@ class ExerciseDashboard extends StatelessWidget {
     ),
   ];
 
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
