@@ -9,11 +9,11 @@ Future<void> main() async {
     androidNotificationChannelName: 'Relax App Audio',
     androidNotificationOngoing: true,
   );
-  runApp(const MyApp());
+  runApp(const RainScreen());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class RainScreen extends StatelessWidget {
+  const RainScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
