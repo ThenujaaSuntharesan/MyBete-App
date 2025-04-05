@@ -26,16 +26,15 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-
-        # Create dummy firebase_options.dart ONLY in CI
+      
       - name: Create dummy firebase_options.dart if missing
         run: |
-          if [ ! -f lib/firebase_options.dart ]; then
-            echo "Creating dummy firebase_options.dart..."
-            echo "class DefaultFirebaseOptions {" > lib/firebase_options.dart
-            echo "  static final currentPlatform = null;" >> lib/firebase_options.dart
-            echo "}" >> lib/firebase_options.dart
-          fi
+          if (-not (Test-Path "lib/firebase_options.dart")) {
+            "class DefaultFirebaseOptions {" | Out-File -FilePath lib/firebase_options.dart -Encoding utf8
+            "  static final currentPlatform = \$null;" | Out-File -FilePath lib/firebase_options.dart -Encoding utf8 -Append
+            "}" | Out-File -FilePath lib/firebase_options.dart -Encoding utf8 -Append
+          }
+
 
       # Run Flutter tests
       - name: Run tests
