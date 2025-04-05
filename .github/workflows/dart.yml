@@ -26,12 +26,16 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      # Configure Firebase (Generate firebase_options.dart)
-      # - name: Configure Firebase
-      #   run: |
-      #     flutterfire configure --project=${{ secrets.FIREBASE_PROJECT_ID }} --platforms=android,ios,web --out=lib/firebase_options.dart
-      #   env:
-      #     FIREBASE_CLI_TOKEN: ${{ secrets.FIREBASE_CLI_TOKEN }}
+
+        # Create dummy firebase_options.dart ONLY in CI
+      - name: Create dummy firebase_options.dart if missing
+        run: |
+          if [ ! -f lib/firebase_options.dart ]; then
+            echo "Creating dummy firebase_options.dart..."
+            echo "class DefaultFirebaseOptions {" > lib/firebase_options.dart
+            echo "  static final currentPlatform = null;" >> lib/firebase_options.dart
+            echo "}" >> lib/firebase_options.dart
+          fi
 
       # Run Flutter tests
       - name: Run tests
