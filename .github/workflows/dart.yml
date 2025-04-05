@@ -27,11 +27,11 @@ jobs:
         run: flutter pub get
 
       # Configure Firebase (Generate firebase_options.dart)
-      - name: Configure Firebase
-        run: |
-          flutterfire configure --project=${{ secrets.FIREBASE_PROJECT_ID }} --platforms=android,ios,web --out=lib/firebase_options.dart
-        env:
-          FIREBASE_CLI_TOKEN: ${{ secrets.FIREBASE_CLI_TOKEN }}
+      # - name: Configure Firebase
+      #   run: |
+      #     flutterfire configure --project=${{ secrets.FIREBASE_PROJECT_ID }} --platforms=android,ios,web --out=lib/firebase_options.dart
+      #   env:
+      #     FIREBASE_CLI_TOKEN: ${{ secrets.FIREBASE_CLI_TOKEN }}
 
       # Run Flutter tests
       - name: Run tests
