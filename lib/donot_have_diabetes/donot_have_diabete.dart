@@ -31,7 +31,7 @@ class DonotHaveDiabeteDashboard extends StatelessWidget {
             SizedBox(height: 20),
             DashboardButton(title: "Meal Planner", page: MealPlannerScreen()),
             SizedBox(height: 20),
-            DashboardButton(title: "Mind Relax", page: MindRelaxDashboard()),
+            // DashboardButton(title: "Mind Relax", page: MindRelaxDashboard()),
             SizedBox(height: 20),
             DashboardButton(title: "Fitness", page: Exercise()),
           ],

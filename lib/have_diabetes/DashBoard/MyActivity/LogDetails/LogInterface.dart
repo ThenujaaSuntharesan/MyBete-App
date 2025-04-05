@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mybete_app/have_diabetes/DashBoard/MyActivity/MyActivity.dart';
 import 'package:provider/provider.dart';
@@ -1190,7 +1190,6 @@ class _LogInterfaceState extends State<LogInterface> {
                           ),
                         ),
                       ),
-
                       // Blood Sugar Tracking Moment
                       Container(
                         padding: const EdgeInsets.all(16),
