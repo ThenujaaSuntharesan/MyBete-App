@@ -42,7 +42,7 @@ class _SleepScheduleScreenState extends State<SleepScheduleScreen> with SingleTi
     );
 
     _animation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut)
+        CurvedAnimation(parent: _animationController, curve: Curves.easeInOut)
     );
 
     _animationController.forward();
@@ -65,14 +65,14 @@ class _SleepScheduleScreenState extends State<SleepScheduleScreen> with SingleTi
     tz_init.initializeTimeZones();
 
     const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+    AndroidInitializationSettings('@mipmap/ic_launcher');
 
     const DarwinInitializationSettings initializationSettingsIOS =
-        DarwinInitializationSettings(
-          requestAlertPermission: true,
-          requestBadgePermission: true,
-          requestSoundPermission: true,
-        );
+    DarwinInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
+    );
 
     const InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
@@ -147,7 +147,7 @@ class _SleepScheduleScreenState extends State<SleepScheduleScreen> with SingleTi
       return;
     }
 
-    // Schedule bedtime reminder if enabled
+    //Schedule bedtime reminder if enabled
     if (_bedtimeReminderEnabled) {
       await _scheduleDailyNotification(
         id: 1,
@@ -274,7 +274,7 @@ class _SleepScheduleScreenState extends State<SleepScheduleScreen> with SingleTi
           ),
           child: child!,
         );
-      }
+      },
     );
 
     if (picked != null && picked != _bedTime) {
@@ -400,7 +400,7 @@ class _SleepScheduleScreenState extends State<SleepScheduleScreen> with SingleTi
               await _saveSettings();
               if (_isScheduleActive &&
                   ((isBedtime && _bedtimeReminderEnabled) ||
-                   (!isBedtime && _wakeupReminderEnabled))) {
+                      (!isBedtime && _wakeupReminderEnabled))) {
                 await _scheduleNotifications();
               }
 
@@ -697,11 +697,11 @@ class _SleepScheduleScreenState extends State<SleepScheduleScreen> with SingleTi
                   onPressed: _toggleSchedule,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _isScheduleActive
-                      ? const Color(0xFF74C7E5)
-                      : const Color(0xFF0048FF),
+                        ? const Color(0xFF74C7E5)
+                        : const Color(0xFF0048FF),
                     foregroundColor: _isScheduleActive
-                      ? const Color(0xFF03174C)
-                      : Colors.white,
+                        ? const Color(0xFF03174C)
+                        : Colors.white,
                     minimumSize: const Size(double.infinity, 56),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(28),
@@ -946,8 +946,8 @@ class ClockPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant ClockPainter oldDelegate) {
     return oldDelegate.startAngle != startAngle ||
-           oldDelegate.sweepAngle != sweepAngle ||
-           oldDelegate.bedTime != bedTime ||
-           oldDelegate.wakeTime != wakeTime;
-  }
+        oldDelegate.sweepAngle != sweepAngle ||
+        oldDelegate.bedTime != bedTime ||
+        oldDelegate.wakeTime !=wakeTime;
+    }
 }

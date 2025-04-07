@@ -497,10 +497,13 @@ class ReminderProvider with ChangeNotifier {
   String? _error;
 
   List<Reminder> get reminders => _reminders;
+
   bool get isLoading => _isLoading;
+
   String? get error => _error;
 
-  ReminderProvider({required FlutterLocalNotificationsPlugin notificationsPlugin})
+  ReminderProvider(
+      {required FlutterLocalNotificationsPlugin notificationsPlugin})
       : _notificationsPlugin = notificationsPlugin {
     loadReminders();
   }
@@ -675,7 +678,8 @@ class ReminderProvider with ChangeNotifier {
       final hour = reminder.reminderTime.hour;
       final minute = reminder.reminderTime.minute;
 
-      if (reminder.reminderType == 'one-time' && reminder.reminderDate != null) {
+      if (reminder.reminderType == 'one-time' &&
+          reminder.reminderDate != null) {
         // Schedule one-time notification
         final scheduledDate = DateTime(
           reminder.reminderDate!.year,
@@ -704,7 +708,8 @@ class ReminderProvider with ChangeNotifier {
             hour: hour,
             minute: minute,
           );
-        } else if (reminder.repeatType == 'custom' && reminder.startsOn != null) {
+        } else
+        if (reminder.repeatType == 'custom' && reminder.startsOn != null) {
           // Schedule custom notification
           final startDate = DateTime(
             reminder.startsOn!.year,
@@ -716,10 +721,15 @@ class ReminderProvider with ChangeNotifier {
 
           // Only schedule if start date is in the future or today
           if (startDate.isAfter(DateTime.now()) ||
-              (startDate.year == DateTime.now().year &&
-                  startDate.month == DateTime.now().month &&
-                  startDate.day == DateTime.now().day)) {
-
+              (startDate.year == DateTime
+                  .now()
+                  .year &&
+                  startDate.month == DateTime
+                      .now()
+                      .month &&
+                  startDate.day == DateTime
+                      .now()
+                      .day)) {
             await _scheduleDailyNotification(
               id: reminder.id.hashCode,
               title: 'Diabetes App Reminder',
@@ -766,13 +776,12 @@ class ReminderProvider with ChangeNotifier {
           iOS: DarwinNotificationDetails(),
         ),
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-        uiLocalNotificationDateInterpretation:
-        UILocalNotificationDateInterpretation.absoluteTime,
       );
     } catch (e) {
       print("Error scheduling one-time notification: $e");
     }
   }
+
 
   // 🔹 Schedule a daily notification
   Future<void> _scheduleDailyNotification({
@@ -834,8 +843,6 @@ class ReminderProvider with ChangeNotifier {
         ),
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         matchDateTimeComponents: DateTimeComponents.time,
-        uiLocalNotificationDateInterpretation:
-        UILocalNotificationDateInterpretation.absoluteTime,
       );
     } catch (e) {
       print("Error scheduling daily notification: $e");

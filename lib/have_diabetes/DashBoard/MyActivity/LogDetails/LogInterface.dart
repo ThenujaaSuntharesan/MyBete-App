@@ -1,4 +1,4 @@
-import'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mybete_app/have_diabetes/DashBoard/MyActivity/MyActivity.dart';
 import 'package:provider/provider.dart';
@@ -1190,6 +1190,7 @@ class _LogInterfaceState extends State<LogInterface> {
                           ),
                         ),
                       ),
+
                       // Blood Sugar Tracking Moment
                       Container(
                         padding: const EdgeInsets.all(16),
@@ -1575,28 +1576,27 @@ class _LogInterfaceState extends State<LogInterface> {
   // Helper method to build list tiles
   Widget _buildListTile(String title, Widget content) {
     return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: Colors.grey[200]!),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontFamily: GoogleFonts.poppins().fontFamily,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: _textColor,
-            ),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(color: Colors.grey[200]!),
           ),
-          content,
-        ],
-      ),
-    );
-  }
+        ),
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  fontFamily: GoogleFonts.poppins().fontFamily,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: _textColor,
+                ),
+              ),
+              content,
+            ],
+            ),
+        );
+    }
 }
-
