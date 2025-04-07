@@ -5,12 +5,11 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'dart:math';
-<<<<<<< HEAD
-=======
 
 
 
->>>>>>> main
+
+
 import '../Reminder/Reminder_screen.dart';
 import '../Report/report_screen.dart';
 import 'LogDetails/LogInterface.dart';
