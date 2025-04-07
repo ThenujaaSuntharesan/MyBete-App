@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class CardioWorkoutPage extends StatefulWidget {
@@ -8,9 +7,7 @@ class CardioWorkoutPage extends StatefulWidget {
   State<CardioWorkoutPage> createState() => _CardioWorkoutPageState();
 }
 
-class _CardioWorkoutPageState extends State<CardioWorkoutPage>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+class _CardioWorkoutPageState extends State<CardioWorkoutPage> {
   int _selectedWorkout = 0;
   final List<String> _workouts = [
     'Running',
@@ -21,25 +18,15 @@ class _CardioWorkoutPageState extends State<CardioWorkoutPage>
   ];
 
   @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 500),
-    )..forward();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cardio Workouts'),
+        elevation: 0,
+        backgroundColor: Colors.blueAccent,
+        title: const Text(
+          'Cardio Workouts',
+          style: TextStyle(fontWeight: FontWeight.w600),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.info_outline),
@@ -47,19 +34,20 @@ class _CardioWorkoutPageState extends State<CardioWorkoutPage>
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildIntroductionCard(),
-            const SizedBox(height: 32),
-            _buildWorkoutTypeSelector(),
-            const SizedBox(height: 32),
-            _buildWorkoutInstructions(),
-            const SizedBox(height: 32),
-            _buildStartButton(),
-          ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            children: [
+              _buildIntroductionCard(),
+              const SizedBox(height: 32),
+              _buildWorkoutTypeSelector(),
+              const SizedBox(height: 32),
+              _buildWorkoutInstructions(),
+              const SizedBox(height: 32),
+              _buildStartButton(),
+            ],
+          ),
         ),
       ),
     );
@@ -83,7 +71,7 @@ class _CardioWorkoutPageState extends State<CardioWorkoutPage>
             const SizedBox(height: 12),
             Text(
               'Improve cardiovascular health and burn calories with our '
-                  'scientifically designed programs',
+                  'scientifically designed programs.',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
@@ -165,6 +153,8 @@ class _CardioWorkoutPageState extends State<CardioWorkoutPage>
         return Icons.cable;
       case 'HIIT':
         return Icons.timer;
+      case 'Stair Climbing':
+        return Icons.accessibility;
       default:
         return Icons.fitness_center;
     }

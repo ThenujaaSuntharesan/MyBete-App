@@ -116,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            music()), // Navigate to Sleep screen
+                            Music()), // Navigate to Sleep screen
                   );
                 },
               ),

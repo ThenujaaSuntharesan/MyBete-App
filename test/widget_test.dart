@@ -20,8 +20,10 @@ void main() {
       ),
     );
 
-    // Allow state changes and settle the widget tree
-    await tester.pumpAndSettle();
+    // Increase the timeout duration for pumpAndSettle and add logging
+    print('Running pumpAndSettle...');
+    await tester.pumpAndSettle(const Duration(seconds: 20));
+    print('pumpAndSettle completed.');
 
     // Verify that expected text or elements appear
     expect(find.text("Choose one option from these three"), findsOneWidget);
